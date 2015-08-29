@@ -63,11 +63,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PokeD.Core\PokeD.Core.csproj">
+    <ProjectReference Include="PokeD.Core\PokeD.Core.csproj">
       <Project>{1CF84E56-3BBE-4A3A-9234-5951BF2558C3}</Project>
       <Name>PokeD.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PokeD.Server\PokeD.Server.csproj">
+    <ProjectReference Include="PokeD.Server\PokeD.Server.csproj">
       <Project>{32FDE5FC-8692-414A-A0A5-921CE83C709C}</Project>
       <Name>PokeD.Server</Name>
     </ProjectReference>

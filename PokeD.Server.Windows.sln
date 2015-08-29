@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeD.Server.Windows", "PokeD.Server.Windows.csproj", "{F092BF10-604E-4742-901B-022BBB0F1EF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeD.Core", "PokeD.Core\PokeD.Core.csproj", "{1CF84E56-3BBE-4A3A-9234-5951BF2558C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeD.Server", "PokeD.Server\PokeD.Server.csproj", "{32FDE5FC-8692-414A-A0A5-921CE83C709C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{F092BF10-604E-4742-901B-022BBB0F1EF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F092BF10-604E-4742-901B-022BBB0F1EF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F092BF10-604E-4742-901B-022BBB0F1EF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CF84E56-3BBE-4A3A-9234-5951BF2558C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CF84E56-3BBE-4A3A-9234-5951BF2558C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CF84E56-3BBE-4A3A-9234-5951BF2558C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CF84E56-3BBE-4A3A-9234-5951BF2558C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32FDE5FC-8692-414A-A0A5-921CE83C709C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32FDE5FC-8692-414A-A0A5-921CE83C709C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32FDE5FC-8692-414A-A0A5-921CE83C709C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32FDE5FC-8692-414A-A0A5-921CE83C709C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
