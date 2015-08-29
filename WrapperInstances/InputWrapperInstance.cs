@@ -1,5 +1,4 @@
-﻿using System;
-using PokeD.Core.Wrappers;
+﻿using PokeD.Core.Wrappers;
 
 namespace PokeD.Server.Windows.WrapperInstances
 {
@@ -15,7 +14,7 @@ namespace PokeD.Server.Windows.WrapperInstances
 
         public void ConsoleWrite(string message)
         {
-            Console.WriteLine(message);
+            ConsoleManager.WriteLine(message);
         }
     }
 }

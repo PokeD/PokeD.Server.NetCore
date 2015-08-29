@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -61,16 +62,16 @@ namespace PokeD.Server.Windows.WrapperInstances
 
         public void WriteLine(string data)
         {
-            Writer.WriteLine(data);
+            try { Writer.WriteLine(data); }
+            catch (Exception) { Disconnect(); }
+
             //Writer.Flush();
         }
 
         public string ReadLine()
         {
-            if(Connected)
-                return Reader.ReadLine();
-            else
-                return "";
+            try { return Reader.ReadLine(); }
+            catch (Exception) { Disconnect(); return ""; }
         }
 
         public Task<string> ReadLineAsync()
