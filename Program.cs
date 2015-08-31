@@ -65,10 +65,10 @@ namespace PokeD.Server.Windows
                     return;
                 
 
-                if (watch.ElapsedMilliseconds < 100)
+                if (watch.ElapsedMilliseconds < 10)
                 {
                     MainThreadTime = watch.ElapsedMilliseconds;
-                    Thread.Sleep((int)(100 - watch.ElapsedMilliseconds));
+                    Thread.Sleep((int)(10 - watch.ElapsedMilliseconds));
                 }
 
                 watch.Reset();
