@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
-using PokeD.Core.Data;
-using PokeD.Core.Packets.Chat;
+
 using PokeD.Core.Wrappers;
+
 using PokeD.Server.Windows.WrapperInstances;
 
 namespace PokeD.Server.Windows
 {
     public static class Program
     {
-        public static int MainThreadTime { get; set; }
-
         static Program()
         {
             FileSystemWrapper.Instance = new FileSystemWrapperInstance();
@@ -21,27 +19,60 @@ namespace PokeD.Server.Windows
             ThreadWrapper.Instance = new ThreadWrapperInstance();
         }
 
-        public static Server Server { get; set; }
+        static Server Server { get; set; }
 
         public static void Main(string[] args)
         {
-            Server = new Server();
-
             ConsoleManager.Start();
+
+            Server server;
+            if (!FileSystemWrapper.LoadSettings(Server.FileName, out server))
+            {
+                ConsoleManager.WriteLine("Error: Server.json is invalid. Please fix it or delete.");
+                Console.ReadLine();
+                return;
+            }
+            else
+                Server = server;
+            
+            Server.Start();
 
             Update();
         }
 
-        public static void Update()
+        public static int MainThreadTime { get; private set; }
+        private static void Update()
         {
             var watch = Stopwatch.StartNew();
             while (true)
             {
+                if (ConsoleManager.InputAvailable)
+                {
+                    var input = ConsoleManager.ReadLine();
+
+                    if (input.StartsWith("/stop"))
+                    {
+                        Server.Stop();
+                        ConsoleManager.WriteLine("Stopped the server. Press Enter to continue.");
+                        Console.ReadLine();
+                        return;
+                    }
+
+                    else if(input.StartsWith("/say "))
+                        Server.SendGlobalChatMessageToAll(input.Remove(0, 5));
+
+                    else if (input.StartsWith("/message "))
+                        Server.SendGlobalChatMessageToAll(input.Remove(0, 9));
+
+                    else if (input.StartsWith("/"))
+                        Server.ExecuteServerCommand(input.Remove(0, 1));
+                }
+
                 Server.Update();
 
-                if (watch.ElapsedMilliseconds < 16)
+                if (watch.ElapsedMilliseconds < 100)
                 {
-                    var time = (int) (16 - watch.ElapsedMilliseconds);
+                    var time = (int) (100 - watch.ElapsedMilliseconds);
                     if (time < 0)
                         time = 0;
 

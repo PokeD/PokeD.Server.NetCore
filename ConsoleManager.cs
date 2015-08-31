@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
-using PokeD.Server.Data;
-
 namespace PokeD.Server.Windows
 {
     public static class ConsoleManager
@@ -68,11 +66,11 @@ namespace PokeD.Server.Windows
                 ScreenBufferArray = new char[Console.WindowWidth, Console.WindowHeight];
                 ScreenBuffer = string.Empty;
 
-                DrawLine(string.Format("Main           thread execution time: {0} ms", Program.MainThreadTime        ), 0);
-                DrawLine(string.Format("ClientListner  thread execution time: {0} ms", Server.ClientListnerThreadTime), 1);
-                DrawLine(string.Format("WorldProcessor thread execution time: {0} ms", World.WorldProcessorThreadTime), 2);
-                DrawLine(string.Format("PlayerWatcher  thread execution time: {0} ms", Server.PlayerWatcherThreadTime), 3);
-                DrawLine(string.Format("ConsoleManager thread execution time: {0} ms", ConsoleManagerThreadTime      ), 4);
+                DrawLine(string.Format("Main             thread execution time: {0} ms", Program.MainThreadTime           ), 0);
+                DrawLine(string.Format("ClientListner    thread execution time: {0} ms", Server.ClientListnerThreadTime   ), 1);
+                DrawLine(string.Format("PlayerWatcher    thread execution time: {0} ms", Server.PlayerWatcherThreadTime   ), 2);
+                DrawLine(string.Format("PlayerCorrection thread execution time: {0} ms", Server.PlayerCorrectionThreadTime), 3);
+                DrawLine(string.Format("ConsoleManager   thread execution time: {0} ms", ConsoleManagerThreadTime         ), 4);
 
                 var currentLineCursor = 6;
                 for (int i = ConsoleOutput.Count - 1; i >= 0 && currentLineCursor < Console.WindowHeight - 2; i--)

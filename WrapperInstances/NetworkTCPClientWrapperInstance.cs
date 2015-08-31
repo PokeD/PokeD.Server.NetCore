@@ -11,14 +11,13 @@ namespace PokeD.Server.Windows.WrapperInstances
     public class NetworkTCPClientWrapperInstance : INetworkTcpClient
     {
         public bool Connected { get { return !IsDisposed && Client != null && Client.Connected; } }
-        public int DataAvailable { get { return !IsDisposed && Client != null ? Client.Available : 0; }
-        }
+        public int DataAvailable { get { return !IsDisposed && Client != null ? Client.Available : 0; } }
 
 
         private TcpClient Client { get; set; }
-        private NetworkStream Stream { get; set; }
+        private NetworkStream WriteStream { get; set; }
+        private BufferedStream ReadStream { get; set; }
 
-        //private BufferedStream BufferedStream { get; set; }
         private StreamWriter Writer { get; set; }
         private StreamReader Reader { get; set; }
 
@@ -30,16 +29,16 @@ namespace PokeD.Server.Windows.WrapperInstances
         internal NetworkTCPClientWrapperInstance(TcpClient tcpClient)
         {
             Client = tcpClient;
-            Stream = new NetworkStream(Client.Client);
-            //BufferedStream = new BufferedStream(Stream);
-            Writer = new StreamWriter(Stream) {AutoFlush = true};
-            Reader = new StreamReader(Stream);
+            WriteStream = new NetworkStream(Client.Client);
+            Writer = new StreamWriter(WriteStream) {AutoFlush = true};
+            ReadStream = new BufferedStream(WriteStream);
+            Reader = new StreamReader(ReadStream);
         }
 
         public void Connect(string ip, ushort port)
         {
             Client = new TcpClient(ip, port);
-            Stream = new NetworkStream(Client.Client);
+            WriteStream = new NetworkStream(Client.Client);
         }
         public void Disconnect()
         {
@@ -50,12 +49,12 @@ namespace PokeD.Server.Windows.WrapperInstances
         public void Send(byte[] bytes, int offset, int count)
         {
             if(!IsDisposed)
-                Stream.Write(bytes, offset, count);
+                WriteStream.Write(bytes, offset, count);
         }
         public int Receive(byte[] buffer, int offset, int count)
         {
             if (!IsDisposed)
-                return Stream.Read(buffer, offset, count);
+                return ReadStream.Read(buffer, offset, count);
             else
                 return -1;
         }
@@ -64,8 +63,6 @@ namespace PokeD.Server.Windows.WrapperInstances
         {
             try { Writer.WriteLine(data); }
             catch (Exception) { Disconnect(); }
-
-            //Writer.Flush();
         }
 
         public string ReadLine()
@@ -85,7 +82,7 @@ namespace PokeD.Server.Windows.WrapperInstances
             Client = new TcpClient();
             await Client.ConnectAsync(ip, port);
 
-            Stream = new NetworkStream(Client.Client);
+            WriteStream = new NetworkStream(Client.Client);
         }
         public bool DisconnectAsync()
         {
@@ -98,14 +95,14 @@ namespace PokeD.Server.Windows.WrapperInstances
         public Task SendAsync(byte[] bytes, int offset, int count)
         {
             if (!IsDisposed)
-                return Stream.WriteAsync(bytes, offset, count);
+                return WriteStream.WriteAsync(bytes, offset, count);
             else
                 return null;
         }
         public Task<int> ReceiveAsync(byte[] bytes, int offset, int count)
         {
             if (!IsDisposed)
-                return Stream.ReadAsync(bytes, offset, count);
+                return ReadStream.ReadAsync(bytes, offset, count);
             else
                 return null;
         }
@@ -126,8 +123,8 @@ namespace PokeD.Server.Windows.WrapperInstances
             if (Client != null)
                 Client.Close();
 
-            if (Stream != null)
-                Stream.Dispose();
+            if (WriteStream != null)
+                WriteStream.Dispose();
         }
     }
 }
