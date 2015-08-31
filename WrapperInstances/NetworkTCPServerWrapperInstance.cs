@@ -36,14 +36,14 @@ namespace PokeD.Server.Windows.WrapperInstances
             Listener.Stop();
         }
 
-        public INetworkTcpClient AcceptNetworkTCPClient()
+        public INetworkTCPClient AcceptNetworkTCPClient()
         {
             return new NetworkTCPClientWrapperInstance(Listener.AcceptTcpClient());
         }
 
-        public Task<INetworkTcpClient> AcceptTcpClientAsync(byte[] bytes, int offset, int count)
+        public Task<INetworkTCPClient> AcceptTcpClientAsync(byte[] bytes, int offset, int count)
         {
-            return new Task<INetworkTcpClient>(() => new NetworkTCPClientWrapperInstance(Listener.AcceptTcpClientAsync().Result));
+            return new Task<INetworkTCPClient>(() => new NetworkTCPClientWrapperInstance(Listener.AcceptTcpClientAsync().Result));
         }
 
         public INetworkTCPServer NewInstance(ushort port)

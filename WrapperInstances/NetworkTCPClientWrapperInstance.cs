@@ -8,7 +8,7 @@ using PokeD.Core.Wrappers;
 
 namespace PokeD.Server.Windows.WrapperInstances
 {
-    public class NetworkTCPClientWrapperInstance : INetworkTcpClient
+    public class NetworkTCPClientWrapperInstance : INetworkTCPClient
     {
         public bool Connected { get { return !IsDisposed && Client != null && Client.Connected; } }
         public int DataAvailable { get { return !IsDisposed && Client != null ? Client.Available : 0; } }
@@ -108,7 +108,7 @@ namespace PokeD.Server.Windows.WrapperInstances
         }
 
 
-        public INetworkTcpClient NewInstance()
+        public INetworkTCPClient NewInstance()
         {
             return new NetworkTCPClientWrapperInstance();
         }
