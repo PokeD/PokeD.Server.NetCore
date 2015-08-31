@@ -72,8 +72,11 @@ namespace PokeD.Server.Windows
                 DrawLine(string.Format("ConsoleManager    thread execution time: {0} ms", ConsoleManagerThreadTime          ), 4);
 
                 var currentLineCursor = 6;
-                for (var i = ConsoleOutput.Count - 1; i >= 0 && currentLineCursor < Console.WindowHeight - 2; i--)
+                for (int i = 0; i < ConsoleOutput.Count && currentLineCursor < Console.WindowHeight - 2; i++)
                     Draw(ConsoleOutput[i], 0, currentLineCursor++);
+                
+                //for (var i = ConsoleOutput.Count - 1; i >= 0 && currentLineCursor < Console.WindowHeight - 2; i--)
+                //    Draw(ConsoleOutput[i], 0, currentLineCursor++);
 
                 HandleInput();
                 DrawLine(CurrentConsoleInput, Console.WindowHeight - 2);
@@ -155,6 +158,11 @@ namespace PokeD.Server.Windows
         private static void UpdateTitle()
         {
             Console.Title = string.Format("PokeD Server FPS: {0}", ScreenFPS);
+        }
+
+        public static void Clear()
+        {
+            ConsoleOutput.Clear();
         }
     }
 }

@@ -8,7 +8,7 @@ using PokeD.Server.Windows.WrapperInstances;
 
 namespace PokeD.Server.Windows
 {
-    public static class Program
+    public static partial class Program
     {
         static Program()
         {
@@ -51,25 +51,19 @@ namespace PokeD.Server.Windows
                 {
                     var input = ConsoleManager.ReadLine();
 
-                    if (input.StartsWith("/stop"))
+                    if (input.StartsWith("/"))
                     {
-                        Server.Stop();
-                        ConsoleManager.WriteLine("Stopped the server. Press Enter to continue.");
-                        Console.ReadLine();
-                        return;
+                        ConsoleManager.Clear();
+                        ConsoleManager.WriteLine(input);
+                        ExecuteCommand(input);
                     }
-
-                    else if(input.StartsWith("/say "))
-                        Server.SendGlobalChatMessageToAll(input.Remove(0, 5));
-
-                    else if (input.StartsWith("/message "))
-                        Server.SendGlobalChatMessageToAll(input.Remove(0, 9));
-
-                    else if (input.StartsWith("/"))
-                        Server.ExecuteServerCommand(input.Remove(0, 1));
                 }
 
-                Server.Update();
+                if(Server != null)
+                    Server.Update();
+                else
+                    return;
+                
 
                 if (watch.ElapsedMilliseconds < 100)
                 {
