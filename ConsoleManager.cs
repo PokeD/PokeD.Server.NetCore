@@ -7,8 +7,6 @@ namespace PokeD.Server.Windows
 {
     public static class ConsoleManager
     {
-        public static int ConsoleManagerThreadTime { get; set; }
-
         private static Thread ConsoleManagerThread { get; set; }
 
         private static char[,] ScreenBufferArray { get; set; }
@@ -57,7 +55,8 @@ namespace PokeD.Server.Windows
             }
         }
 
-        
+
+        private static long ConsoleManagerThreadTime { get; set; }
         private static void Cycle()
         {
             var watch = Stopwatch.StartNew();
@@ -66,14 +65,14 @@ namespace PokeD.Server.Windows
                 ScreenBufferArray = new char[Console.WindowWidth, Console.WindowHeight];
                 ScreenBuffer = string.Empty;
 
-                DrawLine(string.Format("Main             thread execution time: {0} ms", Program.MainThreadTime           ), 0);
-                DrawLine(string.Format("ClientListner    thread execution time: {0} ms", Server.ClientListnerThreadTime   ), 1);
-                DrawLine(string.Format("PlayerWatcher    thread execution time: {0} ms", Server.PlayerWatcherThreadTime   ), 2);
-                DrawLine(string.Format("PlayerCorrection thread execution time: {0} ms", Server.PlayerCorrectionThreadTime), 3);
-                DrawLine(string.Format("ConsoleManager   thread execution time: {0} ms", ConsoleManagerThreadTime         ), 4);
+                DrawLine(string.Format("Main              thread execution time: {0} ms", Program.MainThreadTime            ), 0);
+                DrawLine(string.Format("ClientConnections thread execution time: {0} ms", Server.ClientConnectionsThreadTime), 1);
+                DrawLine(string.Format("PlayerWatcher     thread execution time: {0} ms", Server.PlayerWatcherThreadTime    ), 2);
+                DrawLine(string.Format("PlayerCorrection  thread execution time: {0} ms", Server.PlayerCorrectionThreadTime ), 3);
+                DrawLine(string.Format("ConsoleManager    thread execution time: {0} ms", ConsoleManagerThreadTime          ), 4);
 
                 var currentLineCursor = 6;
-                for (int i = ConsoleOutput.Count - 1; i >= 0 && currentLineCursor < Console.WindowHeight - 2; i--)
+                for (var i = ConsoleOutput.Count - 1; i >= 0 && currentLineCursor < Console.WindowHeight - 2; i--)
                     Draw(ConsoleOutput[i], 0, currentLineCursor++);
 
                 HandleInput();
@@ -83,8 +82,11 @@ namespace PokeD.Server.Windows
                 DrawScreen();
 
 
-                ConsoleManagerThreadTime = (int) watch.ElapsedMilliseconds;
-                Thread.Sleep(ExcecutionMilliseconds);
+                if (watch.ElapsedMilliseconds < ExcecutionMilliseconds)
+                {
+                    ConsoleManagerThreadTime = watch.ElapsedMilliseconds;
+                    Thread.Sleep((int)(ExcecutionMilliseconds - watch.ElapsedMilliseconds));
+                }
                 watch.Reset();
                 watch.Start();
             }

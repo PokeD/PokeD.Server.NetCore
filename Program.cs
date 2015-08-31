@@ -33,14 +33,15 @@ namespace PokeD.Server.Windows
                 return;
             }
             else
-                Server = server;
+                Server = server ?? new Server();
             
+
             Server.Start();
 
             Update();
         }
 
-        public static int MainThreadTime { get; private set; }
+        public static long MainThreadTime { get; private set; }
         private static void Update()
         {
             var watch = Stopwatch.StartNew();
@@ -72,12 +73,8 @@ namespace PokeD.Server.Windows
 
                 if (watch.ElapsedMilliseconds < 100)
                 {
-                    var time = (int) (100 - watch.ElapsedMilliseconds);
-                    if (time < 0)
-                        time = 0;
-
-                    MainThreadTime = (int) watch.ElapsedMilliseconds;
-                    Thread.Sleep(time);
+                    MainThreadTime = watch.ElapsedMilliseconds;
+                    Thread.Sleep((int)(100 - watch.ElapsedMilliseconds));
                 }
 
                 watch.Reset();

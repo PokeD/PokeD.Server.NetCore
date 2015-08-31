@@ -10,6 +10,7 @@ namespace PokeD.Server.Windows.WrapperInstances
     public class NetworkTCPServerWrapperInstance : INetworkTCPServer
     {
         public ushort Port { get; set; }
+        public bool AvailableClients {  get { return Listener.Pending(); } }
 
 
         private TcpListener Listener { get; set; }
