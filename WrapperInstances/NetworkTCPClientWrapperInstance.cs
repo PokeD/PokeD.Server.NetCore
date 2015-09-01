@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,9 +18,7 @@ namespace PokeD.Server.Windows.WrapperInstances
         private TcpClient Client { get; set; }
         private NetworkStream WriteStream { get; set; }
         private BufferedStream ReadStream { get; set; }
-
-        private StreamWriter Writer { get; set; }
-        private StreamReader Reader { get; set; }
+        private StreamReader StreamReader { get; set; }
 
         private bool IsDisposed { get; set; }
 
@@ -29,16 +28,19 @@ namespace PokeD.Server.Windows.WrapperInstances
         internal NetworkTCPClientWrapperInstance(TcpClient tcpClient)
         {
             Client = tcpClient;
+            Client.SendTimeout = 2;
+            Client.ReceiveTimeout = 2;
             WriteStream = new NetworkStream(Client.Client);
-            Writer = new StreamWriter(WriteStream) {AutoFlush = true};
             ReadStream = new BufferedStream(WriteStream);
-            Reader = new StreamReader(ReadStream);
+            StreamReader = new StreamReader(ReadStream);
         }
 
         public void Connect(string ip, ushort port)
         {
-            Client = new TcpClient(ip, port);
+            Client = new TcpClient(ip, port) { SendTimeout = 2, ReceiveTimeout = 2 };
             WriteStream = new NetworkStream(Client.Client);
+            ReadStream = new BufferedStream(WriteStream);
+            StreamReader = new StreamReader(ReadStream);
         }
         public void Disconnect()
         {
@@ -59,21 +61,11 @@ namespace PokeD.Server.Windows.WrapperInstances
                 return -1;
         }
 
-        public void WriteLine(string data)
-        {
-            try { Writer.WriteLine(data); }
-            catch (Exception) { Disconnect(); }
-        }
 
         public string ReadLine()
         {
-            try { return Reader.ReadLine(); }
+            try { return StreamReader.ReadLine(); }
             catch (Exception) { Disconnect(); return ""; }
-        }
-
-        public Task<string> ReadLineAsync()
-        {
-            return Reader.ReadLineAsync();
         }
 
 

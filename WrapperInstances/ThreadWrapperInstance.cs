@@ -39,5 +39,10 @@ namespace PokeD.Server.Windows.WrapperInstances
 
             return Threads[id].IsAlive;
         }
+
+        public void Sleep(int milliseconds)
+        {
+            Thread.Sleep(milliseconds);
+        }
     }
 }

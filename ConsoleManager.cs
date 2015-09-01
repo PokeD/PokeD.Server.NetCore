@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace PokeD.Server.Windows
 {
@@ -88,7 +89,10 @@ namespace PokeD.Server.Windows
                 if (watch.ElapsedMilliseconds < ExcecutionMilliseconds)
                 {
                     ConsoleManagerThreadTime = watch.ElapsedMilliseconds;
-                    Thread.Sleep((int)(ExcecutionMilliseconds - watch.ElapsedMilliseconds));
+
+                    var time = (int) (ExcecutionMilliseconds - watch.ElapsedMilliseconds);
+                    if (time < 0) time = 0;
+                    Thread.Sleep(time);
                 }
                 watch.Reset();
                 watch.Start();

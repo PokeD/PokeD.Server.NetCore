@@ -23,19 +23,13 @@ namespace PokeD.Server.Windows
 
         public static void Main(string[] args)
         {
-            ConsoleManager.Start();
-
-            Server server;
-            if (!FileSystemWrapper.LoadSettings(Server.FileName, out server))
+            foreach (var arg in args)
             {
-                ConsoleManager.WriteLine("Error: Server.json is invalid. Please fix it or delete.");
-                Console.ReadLine();
-                return;
+                if(arg.StartsWith("-enableconsole"))
+                    ConsoleManager.Start();
             }
-            else
-                Server = server ?? new Server();
             
-
+            Server = new Server();
             Server.Start();
 
             Update();
@@ -68,7 +62,10 @@ namespace PokeD.Server.Windows
                 if (watch.ElapsedMilliseconds < 10)
                 {
                     MainThreadTime = watch.ElapsedMilliseconds;
-                    Thread.Sleep((int)(10 - watch.ElapsedMilliseconds));
+
+                    var time = (int) (10 - watch.ElapsedMilliseconds);
+                    if (time < 0) time = 0;
+                    Thread.Sleep(time);
                 }
 
                 watch.Reset();

@@ -41,7 +41,7 @@ namespace PokeD.Server.Windows.WrapperInstances
             return new NetworkTCPClientWrapperInstance(Listener.AcceptTcpClient());
         }
 
-        public Task<INetworkTCPClient> AcceptTcpClientAsync(byte[] bytes, int offset, int count)
+        public Task<INetworkTCPClient> AcceptTCPClientAsync()
         {
             return new Task<INetworkTCPClient>(() => new NetworkTCPClientWrapperInstance(Listener.AcceptTcpClientAsync().Result));
         }
