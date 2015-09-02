@@ -27,6 +27,13 @@ namespace PokeD.Server.Windows
 
         public static bool InputAvailable { get { return ConsoleInput.Count > 0; } }
 
+        static ConsoleManager()
+        {
+            ConsoleOutput = new List<string>();
+            ConsoleInput = new Queue<string>();
+            CurrentConsoleInput = string.Empty;
+        }
+
         public static void WriteLine(string text)
         {
             ConsoleOutput.Add(text);
@@ -42,9 +49,6 @@ namespace PokeD.Server.Windows
             if (ConsoleManagerThread == null || !ConsoleManagerThread.IsAlive)
             {
                 ScreenBufferArray = new char[Console.WindowWidth, Console.WindowHeight];
-                ConsoleOutput = new List<string>();
-                ConsoleInput = new Queue<string>();
-                CurrentConsoleInput = string.Empty;
                 ScreenFPS = 60;
 
                 Console.CursorVisible = true;
