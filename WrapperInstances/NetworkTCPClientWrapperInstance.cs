@@ -1,7 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -50,13 +48,19 @@ namespace PokeD.Server.Windows.WrapperInstances
 
         public void Send(byte[] bytes, int offset, int count)
         {
-            if(!IsDisposed)
-                WriteStream.Write(bytes, offset, count);
+            if (!IsDisposed)
+            {
+                try { WriteStream.Write(bytes, offset, count); }
+                catch (IOException) { Disconnect(); }
+            }
         }
         public int Receive(byte[] buffer, int offset, int count)
         {
             if (!IsDisposed)
-                return ReadStream.Read(buffer, offset, count);
+            {
+                try { return ReadStream.Read(buffer, offset, count); }
+                catch (IOException) { Disconnect(); return -1; }
+            }
             else
                 return -1;
         }
@@ -65,7 +69,7 @@ namespace PokeD.Server.Windows.WrapperInstances
         public string ReadLine()
         {
             try { return StreamReader.ReadLine(); }
-            catch (Exception) { Disconnect(); return ""; }
+            catch (IOException) { Disconnect(); return ""; }
         }
 
 
