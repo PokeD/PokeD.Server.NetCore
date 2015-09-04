@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace PokeD.Server.Windows.WrapperInstances
 {
     public class NetworkTCPClientWrapperInstance : INetworkTCPClient
     {
+        public string IP { get { return !IsDisposed && Client != null ? ((IPEndPoint)Client.Client.RemoteEndPoint).Address.ToString() : ""; } }
         public bool Connected { get { return !IsDisposed && Client != null && Client.Connected; } }
         public int DataAvailable { get { return !IsDisposed && Client != null ? Client.Available : 0; } }
 

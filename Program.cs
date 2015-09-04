@@ -4,6 +4,7 @@ using System.Threading;
 
 using PokeD.Core.Wrappers;
 
+using PokeD.Server.Windows.Extensions;
 using PokeD.Server.Windows.WrapperInstances;
 
 namespace PokeD.Server.Windows
@@ -23,12 +24,29 @@ namespace PokeD.Server.Windows
 
         public static void Main(string[] args)
         {
+            try
+            {
+                AppDomain.CurrentDomain.UnhandledException += (sender, e) => FatalExceptionObject(e.ExceptionObject);
+            }
+            catch (Exception exception)
+            {
+                // Maybe it will cause a recursive exception.
+                if (Server != null)
+                    Server.Stop();
+
+                FatalExceptionHandler(exception);
+            }
+            Start(args);
+        }
+
+        private static void Start(string[] args)
+        {
             foreach (var arg in args)
             {
-                if(arg.StartsWith("-enableconsole"))
+                if (arg.StartsWith("-enableconsole"))
                     ConsoleManager.Start();
             }
-            
+
             Server = new Server();
             Server.Start();
 
@@ -71,6 +89,18 @@ namespace PokeD.Server.Windows
                 watch.Reset();
                 watch.Start();
             }
+        }
+
+
+        private static void FatalExceptionObject(object exceptionObject)
+        {
+            var huh = exceptionObject as Exception ?? new NotSupportedException("Unhandled exception doesn't derive from System.Exception: " + exceptionObject);
+            FatalExceptionHandler(huh);
+        }
+
+        private static void FatalExceptionHandler(Exception exception)
+        {
+            LogManager.WriteLine(exception.GetExceptionDetails());
         }
     }
 }

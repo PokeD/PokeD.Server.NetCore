@@ -16,5 +16,10 @@ namespace PokeD.Server.Windows.WrapperInstances
         {
             ConsoleManager.WriteLine(message);
         }
+
+        public void LogWriteLine(string message)
+        {
+            LogManager.WriteLine(message);
+        }
     }
 }
