@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Threading;
+
+using PCLStorage;
 
 using PokeD.Core.Wrappers;
 
@@ -26,7 +30,7 @@ namespace PokeD.Server.Windows
         {
             try
             {
-                AppDomain.CurrentDomain.UnhandledException += (sender, e) => FatalExceptionObject(e.ExceptionObject);
+                AppDomain.CurrentDomain.UnhandledException += (sender, e) => CatchErrorObject(e.ExceptionObject);
             }
             catch (Exception exception)
             {
@@ -34,7 +38,7 @@ namespace PokeD.Server.Windows
                 if (Server != null)
                     Server.Stop();
 
-                FatalExceptionHandler(exception);
+                CatchError(exception);
             }
             Start(args);
         }
@@ -94,13 +98,67 @@ namespace PokeD.Server.Windows
 
         private static void FatalExceptionObject(object exceptionObject)
         {
-            var huh = exceptionObject as Exception ?? new NotSupportedException("Unhandled exception doesn't derive from System.Exception: " + exceptionObject);
-            FatalExceptionHandler(huh);
+            var exception = exceptionObject as Exception ?? new NotSupportedException("Unhandled exception doesn't derive from System.Exception: " + exceptionObject);
+            FatalExceptionHandler(exception);
         }
-
         private static void FatalExceptionHandler(Exception exception)
         {
             LogManager.WriteLine(exception.GetExceptionDetails());
+        }
+
+
+        private static void CatchErrorObject(object exceptionObject)
+        {
+            var exception = exceptionObject as Exception ?? new NotSupportedException("Unhandled exception doesn't derive from System.Exception: " + exceptionObject);
+            CatchError(exception);
+        }
+        private static void CatchError(Exception ex)
+        {
+            var coreArchitecture = Environment.Is64BitOperatingSystem ? "64 Bit" : "32 Bit";
+            var helpLink = string.IsNullOrWhiteSpace(ex.HelpLink) ? "No helplink available." : ex.HelpLink;
+            var innerException = string.IsNullOrWhiteSpace(ex.InnerException.Message) ? "Nothing" : ex.InnerException.Message;
+            var stackTrace = string.IsNullOrWhiteSpace(ex.InnerException.StackTrace) ? ex.StackTrace : ex.InnerException.StackTrace + Environment.NewLine + ex.StackTrace;
+
+            var errorLog = string.Format(@"[CODE]
+Pokémon 3D Server Client Crash Log v {0}
+--------------------------------------------------
+System specifications:
+Operating system: {1} [{1}]
+Core architecture: {2}
+System time: {3}
+System language: {4}
+Logical processors: {5}
+--------------------------------------------------
+            
+Error information:
+Message: {6}
+InnerException: {7}
+HelpLink: {8}
+Source: {9}
+--------------------------------------------------
+CallStack:
+{10}
+--------------------------------------------------
+You should report this error if it is reproduceable or you could not solve it by yourself.
+Go To: http://pokemon3d.net/forum/threads/12686/ to report this crash there.
+[/CODE]",
+                Environment.Version,
+                Environment.OSVersion,
+                coreArchitecture,
+                DateTime.Now,
+                CultureInfo.CurrentCulture.EnglishName,
+                Environment.ProcessorCount,
+                ex.Message,
+                innerException,
+                helpLink,
+                ex.Source,
+                stackTrace);
+
+            var folder = FileSystemWrapper.LogFolder.CreateFolderAsync("Crash", CreationCollisionOption.OpenIfExists).Result;
+            var crash = folder.CreateFileAsync(string.Format("{0:yyyy-MM-dd_hh.mm.ss}", DateTime.Now), CreationCollisionOption.OpenIfExists).Result;
+            using (var stream = crash.OpenAsync(PCLStorage.FileAccess.ReadAndWrite).Result)
+            using (var writer = new StreamWriter(stream))
+                writer.Write(errorLog);
         }
     }
 }
