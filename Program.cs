@@ -120,24 +120,23 @@ namespace PokeD.Server.Windows
             var stackTrace = string.IsNullOrWhiteSpace(ex.InnerException.StackTrace) ? ex.StackTrace : ex.InnerException.StackTrace + Environment.NewLine + ex.StackTrace;
 
             var errorLog = string.Format(@"[CODE]
-Pokémon 3D Server Client Crash Log v {0}
+PokeD.Server Crash Log v {0}
 --------------------------------------------------
 System specifications:
 Operating system: {1} [{1}]
 Core architecture: {2}
-System time: {3}
-System language: {4}
-Logical processors: {5}
+System language: {3}
+Logical processors: {4}
 --------------------------------------------------
             
 Error information:
-Message: {6}
-InnerException: {7}
-HelpLink: {8}
-Source: {9}
+Message: {5}
+InnerException: {6}
+HelpLink: {7}
+Source: {8}
 --------------------------------------------------
 CallStack:
-{10}
+{9}
 --------------------------------------------------
 You should report this error if it is reproduceable or you could not solve it by yourself.
 Go To: http://pokemon3d.net/forum/threads/12686/ to report this crash there.
@@ -145,7 +144,6 @@ Go To: http://pokemon3d.net/forum/threads/12686/ to report this crash there.
                 Environment.Version,
                 Environment.OSVersion,
                 coreArchitecture,
-                DateTime.Now,
                 CultureInfo.CurrentCulture.EnglishName,
                 Environment.ProcessorCount,
                 ex.Message,
