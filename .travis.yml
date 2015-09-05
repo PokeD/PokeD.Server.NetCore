@@ -2,17 +2,17 @@ language: csharp
 mono:
   - latest
 
-solution: PokeD.Server.Windows.sln
+solution: PokeD.Server.Desktop.sln
 
 before_install:
   - git submodule update --init --recursive
   
 install:
-  - nuget restore PokeD.Server.Windows.sln
+  - nuget restore PokeD.Server.Desktop.sln
 
 script:
-  - xbuild /p:Configuration=Release PokeD.Server.Windows.sln
-  - xbuild /p:Configuration=Debug PokeD.Server.Windows.sln
+  - xbuild /p:Configuration=Release PokeD.Server.Desktop.sln
+  - xbuild /p:Configuration=Debug PokeD.Server.Desktop.sln
 
 notifications:
   email:
