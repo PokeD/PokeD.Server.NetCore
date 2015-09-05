@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeD.Server.Windows", "PokeD.Server.Windows.csproj", "{F092BF10-604E-4742-901B-022BBB0F1EF1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeD.Server.Desktop", "PokeD.Server.Desktop.csproj", "{F092BF10-604E-4742-901B-022BBB0F1EF1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeD.Core", "PokeD.Core\PokeD.Core.csproj", "{1CF84E56-3BBE-4A3A-9234-5951BF2558C3}"
 EndProject

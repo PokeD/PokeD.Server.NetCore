@@ -1,8 +1,6 @@
 ﻿using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
 
 using PokeD.Core.Wrappers;
 
@@ -10,9 +8,9 @@ namespace PokeD.Server.Windows.WrapperInstances
 {
     public class NetworkTCPClientWrapperInstance : INetworkTCPClient
     {
-        public string IP { get { return !IsDisposed && Client != null ? ((IPEndPoint)Client.Client.RemoteEndPoint).Address.ToString() : ""; } }
-        public bool Connected { get { return !IsDisposed && Client != null && Client.Connected; } }
-        public int DataAvailable { get { return !IsDisposed && Client != null ? Client.Available : 0; } }
+        public string IP => !IsDisposed && Client != null ? ((IPEndPoint)Client.Client.RemoteEndPoint).Address.ToString() : "";
+        public bool Connected => !IsDisposed && Client != null && Client.Connected;
+        public int DataAvailable => !IsDisposed && Client != null ? Client.Available : 0;
 
 
         private TcpClient Client { get; set; }
@@ -75,36 +73,6 @@ namespace PokeD.Server.Windows.WrapperInstances
         }
 
 
-        public async Task ConnectAsync(string ip, ushort port)
-        {
-            Client = new TcpClient();
-            await Client.ConnectAsync(ip, port);
-
-            WriteStream = new NetworkStream(Client.Client);
-        }
-        public bool DisconnectAsync()
-        {
-            if (Connected)
-                return Client.Client.DisconnectAsync(new SocketAsyncEventArgs {DisconnectReuseSocket = false});
-            else
-                return true;
-        }
-
-        public Task SendAsync(byte[] bytes, int offset, int count)
-        {
-            if (!IsDisposed)
-                return WriteStream.WriteAsync(bytes, offset, count);
-            else
-                return null;
-        }
-        public Task<int> ReceiveAsync(byte[] bytes, int offset, int count)
-        {
-            if (!IsDisposed)
-                return ReadStream.ReadAsync(bytes, offset, count);
-            else
-                return null;
-        }
-
 
         public INetworkTCPClient NewInstance()
         {
@@ -116,13 +84,8 @@ namespace PokeD.Server.Windows.WrapperInstances
         {
             IsDisposed = true;
 
-            Thread.Sleep(500);
-
-            if (Client != null)
-                Client.Close();
-
-            if (WriteStream != null)
-                WriteStream.Dispose();
+            Client?.Close();
+            WriteStream?.Dispose();
         }
     }
 }

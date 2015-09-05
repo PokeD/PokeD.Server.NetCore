@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
 
 using PokeD.Core.Wrappers;
@@ -9,12 +8,11 @@ namespace PokeD.Server.Windows.WrapperInstances
 {
     public class NetworkTCPServerWrapperInstance : INetworkTCPServer
     {
-        public ushort Port { get; set; }
-        public bool AvailableClients {  get { return Listener.Pending(); } }
+        public ushort Port { get; }
+        public bool AvailableClients => Listener.Pending();
 
 
-        private TcpListener Listener { get; set; }
-        private bool IsDisposed { get; set; }
+        private TcpListener Listener { get; }
 
 
         internal NetworkTCPServerWrapperInstance() { }
@@ -54,12 +52,7 @@ namespace PokeD.Server.Windows.WrapperInstances
 
         public void Dispose()
         {
-            IsDisposed = true;
-
-            Thread.Sleep(500);
-
-            if (Listener != null)
-                Listener.Stop();
+            Listener?.Stop();
         }
     }
 }

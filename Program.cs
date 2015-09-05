@@ -35,8 +35,7 @@ namespace PokeD.Server.Windows
             catch (Exception exception)
             {
                 // Maybe it will cause a recursive exception.
-                if (Server != null)
-                    Server.Stop();
+                Server?.Stop();
 
                 CatchError(exception);
             }
@@ -153,7 +152,7 @@ Go To: http://pokemon3d.net/forum/threads/12686/ to report this crash there.
                 stackTrace);
 
             var folder = FileSystemWrapper.LogFolder.CreateFolderAsync("Crash", CreationCollisionOption.OpenIfExists).Result;
-            var crash = folder.CreateFileAsync(string.Format("{0:yyyy-MM-dd_hh.mm.ss}", DateTime.Now), CreationCollisionOption.OpenIfExists).Result;
+            var crash = folder.CreateFileAsync($"{DateTime.Now:yyyy-MM-dd_hh.mm.ss}", CreationCollisionOption.OpenIfExists).Result;
             using (var stream = crash.OpenAsync(PCLStorage.FileAccess.ReadAndWrite).Result)
             using (var writer = new StreamWriter(stream))
                 writer.Write(errorLog);

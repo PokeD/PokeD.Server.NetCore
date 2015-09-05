@@ -14,6 +14,7 @@ namespace PokeD.Server.Windows
                 Server.Stop();
                 ConsoleManager.WriteLine("Stopped the server. Press Enter to continue.");
                 Console.ReadLine();
+                Environment.Exit(0);
             }
 
             else if (message.StartsWith("clear"))
