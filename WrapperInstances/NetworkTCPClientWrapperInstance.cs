@@ -15,7 +15,6 @@ namespace PokeD.Server.Windows.WrapperInstances
 
         private TcpClient Client { get; set; }
         private NetworkStream WriteStream { get; set; }
-        private BufferedStream ReadStream { get; set; }
         private StreamReader StreamReader { get; set; }
 
         private bool IsDisposed { get; set; }
@@ -29,16 +28,14 @@ namespace PokeD.Server.Windows.WrapperInstances
             Client.SendTimeout = 2;
             Client.ReceiveTimeout = 2;
             WriteStream = new NetworkStream(Client.Client);
-            ReadStream = new BufferedStream(WriteStream);
-            StreamReader = new StreamReader(ReadStream);
+            StreamReader = new StreamReader(WriteStream);
         }
 
         public void Connect(string ip, ushort port)
         {
             Client = new TcpClient(ip, port) { SendTimeout = 2, ReceiveTimeout = 2 };
             WriteStream = new NetworkStream(Client.Client);
-            ReadStream = new BufferedStream(WriteStream);
-            StreamReader = new StreamReader(ReadStream);
+            StreamReader = new StreamReader(WriteStream);
         }
         public void Disconnect()
         {
@@ -58,7 +55,7 @@ namespace PokeD.Server.Windows.WrapperInstances
         {
             if (!IsDisposed)
             {
-                try { return ReadStream.Read(buffer, offset, count); }
+                try { return WriteStream.Read(buffer, offset, count); }
                 catch (IOException) { Disconnect(); return -1; }
             }
             else
