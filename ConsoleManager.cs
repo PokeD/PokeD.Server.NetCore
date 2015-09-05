@@ -69,11 +69,11 @@ namespace PokeD.Server.Windows
                 ScreenBufferArray = new char[Console.WindowWidth, Console.WindowHeight];
                 ScreenBuffer = string.Empty;
 
-                DrawLine(string.Format("Main              thread execution time: {0} ms", Program.MainThreadTime            ), 0);
-                DrawLine(string.Format("ClientConnections thread execution time: {0} ms", Server.ClientConnectionsThreadTime), 1);
-                DrawLine(string.Format("PlayerWatcher     thread execution time: {0} ms", Server.PlayerWatcherThreadTime    ), 2);
-                DrawLine(string.Format("PlayerCorrection  thread execution time: {0} ms", Server.PlayerCorrectionThreadTime ), 3);
-                DrawLine(string.Format("ConsoleManager    thread execution time: {0} ms", ConsoleManagerThreadTime          ), 4);
+                DrawLine($"Main              thread execution time: {Program.MainThreadTime} ms",               0);
+                DrawLine($"ClientConnections thread execution time: {Server.ClientConnectionsThreadTime} ms",   1);
+                DrawLine($"PlayerWatcher     thread execution time: {Server.PlayerWatcherThreadTime} ms",       2);
+                DrawLine($"PlayerCorrection  thread execution time: {Server.PlayerCorrectionThreadTime} ms",    3);
+                DrawLine($"ConsoleManager    thread execution time: {ConsoleManagerThreadTime} ms",             4);
 
                 var currentLineCursor = 6;
                 for (int i = 0; i < ConsoleOutput.Count && currentLineCursor < Console.WindowHeight - 2; i++)

@@ -13,7 +13,7 @@ namespace PokeD.Server.Windows
 
         static LogManager()
         {
-            LogFile = FileSystemWrapper.LogFolder.CreateFileAsync(string.Format("{0:yyyy-MM-dd_hh.mm.ss}", DateTime.Now), CreationCollisionOption.OpenIfExists).Result;
+            LogFile = FileSystemWrapper.LogFolder.CreateFileAsync($"{DateTime.Now:yyyy-MM-dd_HH.mm.ss}", CreationCollisionOption.OpenIfExists).Result;
         }
 
         public static void WriteLine(string message)

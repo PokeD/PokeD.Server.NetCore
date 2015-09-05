@@ -14,8 +14,7 @@ namespace PokeD.Server.Windows.WrapperInstances
 
 
         private TcpClient Client { get; set; }
-        private NetworkStream WriteStream { get; set; }
-        private StreamReader StreamReader { get; set; }
+        private NetworkStream Stream { get; set; }
 
         private bool IsDisposed { get; set; }
 
@@ -27,15 +26,13 @@ namespace PokeD.Server.Windows.WrapperInstances
             Client = tcpClient;
             Client.SendTimeout = 2;
             Client.ReceiveTimeout = 2;
-            WriteStream = new NetworkStream(Client.Client);
-            StreamReader = new StreamReader(WriteStream);
+            Stream = new NetworkStream(Client.Client);
         }
 
         public void Connect(string ip, ushort port)
         {
             Client = new TcpClient(ip, port) { SendTimeout = 2, ReceiveTimeout = 2 };
-            WriteStream = new NetworkStream(Client.Client);
-            StreamReader = new StreamReader(WriteStream);
+            Stream = new NetworkStream(Client.Client);
         }
         public void Disconnect()
         {
@@ -47,7 +44,7 @@ namespace PokeD.Server.Windows.WrapperInstances
         {
             if (!IsDisposed)
             {
-                try { WriteStream.Write(bytes, offset, count); }
+                try { Stream.Write(bytes, offset, count); }
                 catch (IOException) { Disconnect(); }
             }
         }
@@ -55,21 +52,12 @@ namespace PokeD.Server.Windows.WrapperInstances
         {
             if (!IsDisposed)
             {
-                try { return WriteStream.Read(buffer, offset, count); }
+                try { return Stream.Read(buffer, offset, count); }
                 catch (IOException) { Disconnect(); return -1; }
             }
             else
                 return -1;
         }
-
-
-        public string ReadLine()
-        {
-            try { return StreamReader.ReadLine(); }
-            catch (IOException) { Disconnect(); return ""; }
-        }
-
-
 
         public INetworkTCPClient NewInstance()
         {
@@ -82,7 +70,7 @@ namespace PokeD.Server.Windows.WrapperInstances
             IsDisposed = true;
 
             Client?.Close();
-            WriteStream?.Dispose();
+            Stream?.Dispose();
         }
     }
 }
