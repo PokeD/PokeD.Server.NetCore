@@ -12,5 +12,5 @@ before_build:
 - nuget restore
 
 build:
-  project: PokeD.Server.Windows.sln
+  project: PokeD.Server.Desktop.sln
   verbosity: minimal
