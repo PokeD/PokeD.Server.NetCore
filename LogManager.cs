@@ -9,7 +9,7 @@ namespace PokeD.Server.Windows
 {
     public static class LogManager
     {
-        private static IFile LogFile { get; set; }
+        private static IFile LogFile { get; }
 
         static LogManager()
         {

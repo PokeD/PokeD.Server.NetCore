@@ -15,6 +15,9 @@ namespace PokeD.Server.Windows
 {
     public static partial class Program
     {
+        static Server Server { get; set; }
+
+
         static Program()
         {
             FileSystemWrapper.Instance = new FileSystemWrapperInstance();
@@ -24,7 +27,6 @@ namespace PokeD.Server.Windows
             ThreadWrapper.Instance = new ThreadWrapperInstance();
         }
 
-        static Server Server { get; set; }
 
         public static void Main(string[] args)
         {
@@ -79,6 +81,7 @@ namespace PokeD.Server.Windows
                 else
                     return;
                 
+
 
                 if (watch.ElapsedMilliseconds < 10)
                 {

@@ -12,7 +12,7 @@ namespace PokeD.Server.Windows.Extensions
 
             var fields = properties
                 .Select(property => new { Name = property.Name, Value = property.GetValue(exception, null) })
-                .Select(x => string.Format("{0} = {1}", x.Name, x.Value != null ? x.Value.ToString() : string.Empty));
+                .Select(x => $"{x.Name} = {x.Value?.ToString() ?? string.Empty}");
 
             return string.Join("\n", fields);
         }

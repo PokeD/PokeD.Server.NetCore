@@ -8,31 +8,37 @@ namespace PokeD.Server.Windows.WrapperInstances
 {
     public class NetworkTCPClientWrapperInstance : INetworkTCPClient
     {
-        public string IP => !IsDisposed && Client != null ? ((IPEndPoint)Client.Client.RemoteEndPoint).Address.ToString() : "";
+        public string IP => !IsDisposed && Client != null ? ((IPEndPoint) Client.Client.RemoteEndPoint).Address.ToString() : "";
         public bool Connected => !IsDisposed && Client != null && Client.Connected;
         public int DataAvailable => !IsDisposed && Client != null ? Client.Available : 0;
 
 
         private TcpClient Client { get; set; }
-        private NetworkStream Stream { get; set; }
+        private Stream Stream { get; set; }
 
         private bool IsDisposed { get; set; }
 
 
         public NetworkTCPClientWrapperInstance() { }
 
-        internal NetworkTCPClientWrapperInstance(TcpClient tcpClient)
+        public NetworkTCPClientWrapperInstance(TcpClient tcpClient)
         {
             Client = tcpClient;
-            Client.SendTimeout = 2;
-            Client.ReceiveTimeout = 2;
-            Stream = new NetworkStream(Client.Client);
+            Client.SendTimeout = 5;
+            Client.ReceiveTimeout = 5;
+            Client.NoDelay = false;
+            Stream = Client.GetStream();
+
         }
+
 
         public void Connect(string ip, ushort port)
         {
-            Client = new TcpClient(ip, port) { SendTimeout = 2, ReceiveTimeout = 2 };
-            Stream = new NetworkStream(Client.Client);
+            if (Connected)
+                Disconnect();
+
+            Client = new TcpClient(ip, port) { SendTimeout = 5, ReceiveTimeout = 5, NoDelay = false };
+            Stream = Client.GetStream();
         }
         public void Disconnect()
         {
@@ -42,21 +48,24 @@ namespace PokeD.Server.Windows.WrapperInstances
 
         public void Send(byte[] bytes, int offset, int count)
         {
-            if (!IsDisposed)
-            {
-                try { Stream.Write(bytes, offset, count); }
-                catch (IOException) { Disconnect(); }
-            }
+            if (IsDisposed)
+                return;
+
+            try { Stream.Write(bytes, offset, count); }
+            catch (IOException) { Disconnect(); }
         }
         public int Receive(byte[] buffer, int offset, int count)
         {
-            if (!IsDisposed)
-            {
-                try { return Stream.Read(buffer, offset, count); }
-                catch (IOException) { Disconnect(); return -1; }
-            }
-            else
+            if (IsDisposed)
                 return -1;
+
+            try { return Stream.Read(buffer, offset, count); }
+            catch (IOException) { Disconnect(); return -1; }
+        }
+
+        public Stream GetStream()
+        {
+            return Stream;
         }
 
         public INetworkTCPClient NewInstance()

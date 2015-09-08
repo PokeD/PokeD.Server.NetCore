@@ -11,8 +11,8 @@ namespace PokeD.Server.Windows
 
         private static char[,] ScreenBufferArray { get; set; }
         private static string ScreenBuffer { get; set; }
-        private static int ScreenWidth { get { return ScreenBufferArray.GetLength(0); } }
-        private static int ScreenHeight { get { return ScreenBufferArray.GetLength(1); } }
+        private static int ScreenWidth => ScreenBufferArray.GetLength(0);
+        private static int ScreenHeight => ScreenBufferArray.GetLength(1);
 
         public static int ScreenFPS { get { return _screenFPS; } set { _screenFPS = value; _excecutionMilliseconds = 1000 / _screenFPS; UpdateTitle(); } }
         private static int _screenFPS;
@@ -20,11 +20,11 @@ namespace PokeD.Server.Windows
         private static int ExcecutionMilliseconds { get { return _excecutionMilliseconds; } set { _excecutionMilliseconds = value; _screenFPS = 1000 / _excecutionMilliseconds; UpdateTitle(); } }
         private static int _excecutionMilliseconds;
 
-        private static List<string> ConsoleOutput { get; set; }
-        private static Queue<string> ConsoleInput { get; set; }
+        private static List<string> ConsoleOutput { get; }
+        private static Queue<string> ConsoleInput { get; }
         private static string CurrentConsoleInput { get; set; }
 
-        public static bool InputAvailable { get { return ConsoleInput.Count > 0; } }
+        public static bool InputAvailable => ConsoleInput.Count > 0;
 
         static ConsoleManager()
         {
@@ -45,18 +45,18 @@ namespace PokeD.Server.Windows
 
         public static void Start()
         {
-            if (ConsoleManagerThread == null || !ConsoleManagerThread.IsAlive)
-            {
-                ScreenBufferArray = new char[Console.WindowWidth, Console.WindowHeight];
-                ScreenFPS = 60;
+            if (ConsoleManagerThread != null && ConsoleManagerThread.IsAlive)
+                return;
 
-                Console.CursorVisible = true;
+            ScreenBufferArray = new char[Console.WindowWidth, Console.WindowHeight];
+            ScreenFPS = 60;
 
-                UpdateTitle();
+            Console.CursorVisible = true;
 
-                ConsoleManagerThread = new Thread(Cycle) { IsBackground = true, Name = "ConsoleManagerThread" };
-                ConsoleManagerThread.Start();
-            }
+            UpdateTitle();
+
+            ConsoleManagerThread = new Thread(Cycle) { IsBackground = true, Name = "ConsoleManagerThread" };
+            ConsoleManagerThread.Start();
         }
 
 
@@ -78,9 +78,6 @@ namespace PokeD.Server.Windows
                 var currentLineCursor = 6;
                 for (int i = 0; i < ConsoleOutput.Count && currentLineCursor < Console.WindowHeight - 2; i++)
                     Draw(ConsoleOutput[i], 0, currentLineCursor++);
-                
-                //for (var i = ConsoleOutput.Count - 1; i >= 0 && currentLineCursor < Console.WindowHeight - 2; i--)
-                //    Draw(ConsoleOutput[i], 0, currentLineCursor++);
 
                 HandleInput();
                 DrawLine(CurrentConsoleInput, Console.WindowHeight - 2);
@@ -104,37 +101,37 @@ namespace PokeD.Server.Windows
 
         private static void HandleInput()
         {
-            if (Console.KeyAvailable)
+            if (!Console.KeyAvailable)
+                return;
+
+            var input = Console.ReadKey();
+            switch (input.Key)
             {
-                var input = Console.ReadKey();
-                switch (input.Key)
-                {
-                    case ConsoleKey.Enter:
-                        ConsoleInput.Enqueue(CurrentConsoleInput);
-                        CurrentConsoleInput = string.Empty;
-                        break;
+                case ConsoleKey.Enter:
+                    ConsoleInput.Enqueue(CurrentConsoleInput);
+                    CurrentConsoleInput = string.Empty;
+                    break;
 
-                    case ConsoleKey.Backspace:
-                        if (CurrentConsoleInput.Length >= 1)
-                            CurrentConsoleInput = CurrentConsoleInput.Remove(CurrentConsoleInput.Length - 1);
-                        break;
+                case ConsoleKey.Backspace:
+                    if (CurrentConsoleInput.Length >= 1)
+                        CurrentConsoleInput = CurrentConsoleInput.Remove(CurrentConsoleInput.Length - 1);
+                    break;
 
-                    case ConsoleKey.Escape:
-                    case ConsoleKey.LeftArrow:
-                    case ConsoleKey.RightArrow:
-                    case ConsoleKey.Home:
-                    case ConsoleKey.End:
-                    case ConsoleKey.Delete:
-                    case ConsoleKey.Oem6:
-                    case ConsoleKey.DownArrow:
-                    case ConsoleKey.UpArrow:
-                    case ConsoleKey.Tab:
-                        break;
+                case ConsoleKey.Escape:
+                case ConsoleKey.LeftArrow:
+                case ConsoleKey.RightArrow:
+                case ConsoleKey.Home:
+                case ConsoleKey.End:
+                case ConsoleKey.Delete:
+                case ConsoleKey.Oem6:
+                case ConsoleKey.DownArrow:
+                case ConsoleKey.UpArrow:
+                case ConsoleKey.Tab:
+                    break;
 
-                    default:
-                        CurrentConsoleInput += input.KeyChar;
-                        break;
-                }
+                default:
+                    CurrentConsoleInput += input.KeyChar;
+                    break;
             }
         }
 
@@ -164,7 +161,7 @@ namespace PokeD.Server.Windows
 
         private static void UpdateTitle()
         {
-            Console.Title = string.Format("PokeD Server FPS: {0}", ScreenFPS);
+            Console.Title = $"PokeD Server FPS: {ScreenFPS}";
         }
 
         public static void Clear()

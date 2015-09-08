@@ -6,11 +6,11 @@ namespace PokeD.Server.Windows.WrapperInstances
 {
     public class FileSystemWrapperInstance : Core.Wrappers.IFileSystem
     {
-        public IFolder UsersFolder { get; private set; }
+        public IFolder UsersFolder { get; }
 
-        public IFolder SettingsFolder { get; private set; }
+        public IFolder SettingsFolder { get; }
 
-        public IFolder LogFolder { get; private set; }
+        public IFolder LogFolder { get; }
 
 
         public FileSystemWrapperInstance()
