@@ -76,7 +76,7 @@ namespace PokeD.Server.Windows
                 DrawLine($"ConsoleManager    thread execution time: {ConsoleManagerThreadTime} ms",             4);
 
                 var currentLineCursor = 6;
-                for (int i = 0; i < ConsoleOutput.Count && currentLineCursor < Console.WindowHeight - 2; i++)
+                for (var i = 0; i < ConsoleOutput.Count && currentLineCursor < Console.WindowHeight - 2; i++)
                     Draw(ConsoleOutput[i], 0, currentLineCursor++);
 
                 HandleInput();

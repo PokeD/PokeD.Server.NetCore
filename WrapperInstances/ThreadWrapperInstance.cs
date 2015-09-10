@@ -8,7 +8,7 @@ namespace PokeD.Server.Windows.WrapperInstances
 {
     public class ThreadWrapperInstance : IThreadWrapper
     {
-        private List<Thread> Threads { get; set; }
+        private List<Thread> Threads { get; }
 
         public ThreadWrapperInstance() { Threads = new List<Thread>(); }
 

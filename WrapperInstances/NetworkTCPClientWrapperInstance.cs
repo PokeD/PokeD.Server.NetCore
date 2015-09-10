@@ -52,7 +52,7 @@ namespace PokeD.Server.Windows.WrapperInstances
                 return;
 
             try { Stream.Write(bytes, offset, count); }
-            catch (IOException) { Disconnect(); }
+            catch (IOException) { Dispose(); }
         }
         public int Receive(byte[] buffer, int offset, int count)
         {
@@ -60,7 +60,7 @@ namespace PokeD.Server.Windows.WrapperInstances
                 return -1;
 
             try { return Stream.Read(buffer, offset, count); }
-            catch (IOException) { Disconnect(); return -1; }
+            catch (IOException) { Dispose(); return -1; }
         }
 
         public Stream GetStream()
@@ -76,6 +76,9 @@ namespace PokeD.Server.Windows.WrapperInstances
 
         public void Dispose()
         {
+            if(Connected)
+                Disconnect();
+
             IsDisposed = true;
 
             Client?.Close();
