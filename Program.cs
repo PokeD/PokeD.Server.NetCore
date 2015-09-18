@@ -120,26 +120,27 @@ namespace PokeD.Server.Windows
 PokeD.Server Crash Log v {0}
 --------------------------------------------------
 System specifications:
-Operating system: {1} [{1}]
-Core architecture: {2}
-System language: {3}
-Logical processors: {4}
+Operating system: {1} [{2}]
+Core architecture: {3}
+System language: {4}
+Logical processors: {5}
 --------------------------------------------------
             
 Error information:
-Message: {5}
-InnerException: {6}
-HelpLink: {7}
-Source: {8}
+Message: {6}
+InnerException: {7}
+HelpLink: {8}
+Source: {9}
 --------------------------------------------------
 CallStack:
-{9}
+{10}
 --------------------------------------------------
 You should report this error if it is reproduceable or you could not solve it by yourself.
 Go To: http://pokemon3d.net/forum/threads/12686/ to report this crash there.
 [/CODE]",
                 Environment.Version,
                 Environment.OSVersion,
+                Type.GetType("Mono.Runtime") != null ? "Mono": ".NET",
                 Environment.Is64BitOperatingSystem ? "64 Bit" : "32 Bit",
                 CultureInfo.CurrentCulture.EnglishName,
                 Environment.ProcessorCount,
