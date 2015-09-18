@@ -116,11 +116,6 @@ namespace PokeD.Server.Windows
         }
         private static void CatchError(Exception ex)
         {
-            var coreArchitecture = Environment.Is64BitOperatingSystem ? "64 Bit" : "32 Bit";
-            var helpLink = string.IsNullOrWhiteSpace(ex.HelpLink) ? "No helplink available." : ex.HelpLink;
-            var innerException = string.IsNullOrWhiteSpace(ex.InnerException.Message) ? "Nothing" : ex.InnerException.Message;
-            var stackTrace = string.IsNullOrWhiteSpace(ex.InnerException.StackTrace) ? ex.StackTrace : ex.InnerException.StackTrace + Environment.NewLine + ex.StackTrace;
-
             var errorLog = string.Format(@"[CODE]
 PokeD.Server Crash Log v {0}
 --------------------------------------------------
@@ -145,14 +140,14 @@ Go To: http://pokemon3d.net/forum/threads/12686/ to report this crash there.
 [/CODE]",
                 Environment.Version,
                 Environment.OSVersion,
-                coreArchitecture,
+                Environment.Is64BitOperatingSystem ? "64 Bit" : "32 Bit",
                 CultureInfo.CurrentCulture.EnglishName,
                 Environment.ProcessorCount,
                 ex.Message,
-                innerException,
-                helpLink,
+                ex.InnerException?.Message ?? "Nothing",
+                string.IsNullOrWhiteSpace(ex.HelpLink) ? "Nothing" : ex.HelpLink,
                 ex.Source,
-                stackTrace);
+                ex.InnerException == null ? ex.StackTrace : ex.InnerException.StackTrace + Environment.NewLine + ex.StackTrace);
 
             var folder = FileSystemWrapper.LogFolder.CreateFolderAsync("Crash", CreationCollisionOption.OpenIfExists).Result;
             var crash = folder.CreateFileAsync($"{DateTime.Now:yyyy-MM-dd_HH.mm.ss}", CreationCollisionOption.OpenIfExists).Result;
