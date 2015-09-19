@@ -32,18 +32,22 @@ namespace PokeD.Server.Windows.WrapperInstances
         }
 
 
-        public void Connect(string ip, ushort port)
+        public INetworkTCPClient Connect(string ip, ushort port)
         {
             if (Connected)
                 Disconnect();
 
             Client = new TcpClient(ip, port) { SendTimeout = 5, ReceiveTimeout = 5, NoDelay = false };
             Stream = Client.GetStream();
+
+            return this;
         }
-        public void Disconnect()
+        public INetworkTCPClient Disconnect()
         {
             if (Connected)
                 Client.Client.Disconnect(false);
+
+            return this;
         }
 
         public void Send(byte[] bytes, int offset, int count)

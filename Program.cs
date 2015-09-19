@@ -13,7 +13,7 @@ using PokeD.Server.Windows.WrapperInstances;
 
 namespace PokeD.Server.Windows
 {
-    public static partial class Program
+    public static partial class Program 
     {
         static Server Server { get; set; }
 
@@ -28,7 +28,7 @@ namespace PokeD.Server.Windows
         }
 
 
-        public static void Main(string[] args)
+        public static void Main(params string[] args)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace PokeD.Server.Windows
             Start(args);
         }
 
-        private static void Start(string[] args)
+        private static void Start(params string[] args)
         {
             foreach (var arg in args)
             {
