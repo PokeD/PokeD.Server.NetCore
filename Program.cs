@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 
 using PCLStorage;
@@ -138,7 +139,7 @@ CallStack:
 You should report this error if it is reproduceable or you could not solve it by yourself.
 Go To: http://pokemon3d.net/forum/threads/12686/ to report this crash there.
 [/CODE]",
-                Environment.Version,
+                Assembly.GetExecutingAssembly().GetName().Version,
                 Environment.OSVersion,
                 Type.GetType("Mono.Runtime") != null ? "Mono": ".NET",
                 Environment.Is64BitOperatingSystem ? "64 Bit" : "32 Bit",
