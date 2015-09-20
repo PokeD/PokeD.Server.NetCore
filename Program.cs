@@ -117,7 +117,7 @@ Logical processors: {5}
 {6}
 --------------------------------------------------
 You should report this error if it is reproduceable or you could not solve it by yourself.
-Go To: http://pokemon3d.net/forum/threads/12686/ to report this crash there.
+Go To: http://pokemon3d.net/forum/threads/12901/ to report this crash there.
 [/CODE]",
                 Assembly.GetExecutingAssembly().GetName().Version,
                 Environment.OSVersion,
