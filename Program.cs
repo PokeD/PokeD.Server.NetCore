@@ -31,10 +31,7 @@ namespace PokeD.Server.Windows
 
         public static void Main(params string[] args)
         {
-            try
-            {
-                AppDomain.CurrentDomain.UnhandledException += (sender, e) => CatchErrorObject(e.ExceptionObject);
-            }
+            try { AppDomain.CurrentDomain.UnhandledException += (sender, e) => CatchErrorObject(e.ExceptionObject); }
             catch (Exception exception)
             {
                 // Maybe it will cause a recursive exception.
@@ -77,11 +74,11 @@ namespace PokeD.Server.Windows
                     }
                 }
 
-                if(Server != null)
-                    Server.Update();
-                else
-                    return;
-                
+                if(Server == null || (Server != null && Server.IsDisposing))
+                    break;
+
+                Server.Update();
+
 
 
                 if (watch.ElapsedMilliseconds < 10)
@@ -133,7 +130,9 @@ Go To: http://pokemon3d.net/forum/threads/12901/ to report this crash there.
             using (var writer = new StreamWriter(stream))
                 writer.Write(errorLog);
 
+#if RELEASE
             Environment.Exit((int) ExitCodes.UnknownError);
+#endif
         }
 
         private static string BuildErrorStringRecursive(Exception ex)

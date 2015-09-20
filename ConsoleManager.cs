@@ -20,18 +20,12 @@ namespace PokeD.Server.Windows
         private static int ExcecutionMilliseconds { get { return _excecutionMilliseconds; } set { _excecutionMilliseconds = value; _screenFPS = 1000 / _excecutionMilliseconds; UpdateTitle(); } }
         private static int _excecutionMilliseconds;
 
-        private static List<string> ConsoleOutput { get; }
-        private static Queue<string> ConsoleInput { get; }
-        private static string CurrentConsoleInput { get; set; }
+        private static List<string> ConsoleOutput { get; } = new List<string>();
+        private static Queue<string> ConsoleInput { get; } = new Queue<string>();
+        private static string CurrentConsoleInput { get; set; } = string.Empty;
 
         public static bool InputAvailable => ConsoleInput.Count > 0;
 
-        static ConsoleManager()
-        {
-            ConsoleOutput = new List<string>();
-            ConsoleInput = new Queue<string>();
-            CurrentConsoleInput = string.Empty;
-        }
 
         public static void WriteLine(string text)
         {
