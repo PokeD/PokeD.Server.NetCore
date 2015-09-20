@@ -130,7 +130,7 @@ Go To: http://pokemon3d.net/forum/threads/12901/ to report this crash there.
             using (var writer = new StreamWriter(stream))
                 writer.Write(errorLog);
 
-#if RELEASE
+#if !DEBUG
             Environment.Exit((int) ExitCodes.UnknownError);
 #endif
         }
