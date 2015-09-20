@@ -46,7 +46,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\ExceptionExtensions.cs" />
+    <Compile Include="ExitCodes.cs" />
     <Compile Include="LogManager.cs" />
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="Program.Commands.cs" />
