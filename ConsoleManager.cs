@@ -37,13 +37,14 @@ namespace PokeD.Server.Windows
             return ConsoleInput.Dequeue();
         }
 
-        public static void Start()
+
+        public static void Start(int fps = 60)
         {
             if (ConsoleManagerThread != null && ConsoleManagerThread.IsAlive)
                 return;
 
             ScreenBufferArray = new char[Console.WindowWidth, Console.WindowHeight];
-            ScreenFPS = 60;
+            ScreenFPS = fps;
 
             Console.CursorVisible = true;
 
@@ -60,7 +61,7 @@ namespace PokeD.Server.Windows
             var watch = Stopwatch.StartNew();
             while (true)
             {
-                ScreenBufferArray = new char[Console.WindowWidth, Console.WindowHeight];
+                Array.Clear(ScreenBufferArray, 0, ScreenBufferArray.Length);
                 ScreenBuffer = string.Empty;
 
                 DrawLine($"Main              thread execution time: {Program.MainThreadTime} ms",               0);
