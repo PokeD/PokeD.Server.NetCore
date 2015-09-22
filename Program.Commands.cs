@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PokeD.Server.Windows
+namespace PokeD.Server.Desktop
 {
     public static partial class Program
     {

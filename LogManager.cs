@@ -5,7 +5,7 @@ using PCLStorage;
 
 using PokeD.Core.Wrappers;
 
-namespace PokeD.Server.Windows
+namespace PokeD.Server.Desktop
 {
     public static class LogManager
     {

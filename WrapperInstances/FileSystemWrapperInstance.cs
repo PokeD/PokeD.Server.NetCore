@@ -2,7 +2,7 @@
 
 using PCLStorage;
 
-namespace PokeD.Server.Windows.WrapperInstances
+namespace PokeD.Server.Desktop.WrapperInstances
 {
     public class FileSystemWrapperInstance : Core.Wrappers.IFileSystem
     {

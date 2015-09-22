@@ -10,9 +10,9 @@ using PCLStorage;
 
 using PokeD.Core.Wrappers;
 
-using PokeD.Server.Windows.WrapperInstances;
+using PokeD.Server.Desktop.WrapperInstances;
 
-namespace PokeD.Server.Windows
+namespace PokeD.Server.Desktop
 {
     public static partial class Program 
     {

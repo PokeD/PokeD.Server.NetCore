@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
-namespace PokeD.Server.Windows
+namespace PokeD.Server.Desktop
 {
     public static class ConsoleManager
     {
