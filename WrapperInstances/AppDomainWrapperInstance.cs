@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 using PokeD.Core.Wrappers;
@@ -13,38 +12,14 @@ namespace PokeD.Server.Desktop.WrapperInstances
             return Assembly.GetCallingAssembly();
         }
 
-        public IList<IAssembly> GetAssemblies()
+        public Assembly[] GetAssemblies()
         {
-            var result = new List<IAssembly>();
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-                result.Add(new AssemblyWrapper(assembly));
-
-            return result;
+            return AppDomain.CurrentDomain.GetAssemblies();
         }
 
         public Assembly LoadAssembly(byte[] assemblyData)
         {
             return Assembly.Load(assemblyData);
-        }
-    }
-
-    public class AssemblyWrapper : IAssembly
-    {
-        private readonly Assembly _assembly;
-
-        public AssemblyWrapper(Assembly assembly)
-        {
-            _assembly = assembly;
-        }
-
-        public string GetName()
-        {
-            return _assembly.GetName().ToString();
-        }
-
-        public IList<Type> GetTypes()
-        {
-            return _assembly.GetTypes();
         }
     }
 }

@@ -22,7 +22,6 @@ namespace PokeD.Server.Desktop.WrapperInstances
             Threads.Add(thread);
             return Threads.IndexOf(thread);
         }
-
         public void AbortThread(int id)
         {
             if(Threads.Count >= id)
