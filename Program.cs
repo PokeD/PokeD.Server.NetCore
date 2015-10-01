@@ -21,6 +21,7 @@ namespace PokeD.Server.Desktop
 
         static Program()
         {
+            AppDomainWrapper.Instance = new AppDomainWrapperInstance();
             FileSystemWrapper.Instance = new FileSystemWrapperInstance();
             NetworkTCPClientWrapper.Instance = new NetworkTCPClientWrapperInstance();
             NetworkTCPServerWrapper.Instance = new NetworkTCPServerWrapperInstance();
