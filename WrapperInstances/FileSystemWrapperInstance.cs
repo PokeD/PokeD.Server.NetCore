@@ -4,7 +4,7 @@ using PCLStorage;
 
 namespace PokeD.Server.Desktop.WrapperInstances
 {
-    public class FileSystemWrapperInstance : Core.Wrappers.IFileSystem
+    public class FileSystemWrapperInstance : Aragas.Core.Wrappers.IFileSystem
     {
         public IFolder UsersFolder { get; }
         public IFolder SettingsFolder { get; }

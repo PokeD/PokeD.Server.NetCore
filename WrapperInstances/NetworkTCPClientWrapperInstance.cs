@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 
-using PokeD.Core.Wrappers;
+using Aragas.Core.Wrappers;
 
 namespace PokeD.Server.Desktop.WrapperInstances
 {

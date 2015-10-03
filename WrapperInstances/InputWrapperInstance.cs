@@ -1,12 +1,12 @@
 ﻿using System;
 
-using PokeD.Core.Wrappers;
+using Aragas.Core.Wrappers;
 
 namespace PokeD.Server.Desktop.WrapperInstances
 {
     public class InputWrapperInstance : IInputWrapper
     {
-        public event Action<string> OnKey;
+        public event EventHandler<KeyPressedEventArgs> KeyPressed;
 
         public InputWrapperInstance() { }
 
