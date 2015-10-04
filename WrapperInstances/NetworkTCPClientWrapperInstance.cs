@@ -26,7 +26,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
             Client = tcpClient;
             Client.SendTimeout = 5;
             Client.ReceiveTimeout = 5;
-            Client.NoDelay = false;
+            Client.NoDelay = true;
             Stream = Client.GetStream();
 
         }
@@ -37,7 +37,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
             if (Connected)
                 Disconnect();
 
-            Client = new TcpClient(ip, port) { SendTimeout = 5, ReceiveTimeout = 5, NoDelay = false };
+            Client = new TcpClient(ip, port) { SendTimeout = 5, ReceiveTimeout = 5, NoDelay = true };
             Stream = Client.GetStream();
 
             return this;
