@@ -125,8 +125,7 @@ Go To: http://pokemon3d.net/forum/threads/12901/ to report this crash there.
                 Environment.ProcessorCount,
                 BuildErrorStringRecursive(ex));
 
-            var crashFolder = FileSystemWrapper.LogFolder.CreateFolderAsync("Crash", CreationCollisionOption.OpenIfExists).Result;
-            var crashFile = crashFolder.CreateFileAsync($"{DateTime.Now:yyyy-MM-dd_HH.mm.ss}.log", CreationCollisionOption.OpenIfExists).Result;
+            var crashFile = FileSystemWrapper.CrashLogFolder.CreateFileAsync($"{DateTime.Now:yyyy-MM-dd_HH.mm.ss}.log", CreationCollisionOption.OpenIfExists).Result;
             using (var stream = crashFile.OpenAsync(PCLStorage.FileAccess.ReadAndWrite).Result)
             using (var writer = new StreamWriter(stream))
                 writer.Write(errorLog);
