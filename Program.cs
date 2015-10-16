@@ -23,9 +23,10 @@ namespace PokeD.Server.Desktop
         {
             AppDomainWrapper.Instance = new AppDomainWrapperInstance();
             FileSystemWrapper.Instance = new FileSystemWrapperInstance();
+            InputWrapper.Instance = new InputWrapperInstance();
+            LuaWrapper.Instance = new LuaWrapperInstance();
             NetworkTCPClientWrapper.Instance = new NetworkTCPClientWrapperInstance();
             NetworkTCPServerWrapper.Instance = new NetworkTCPServerWrapperInstance();
-            InputWrapper.Instance = new InputWrapperInstance();
             ThreadWrapper.Instance = new ThreadWrapperInstance();
         }
 
