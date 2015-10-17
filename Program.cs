@@ -24,7 +24,10 @@ namespace PokeD.Server.Desktop
             AppDomainWrapper.Instance = new AppDomainWrapperInstance();
             FileSystemWrapper.Instance = new FileSystemWrapperInstance();
             InputWrapper.Instance = new InputWrapperInstance();
-            LuaWrapper.Instance = new LuaWrapperInstance();
+
+            //LuaWrapper.Instance = new NLuaWrapperInstance();
+            LuaWrapper.Instance = new MoonLuaWrapperInstance();
+
             NetworkTCPClientWrapper.Instance = new NetworkTCPClientWrapperInstance();
             NetworkTCPServerWrapper.Instance = new NetworkTCPServerWrapperInstance();
             ThreadWrapper.Instance = new ThreadWrapperInstance();
@@ -50,6 +53,9 @@ namespace PokeD.Server.Desktop
             {
                 if (arg.StartsWith("-enableconsole"))
                     ConsoleManager.Start();
+
+                if (arg.StartsWith("-usenlua"))
+                    LuaWrapper.Instance = new NLuaWrapperInstance();
             }
 
             Server = new Server();

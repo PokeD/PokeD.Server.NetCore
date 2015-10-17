@@ -40,6 +40,10 @@
       <HintPath>packages\NLua_Safe.1.3.2.1\lib\net45\KopiLua.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MoonSharp.Interpreter, Version=0.9.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MoonSharp.0.9.8.0\lib\net40-client\MoonSharp.Interpreter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NLua, Version=1.3.2.0, Culture=neutral, PublicKeyToken=8df2ab518030ea95, processorArchitecture=MSIL">
       <HintPath>packages\NLua_Safe.1.3.2.1\lib\net45\NLua.dll</HintPath>
       <Private>True</Private>
@@ -64,7 +68,8 @@
     <Compile Include="WrapperInstances\NetworkTCPServerWrapperInstance.cs" />
     <Compile Include="WrapperInstances\NetworkTCPClientWrapperInstance.cs" />
     <Compile Include="WrapperInstances\AppDomainWrapperInstance.cs" />
-    <Compile Include="WrapperInstances\LuaWrapperInstance.cs" />
+    <Compile Include="WrapperInstances\MoonLuaWrapperInstance.cs" />
+    <Compile Include="WrapperInstances\NLuaWrapperInstance.cs" />
     <Compile Include="WrapperInstances\ThreadWrapperInstance.cs" />
   </ItemGroup>
   <ItemGroup>

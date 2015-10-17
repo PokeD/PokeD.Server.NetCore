@@ -9,16 +9,15 @@ using PCLStorage;
 
 namespace PokeD.Server.Desktop.WrapperInstances
 {
-    public class LuaClass : ILua
+    public class NLuaClass : ILua
     {
         string LuaName { get; }
 
         internal Lua InternalLua => Script;
         Lua Script { get; }
-        string ScriptText { get; }
 
-        public LuaClass() { Script = new Lua(); }
-        public LuaClass(string luaName, bool instantInit = false)
+        public NLuaClass() { Script = new Lua(); }
+        public NLuaClass(string luaName, bool instantInit = false)
         {
             LuaName = luaName;
 
@@ -51,19 +50,19 @@ namespace PokeD.Server.Desktop.WrapperInstances
         public object[] CallFunction(string functionName, params object[] args) { return (Script[functionName] as LuaFunction)?.Call(args); }
     }
 
-    public class LuaTableClass : ILuaTable
+    public class NLuaTableClass : ILuaTable
     {
         LuaTable Table { get; }
 
-        private LuaTableClass(LuaTable table) { Table = table; }
-        public LuaTableClass(ILua lua, string tableName) { Table = ((LuaClass) lua).InternalLua.GetTable(tableName); }
+        private NLuaTableClass(LuaTable table) { Table = table; }
+        public NLuaTableClass(ILua lua, string tableName) { Table = ((NLuaClass) lua).InternalLua.GetTable(tableName); }
 
         public object this[object field]
         {
             get
             {
                 if (Table[field] is LuaTable)
-                    return new LuaTableClass((LuaTable) Table[field]);
+                    return new NLuaTableClass((LuaTable) Table[field]);
                 return Table[field];
             }
             set { Table[field] = value; }
@@ -73,7 +72,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
             get
             {
                 if (Table[field] is LuaTable)
-                    return new LuaTableClass((LuaTable) Table[field]);
+                    return new NLuaTableClass((LuaTable) Table[field]);
                 return Table[field];
             }
             set { Table[field] = value; }
@@ -92,7 +91,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
         private static object RecursiveParse(object value)
         {
             if (value is LuaTable)
-                return RecursiveParse(new LuaTableClass((LuaTable) value).ToDictionary());
+                return RecursiveParse(new NLuaTableClass((LuaTable) value).ToDictionary());
 
             return value;
         }
@@ -115,10 +114,10 @@ namespace PokeD.Server.Desktop.WrapperInstances
         }
     }
 
-    public class LuaWrapperInstance : ILuaWrapper
+    public class NLuaWrapperInstance : ILuaWrapper
     {
-        public ILua Create() { return new LuaClass(); }
-        public ILua Create(string scriptName) { return new LuaClass(scriptName); }
-        public ILuaTable Create(ILua lua, string tableName) { return new LuaTableClass(lua, tableName); }
+        public ILua Create() { return new NLuaClass(); }
+        public ILua Create(string scriptName) { return new NLuaClass(scriptName); }
+        public ILuaTable Create(ILua lua, string tableName) { return new NLuaTableClass(lua, tableName); }
     }
 }
