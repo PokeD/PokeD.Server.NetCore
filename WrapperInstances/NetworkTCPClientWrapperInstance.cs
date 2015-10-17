@@ -9,7 +9,7 @@ using Aragas.Core.Wrappers;
 
 namespace PokeD.Server.Desktop.WrapperInstances
 {
-    public class NetworkTCPClientWrapperInstance : INetworkTCPClient
+    public class NetworkTCPClientWrapperInstance1 : INetworkTCPClient
     {
         #region Connection Stuff
         private static int RefreshConnectionInfoTimeStatic { get; set; } = 5000;
@@ -67,8 +67,8 @@ namespace PokeD.Server.Desktop.WrapperInstances
         private bool IsDisposed { get; set; }
 
 
-        public NetworkTCPClientWrapperInstance() { }
-        internal NetworkTCPClientWrapperInstance(TcpClient tcpClient)
+        public NetworkTCPClientWrapperInstance1() { }
+        internal NetworkTCPClientWrapperInstance1(TcpClient tcpClient)
         {
             Client = tcpClient;
             Client.SendTimeout = 5;
@@ -136,6 +136,94 @@ namespace PokeD.Server.Desktop.WrapperInstances
                 return;
 
             Disconnect();
+
+            IsDisposed = true;
+
+            Client?.Close();
+            Stream?.Dispose();
+        }
+    }
+
+    public class NetworkTCPClientWrapperInstance : INetworkTCPClient
+    {
+        public int RefreshConnectionInfoTime { get; set; }
+
+        public string IP => !IsDisposed && Client != null ? ((IPEndPoint) Client.Client.RemoteEndPoint).Address.ToString() : "";
+        public bool Connected => !IsDisposed && Client != null && Client.Client.Connected;
+        public int DataAvailable => !IsDisposed && Client != null ? Client.Available : 0;
+
+
+        private TcpClient Client { get; set; }
+        private Stream Stream { get; set; }
+
+        private bool IsDisposed { get; set; }
+
+
+        public NetworkTCPClientWrapperInstance() { }
+
+        public NetworkTCPClientWrapperInstance(TcpClient tcpClient)
+        {
+            Client = tcpClient;
+            Client.SendTimeout = 5;
+            Client.ReceiveTimeout = 5;
+            Client.NoDelay = false;
+            Stream = Client.GetStream();
+
+        }
+
+
+        public INetworkTCPClient Connect(string ip, ushort port)
+        {
+            if (Connected)
+                Disconnect();
+
+            Client = new TcpClient(ip, port) { SendTimeout = 5, ReceiveTimeout = 5, NoDelay = false };
+            Stream = Client.GetStream();
+
+            return this;
+        }
+        public INetworkTCPClient Disconnect()
+        {
+            if (Connected)
+                Client.Client.Disconnect(false);
+
+            return this;
+        }
+
+        public void Send(byte[] bytes, int offset, int count)
+        {
+            if (IsDisposed)
+                return;
+
+            try { Stream.Write(bytes, offset, count); }
+            catch (IOException) { Dispose(); }
+            catch (SocketException) { Dispose(); }
+        }
+        public int Receive(byte[] buffer, int offset, int count)
+        {
+            if (IsDisposed)
+                return -1;
+
+            try { return Stream.Read(buffer, offset, count); }
+            catch (IOException) { Dispose(); return -1; }
+            catch (SocketException) { Dispose(); return -1; }
+        }
+
+        public Stream GetStream()
+        {
+            return Stream;
+        }
+
+        public INetworkTCPClient NewInstance()
+        {
+            return new NetworkTCPClientWrapperInstance();
+        }
+
+
+        public void Dispose()
+        {
+            if (Connected)
+                Disconnect();
 
             IsDisposed = true;
 
