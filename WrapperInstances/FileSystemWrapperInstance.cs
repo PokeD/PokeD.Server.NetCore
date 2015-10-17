@@ -20,7 +20,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
             SettingsFolder  = baseDirectory.CreateFolderAsync("Settings", CreationCollisionOption.OpenIfExists).Result;
             LogFolder       = baseDirectory.CreateFolderAsync("Logs", CreationCollisionOption.OpenIfExists).Result;
             CrashLogFolder  = LogFolder.CreateFolderAsync("Crash", CreationCollisionOption.OpenIfExists).Result;
-            LuaFolder       = LogFolder.CreateFolderAsync("Lua", CreationCollisionOption.OpenIfExists).Result;
+            LuaFolder       = baseDirectory.CreateFolderAsync("Lua", CreationCollisionOption.OpenIfExists).Result;
         }
     }
 }

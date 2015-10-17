@@ -15,15 +15,18 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
         internal Lua InternalLua => Script;
         Lua Script { get; }
+        string ScriptText { get; }
 
         public LuaClass() { Script = new Lua(); }
-        public LuaClass(string luaName)
+        public LuaClass(string luaName, bool instantInit = false)
         {
             LuaName = luaName;
 
             Script = new Lua();
+            Script.LoadCLRPackage();
 
-            ReloadFile();
+            if (instantInit)
+                ReloadFile();
         }
 
         public bool ReloadFile()
