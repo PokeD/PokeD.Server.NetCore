@@ -91,37 +91,37 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
     public class MoonLuaTableClass : ILuaTable
     {
-        Table Table { get; }
+        Table TableScript { get; }
 
-        private MoonLuaTableClass(Table table) { Table = table; }
-        public MoonLuaTableClass(ILua lua, string tableName) { Table = lua[tableName] as Table; }
+        private MoonLuaTableClass(Table tableScript) { TableScript = tableScript; }
+        public MoonLuaTableClass(ILua lua, string tableName) { TableScript = lua[tableName] as Table; }
 
         public object this[object field]
         {
             get
             {
-                if (Table[field] is Table)
-                    return new MoonLuaTableClass((Table) Table[field]);
-                return Table[field];
+                if (TableScript[field] is Table)
+                    return new MoonLuaTableClass((Table) TableScript[field]);
+                return TableScript[field];
             }
-            set { Table[field] = value; }
+            set { TableScript[field] = value; }
         }
         public object this[string field]
         {
             get
             {
-                if (Table[field] is Table)
-                    return new MoonLuaTableClass((Table) Table[field]);
-                return Table[field];
+                if (TableScript[field] is Table)
+                    return new MoonLuaTableClass((Table) TableScript[field]);
+                return TableScript[field];
             }
-            set { Table[field] = value; }
+            set { TableScript[field] = value; }
         }
 
         public Dictionary<object, object> ToDictionary()
         {
             var dictionary = new Dictionary<object, object>();
 
-            foreach (var pair in Table.Pairs)
+            foreach (var pair in TableScript.Pairs)
                 dictionary.Add(pair.Key, RecursiveParse(pair.Value));
             
             return dictionary;
@@ -137,7 +137,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
         public List<object> ToList()
         {
             var list = new List<object>();
-            foreach (var value in Table.Values)
+            foreach (var value in TableScript.Values)
                 list.Add(value);
 
             return list;
@@ -145,7 +145,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
         public object[] ToArray()
         {
             var list = new List<object>();
-            foreach (var value in Table.Values)
+            foreach (var value in TableScript.Values)
                 list.Add(value);
 
             return list.ToArray();

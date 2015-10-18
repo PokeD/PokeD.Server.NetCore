@@ -52,37 +52,37 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
     public class NLuaTableClass : ILuaTable
     {
-        LuaTable Table { get; }
+        LuaTable TableScript { get; }
 
-        private NLuaTableClass(LuaTable table) { Table = table; }
-        public NLuaTableClass(ILua lua, string tableName) { Table = ((NLuaClass) lua).InternalLua.GetTable(tableName); }
+        private NLuaTableClass(LuaTable tableScript) { TableScript = tableScript; }
+        public NLuaTableClass(ILua lua, string tableName) { TableScript = ((NLuaClass) lua).InternalLua.GetTable(tableName); }
 
         public object this[object field]
         {
             get
             {
-                if (Table[field] is LuaTable)
-                    return new NLuaTableClass((LuaTable) Table[field]);
-                return Table[field];
+                if (TableScript[field] is LuaTable)
+                    return new NLuaTableClass((LuaTable) TableScript[field]);
+                return TableScript[field];
             }
-            set { Table[field] = value; }
+            set { TableScript[field] = value; }
         }
         public object this[string field]
         {
             get
             {
-                if (Table[field] is LuaTable)
-                    return new NLuaTableClass((LuaTable) Table[field]);
-                return Table[field];
+                if (TableScript[field] is LuaTable)
+                    return new NLuaTableClass((LuaTable) TableScript[field]);
+                return TableScript[field];
             }
-            set { Table[field] = value; }
+            set { TableScript[field] = value; }
         }
 
         public Dictionary<object, object> ToDictionary()
         {
             var dictionary = new Dictionary<object, object>();
 
-            var enumerator = Table.GetEnumerator();
+            var enumerator = TableScript.GetEnumerator();
             while (enumerator.MoveNext())
                 dictionary.Add(enumerator.Key, RecursiveParse(enumerator.Value));
 
@@ -99,7 +99,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
         public List<object> ToList()
         {
             var list = new List<object>();
-            foreach (var value in Table.Values)
+            foreach (var value in TableScript.Values)
                 list.Add(value);
 
             return list;
@@ -107,7 +107,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
         public object[] ToArray()
         {
             var list = new List<object>();
-            foreach (var value in Table.Values)
+            foreach (var value in TableScript.Values)
                 list.Add(value);
 
             return list.ToArray();
