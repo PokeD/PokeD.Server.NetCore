@@ -40,22 +40,17 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
     public class MoonLuaClass : ILua
     {
-        static MoonLuaClass()
-        {
-            UserData.RegisterType<Vector3>();
-        }
-
         string LuaName { get; }
 
-        Script Script { get; }
+        Script LuaScript { get; }
 
-        public MoonLuaClass() { Script = new Script(); }
+        public MoonLuaClass() { LuaScript = new Script(); }
         public MoonLuaClass(string luaName, bool instantInit = false)
         {
             LuaName = luaName;
 
-            Script = new Script();
-            Script.Options.ScriptLoader = new FileSystemScriptLoader();
+            LuaScript = new Script();
+            LuaScript.Options.ScriptLoader = new FileSystemScriptLoader();
 
             if (instantInit)
                 ReloadFile();
@@ -68,7 +63,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
                 using (var stream = FileSystemWrapper.LuaFolder.GetFileAsync(LuaName).Result.OpenAsync(PCLStorage.FileAccess.Read).Result)
                 using (var reader = new StreamReader(stream))
                 {
-                    Script.DoString(reader.ReadToEnd());
+                    LuaScript.DoString(reader.ReadToEnd());
                     return true;
                 }
 
@@ -77,20 +72,20 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
         public object this[string fullPath]
         {
-            get { return Script.Globals[fullPath]; }
+            get { return LuaScript.Globals[fullPath]; }
             set
             {
                 var type = value.GetType();
                 if (!UserData.IsTypeRegistered(type))
                     UserData.RegisterType(type);
                 
-                Script.Globals[fullPath] = value;
+                LuaScript.Globals[fullPath] = value;
             }
         }
 
         public object[] CallFunction(string functionName, params object[] args)
         {
-            return Script.Call(Script.Globals[functionName], args).Tuple;
+            return LuaScript.Call(LuaScript.Globals[functionName], args).Tuple;
         }
     }
 

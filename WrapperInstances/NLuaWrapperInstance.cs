@@ -13,16 +13,16 @@ namespace PokeD.Server.Desktop.WrapperInstances
     {
         string LuaName { get; }
 
-        internal Lua InternalLua => Script;
-        Lua Script { get; }
+        internal Lua InternalLua => LuaScript;
+        Lua LuaScript { get; }
 
-        public NLuaClass() { Script = new Lua(); }
+        public NLuaClass() { LuaScript = new Lua(); }
         public NLuaClass(string luaName, bool instantInit = false)
         {
             LuaName = luaName;
 
-            Script = new Lua();
-            Script.LoadCLRPackage();
+            LuaScript = new Lua();
+            LuaScript.LoadCLRPackage();
 
             if (instantInit)
                 ReloadFile();
@@ -34,7 +34,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
                 using (var stream = FileSystemWrapper.LuaFolder.GetFileAsync(LuaName).Result.OpenAsync(PCLStorage.FileAccess.Read).Result)
                 using (var reader = new StreamReader(stream))
                 {
-                    Script.DoString(reader.ReadToEnd());
+                    LuaScript.DoString(reader.ReadToEnd());
                     return true;
                 }
 
@@ -43,11 +43,11 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
         public object this[string fullPath]
         {
-            get { return Script[fullPath]; }
-            set { Script[fullPath] = value; }
+            get { return LuaScript[fullPath]; }
+            set { LuaScript[fullPath] = value; }
         }
 
-        public object[] CallFunction(string functionName, params object[] args) { return (Script[functionName] as LuaFunction)?.Call(args); }
+        public object[] CallFunction(string functionName, params object[] args) { return (LuaScript[functionName] as LuaFunction)?.Call(args); }
     }
 
     public class NLuaTableClass : ILuaTable
