@@ -218,6 +218,9 @@ namespace PokeD.Server.Desktop.WrapperInstances
                         Stream.Write(buffer, 0, buffer.Length);
                         totalWritedLength += writedLength;
                     } while (totalWritedLength < length);
+
+                    if(length >= 46857)
+                        Logger.Log(LogType.GlobalError, $"TCPClientClass: WriteByteArray: length >= 46857; Length - {length}, totalWri - {totalWritedLength}, data.Length - {data.Length}");
                 }
             }
             catch (IOException) { Dispose(); }
