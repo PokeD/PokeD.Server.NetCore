@@ -27,15 +27,9 @@ namespace PokeD.Server.Desktop
         public static bool InputAvailable => ConsoleInput.Count > 0;
 
 
-        public static void WriteLine(string text)
-        {
-            ConsoleOutput.Add(text);
-        }
+        public static void WriteLine(string text) { ConsoleOutput.Add(text); }
 
-        public static string ReadLine()
-        {
-            return ConsoleInput.Dequeue();
-        }
+        public static string ReadLine() { return ConsoleInput.Dequeue(); }
 
 
         public static void Start(int fps = 60)
@@ -136,14 +130,12 @@ namespace PokeD.Server.Desktop
             for (var i = 0; i < text.Length && ScreenWidth > x + i && ScreenHeight > y; i++)
                 ScreenBufferArray[x + count++, y] = text[i];
         }
-
         private static void DrawLine(string text, int y)
         {
             var count = 0;
             for (var i = 0; i < text.Length && ScreenWidth > y; i++)
                 ScreenBufferArray[count++, y] = text[i];
         }
-
         private static void DrawScreen()
         {
             for (var iy = 0; iy < ScreenHeight - 1; iy++)

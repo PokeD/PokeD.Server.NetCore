@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Threading;
 
 using Aragas.Core.Wrappers;
 
@@ -159,7 +158,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
     {
         public int RefreshConnectionInfoTime { get; set; }
 
-        public string IP => !IsDisposed && Client != null ? ((IPEndPoint) Client.Client.RemoteEndPoint).Address.ToString() : "";
+        public string IP => !IsDisposed && Client != null && Client.Client.Connected ? ((IPEndPoint) Client.Client.RemoteEndPoint).Address.ToString() : "";
         public bool Connected => !IsDisposed && Client != null && Client.Client.Connected;
         public int DataAvailable => !IsDisposed && Client != null ? Client.Available : 0;
 
@@ -242,7 +241,10 @@ namespace PokeD.Server.Desktop.WrapperInstances
                     {
                         var numberOfBytesRead = Stream.Read(buffer, 0, buffer.Length);
                         if (numberOfBytesRead == 0)
+                        {
+                            Logger.Log(LogType.GlobalError, $"TCPClientClass: ReadByteArray: numberOfBytesRead == 0; Length - {length}, totalRec - {totalNumberOfBytesRead}, stream.Length - {receivedData.Length}");
                             break;
+                        }
 
                         receivedData.Write(buffer, 0, buffer.Length); //Write to memory stream
                         totalNumberOfBytesRead += numberOfBytesRead;
