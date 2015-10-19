@@ -14,14 +14,8 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
         public void HideKeyboard() { }
 
-        public void ConsoleWrite(string message)
-        {
-            ConsoleManager.WriteLine(message);
-        }
+        public void ConsoleWrite(string message) { ConsoleManager.WriteLine(message); }
 
-        public void LogWriteLine(string message)
-        {
-            LogManager.WriteLine(message);
-        }
+        public void LogWriteLine(string message) { LogManager.WriteLine(message); }
     }
 }

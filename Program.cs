@@ -28,8 +28,8 @@ namespace PokeD.Server.Desktop
             //LuaWrapper.Instance = new NLuaWrapperInstance();
             LuaWrapper.Instance = new MoonLuaWrapperInstance();
 
-            NetworkTCPClientWrapper.Instance = new NetworkTCPClientWrapperInstance();
-            NetworkTCPServerWrapper.Instance = new NetworkTCPServerWrapperInstance();
+            TCPClientWrapper.Instance = new TCPClientWrapperInstance();
+            TCPListenerWrapper.Instance = new ITCPServerWrapperrInstance();
             ThreadWrapper.Instance = new ThreadWrapperInstance();
         }
 

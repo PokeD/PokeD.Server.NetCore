@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Aragas.Core.Data;
+
 using Aragas.Core.Wrappers;
 
 using MoonSharp.Interpreter;
@@ -10,7 +10,7 @@ using PCLStorage;
 
 namespace PokeD.Server.Desktop.WrapperInstances
 {
-    public class FileSystemScriptLoader : IScriptLoader
+    internal class FileSystemScriptLoader : IScriptLoader
     {
         public object LoadFile(string file, Table globalContext)
         {
@@ -154,8 +154,8 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
     public class MoonLuaWrapperInstance : ILuaWrapper
     {
-        public ILua Create() { return new MoonLuaClass(); }
-        public ILua Create(string scriptName) { return new MoonLuaClass(scriptName); }
-        public ILuaTable Create(ILua lua, string tableName) { return new MoonLuaTableClass(lua, tableName); }
+        public ILua CreateLua() { return new MoonLuaClass(); }
+        public ILua CreateLua(string scriptName) { return new MoonLuaClass(scriptName); }
+        public ILuaTable CreateTable(ILua lua, string tableName) { return new MoonLuaTableClass(lua, tableName); }
     }
 }

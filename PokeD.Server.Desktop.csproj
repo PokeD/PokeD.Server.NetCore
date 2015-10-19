@@ -65,8 +65,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WrapperInstances\FileSystemWrapperInstance.cs" />
     <Compile Include="WrapperInstances\InputWrapperInstance.cs" />
-    <Compile Include="WrapperInstances\NetworkTCPServerWrapperInstance.cs" />
-    <Compile Include="WrapperInstances\NetworkTCPClientWrapperInstance.cs" />
+    <Compile Include="WrapperInstances\TCPServerWrapperInstance.cs" />
+    <Compile Include="WrapperInstances\TCPClientWrapperInstance.cs" />
     <Compile Include="WrapperInstances\AppDomainWrapperInstance.cs" />
     <Compile Include="WrapperInstances\MoonLuaWrapperInstance.cs" />
     <Compile Include="WrapperInstances\NLuaWrapperInstance.cs" />

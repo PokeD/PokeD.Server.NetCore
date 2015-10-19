@@ -116,8 +116,8 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
     public class NLuaWrapperInstance : ILuaWrapper
     {
-        public ILua Create() { return new NLuaClass(); }
-        public ILua Create(string scriptName) { return new NLuaClass(scriptName); }
-        public ILuaTable Create(ILua lua, string tableName) { return new NLuaTableClass(lua, tableName); }
+        public ILua CreateLua() { return new NLuaClass(); }
+        public ILua CreateLua(string scriptName) { return new NLuaClass(scriptName); }
+        public ILuaTable CreateTable(ILua lua, string tableName) { return new NLuaTableClass(lua, tableName); }
     }
 }
