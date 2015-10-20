@@ -29,7 +29,7 @@ namespace PokeD.Server.Desktop
             LuaWrapper.Instance = new MoonLuaWrapperInstance();
 
             TCPClientWrapper.Instance = new TCPClientWrapperInstance();
-            TCPListenerWrapper.Instance = new ITCPServerWrapperrInstance();
+            TCPListenerWrapper.Instance = new TCPServerWrapperInstance();
             ThreadWrapper.Instance = new ThreadWrapperInstance();
         }
 

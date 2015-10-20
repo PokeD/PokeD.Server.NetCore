@@ -6,7 +6,7 @@ using Aragas.Core.Wrappers;
 
 namespace PokeD.Server.Desktop.WrapperInstances
 {
-    public class TCPClientClass : ITCPClient
+    public class TCPClientImplementation: ITCPClient
     {
         public int RefreshConnectionInfoTime { get; set; }
 
@@ -20,12 +20,12 @@ namespace PokeD.Server.Desktop.WrapperInstances
         private bool IsDisposed { get; set; }
 
 
-        public TCPClientClass()
+        public TCPClientImplementation()
         {
             Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             Client.NoDelay = true;
         }
-        internal TCPClientClass(Socket socket)
+        internal TCPClientImplementation(Socket socket)
         {
             Client = socket;
             Stream = new NetworkStream(Client);
@@ -101,6 +101,6 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
     public class TCPClientWrapperInstance : ITCPClientWrapper
     {
-        public ITCPClient CreateTCPClient() { return new TCPClientClass(); }
+        public ITCPClient CreateTCPClient() { return new TCPClientImplementation(); }
     }
 }

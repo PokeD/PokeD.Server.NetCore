@@ -5,7 +5,7 @@ using Aragas.Core.Wrappers;
 
 namespace PokeD.Server.Desktop.WrapperInstances
 {
-    public class TCPListenerClass : ITCPListener
+    public class TCPListenerImplementation : ITCPListener
     {
         public ushort Port { get; }
         public bool AvailableClients => Listener.Poll(0, SelectMode.SelectRead);
@@ -15,7 +15,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
         private Socket Listener { get; }
 
 
-        internal TCPListenerClass(ushort port)
+        internal TCPListenerImplementation(ushort port)
         {
             Port = port;
 
@@ -46,7 +46,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
             if (IsDisposed)
                 return null;
 
-            return new TCPClientClass(Listener.Accept());
+            return new TCPClientImplementation(Listener.Accept());
         }
 
         public void Dispose()
@@ -60,8 +60,8 @@ namespace PokeD.Server.Desktop.WrapperInstances
         }
     }
 
-    public class ITCPServerWrapperrInstance : ITCPListenerWrapper
+    public class TCPServerWrapperInstance : ITCPListenerWrapper
     {  
-        public ITCPListener CreateTCPListener(ushort port) { return new TCPListenerClass(port); }
+        public ITCPListener CreateTCPListener(ushort port) { return new TCPListenerImplementation(port); }
     }
 }
