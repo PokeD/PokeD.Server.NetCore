@@ -131,21 +131,21 @@ namespace PokeD.Server.Desktop.WrapperInstances
         {
             var fields = new Fields();
 
-            foreach (var propertyInfo in obj.GetType().GetProperties())
+            foreach (var info in obj.GetType().GetFields())
             {
                 DataTypeEnum dataType;
 
-                if (propertyInfo.PropertyType.IsEnum)
+                if (info.FieldType.IsEnum)
                     dataType = DataTypeEnum.Int32;
-                else if (propertyInfo.PropertyType == typeof(Boolean))
+                else if (info.FieldType == typeof(Boolean))
                     dataType = DataTypeEnum.Bool;
                 else
-                    if (!Enum.TryParse(propertyInfo.PropertyType.Name, out dataType))
+                    if (!Enum.TryParse(info.FieldType.Name, out dataType))
                     throw new Exception("Only Primitive types supported!");
 
 
-                var field = new Field(propertyInfo.Name, dataType);
-                if (propertyInfo.Name == "Id")
+                var field = new Field(info.Name, dataType);
+                if (info.Name == "Id")
                 {
                     field.IsPrimaryKey = true;
                     field.AutoIncStart = 1;
@@ -160,7 +160,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
         {
             var fieldValues = new FieldValues();
 
-            foreach (var propertyInfo in obj.GetType().GetProperties())
+            foreach (var propertyInfo in obj.GetType().GetFields())
                 fieldValues.Add(propertyInfo.Name, propertyInfo.GetValue(obj));
 
             return fieldValues;
@@ -170,8 +170,8 @@ namespace PokeD.Server.Desktop.WrapperInstances
         {
             var instance = new T();
 
-            foreach (var propertyInfo in instance.GetType().GetProperties())
-                propertyInfo.SetValue(instance, record[propertyInfo.Name]);
+            foreach (var info in instance.GetType().GetFields())
+                info.SetValue(instance, record[info.Name]);
 
             return instance;
         }
@@ -213,7 +213,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
         {
             var function = predicate.Compile();
 
-            var fullList = new List<T>();
+            //var fullList = new List<T>();
 
             // Original class
             //fullList.AddRange(Database.LoadAll<T>());
