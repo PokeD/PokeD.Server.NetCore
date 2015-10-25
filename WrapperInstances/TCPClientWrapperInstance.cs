@@ -10,7 +10,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
     {
         public int RefreshConnectionInfoTime { get; set; }
 
-        public string IP => !IsDisposed && Client != null ? (Client.RemoteEndPoint as IPEndPoint)?.Address.ToString() : "";
+        public string IP => !IsDisposed && Client != null && Client.Connected ? (Client.RemoteEndPoint as IPEndPoint)?.Address.ToString() : "";
         public bool Connected => !IsDisposed && Client != null && Client.Connected;
         public int DataAvailable => !IsDisposed && Client != null ? Client.Available : 0;
 

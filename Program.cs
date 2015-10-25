@@ -28,11 +28,14 @@ namespace PokeD.Server.Desktop
             //LuaWrapper.Instance = new NLuaWrapperInstance();
             LuaWrapper.Instance = new MoonLuaWrapperInstance();
 
+            //DatabaseWrapper.Instance = new SQLiteDatabase();
+            //DatabaseWrapper.Instance = new FileDBDatabase();
+            DatabaseWrapper.Instance = new SiaqodbDatabase();
+
             TCPClientWrapper.Instance = new TCPClientWrapperInstance();
             TCPListenerWrapper.Instance = new TCPServerWrapperInstance();
             ThreadWrapper.Instance = new ThreadWrapperInstance();
         }
-
 
         public static void Main(params string[] args)
         {
