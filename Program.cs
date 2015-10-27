@@ -28,9 +28,10 @@ namespace PokeD.Server.Desktop
             //LuaWrapper.Instance = new NLuaWrapperInstance();
             LuaWrapper.Instance = new MoonLuaWrapperInstance();
 
-            DatabaseWrapper.Instance = new SQLiteDatabase();
+			//DatabaseWrapper.Instance = new SQLiteDatabase();
+            //DatabaseWrapper.Instance = new CouchbaseDatabase();
             //DatabaseWrapper.Instance = new FileDBDatabase();
-            //DatabaseWrapper.Instance = new SiaqodbDatabase();
+			//DatabaseWrapper.Instance = new SiaqodbDatabase();
 
             TCPClientWrapper.Instance = new TCPClientWrapperInstance();
             TCPListenerWrapper.Instance = new TCPServerWrapperInstance();
@@ -60,14 +61,14 @@ namespace PokeD.Server.Desktop
                 if (arg.StartsWith("-usenlua"))
                     LuaWrapper.Instance = new NLuaWrapperInstance();
 
-                //if (arg.StartsWith("-usensqlite"))
-                //    DatabaseWrapper.Instance = new SQLiteDatabase();
+				//if (arg.StartsWith("-usecouchbase"))
+				//    DatabaseWrapper.Instance = new CouchbaseDatabase();
 
-                if (arg.StartsWith("-usenfiledb"))
+                if (arg.StartsWith("-usefiledb"))
                     DatabaseWrapper.Instance = new FileDBDatabase();
 
-                if (arg.StartsWith("-usensiaqodb"))
-                    DatabaseWrapper.Instance = new SiaqodbDatabase();
+                //if (arg.StartsWith("-usensiaqodb"))
+                //    DatabaseWrapper.Instance = new SiaqodbDatabase();
             }
 
             Server = new Server();
@@ -178,11 +179,10 @@ CallStack:
 
             if (ex.InnerException != null)
             {
-                sb.AppendFormat(@"
---------------------------------------------------
-InnerException:
-{0}
-",
+                sb.AppendFormat($"" +
+                	"--------------------------------------------------" +
+                	"InnerException:" +
+                	"{0}",
                     BuildErrorStringRecursive(ex.InnerException));
             }
 
