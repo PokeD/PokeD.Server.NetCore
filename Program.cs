@@ -28,7 +28,7 @@ namespace PokeD.Server.Desktop
             //LuaWrapper.Instance = new NLuaWrapperInstance();
             LuaWrapper.Instance = new MoonLuaWrapperInstance();
 
-			//DatabaseWrapper.Instance = new SQLiteDatabase();
+			DatabaseWrapper.Instance = new SQLiteDatabase();
             //DatabaseWrapper.Instance = new CouchbaseDatabase();
             //DatabaseWrapper.Instance = new FileDBDatabase();
 			//DatabaseWrapper.Instance = new SiaqodbDatabase();
