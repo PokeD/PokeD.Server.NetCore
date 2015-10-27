@@ -110,8 +110,19 @@
     <Compile Include="WrapperInstances\NLuaWrapperInstance.cs" />
     <Compile Include="WrapperInstances\ThreadWrapperInstance.cs" />
   </ItemGroup>
+  <Choose>
+    <When Condition=" '$(OS)' == 'Unix' ">
+      <ItemGroup>
+        <None Include="App.config.linux" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <None Include="App.config" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +144,11 @@
     <EmbeddedResource Include="liblmdb.so">
       <Link>liblmdb.so</Link>
       <LogicalName>liblmdb.so</LogicalName>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="sqlite3.dll">
+      <Link>sqlite3.dll</Link>
+      <LogicalName>sqlite3.dll</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
