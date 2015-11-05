@@ -38,14 +38,14 @@ namespace PokeD.Server.Desktop.WrapperInstances
     }
 
 
-    public class MoonLuaImplementation : ILua
+    public class MoonLua : ILua
     {
         string LuaName { get; }
 
         Script LuaScript { get; }
 
-        public MoonLuaImplementation() { LuaScript = new Script(); }
-        public MoonLuaImplementation(string luaName, bool instantInit = false)
+        public MoonLua() { LuaScript = new Script(); }
+        public MoonLua(string luaName, bool instantInit = false)
         {
             LuaName = luaName;
 
@@ -89,19 +89,19 @@ namespace PokeD.Server.Desktop.WrapperInstances
         }
     }
 
-    public class MoonLuaTableImplementation : ILuaTable
+    public class MoonLuaTable : ILuaTable
     {
         Table TableScript { get; }
 
-        private MoonLuaTableImplementation(Table tableScript) { TableScript = tableScript; }
-        public MoonLuaTableImplementation(ILua lua, string tableName) { TableScript = lua[tableName] as Table; }
+        private MoonLuaTable(Table tableScript) { TableScript = tableScript; }
+        public MoonLuaTable(ILua lua, string tableName) { TableScript = lua[tableName] as Table; }
 
         public object this[object field]
         {
             get
             {
                 if (TableScript[field] is Table)
-                    return new MoonLuaTableImplementation((Table) TableScript[field]);
+                    return new MoonLuaTable((Table) TableScript[field]);
                 return TableScript[field];
             }
             set { TableScript[field] = value; }
@@ -111,7 +111,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
             get
             {
                 if (TableScript[field] is Table)
-                    return new MoonLuaTableImplementation((Table) TableScript[field]);
+                    return new MoonLuaTable((Table) TableScript[field]);
                 return TableScript[field];
             }
             set { TableScript[field] = value; }
@@ -129,7 +129,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
         private static object RecursiveParse(object value)
         {
             if (value is Table)
-                return RecursiveParse(new MoonLuaTableImplementation((Table) value).ToDictionary());
+                return RecursiveParse(new MoonLuaTable((Table) value).ToDictionary());
 
             return value;
         }
@@ -154,8 +154,8 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
     public class MoonLuaWrapperInstance : ILuaWrapper
     {
-        public ILua CreateLua() { return new MoonLuaImplementation(); }
-        public ILua CreateLua(string scriptName) { return new MoonLuaImplementation(scriptName); }
-        public ILuaTable CreateTable(ILua lua, string tableName) { return new MoonLuaTableImplementation(lua, tableName); }
+        public ILua CreateLua() { return new MoonLua(); }
+        public ILua CreateLua(string scriptName) { return new MoonLua(scriptName); }
+        public ILuaTable CreateTable(ILua lua, string tableName) { return new MoonLuaTable(lua, tableName); }
     }
 }
