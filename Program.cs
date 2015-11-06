@@ -10,7 +10,6 @@ using Aragas.Core.Wrappers;
 using PCLStorage;
 
 using PokeD.Server.Desktop.WrapperInstances;
-using Thread = System.Threading.Thread;
 
 namespace PokeD.Server.Desktop
 {
