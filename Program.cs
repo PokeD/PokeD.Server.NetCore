@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 
 using Aragas.Core.Wrappers;
@@ -124,20 +125,26 @@ namespace PokeD.Server.Desktop
         }
         private static void CatchError(Exception ex)
         {
-            var errorLog = $@"
-[CODE]
-PokeD.Server Crash Log v {Assembly.GetExecutingAssembly().GetName().Version}
+            var errorLog = string.Format(@"[CODE]
+PokeD.Server Crash Log v {0}
 --------------------------------------------------
 System specifications:
-Operating system: {Environment.OSVersion} [{(Type.GetType("Mono.Runtime") != null ? "Mono" : ".NET")}]
-Core architecture: {(Environment.Is64BitOperatingSystem ? "64 Bit" : "32 Bit")}
-System language: {CultureInfo.CurrentCulture.EnglishName}
-Logical processors: {Environment.ProcessorCount}
-{BuildErrorStringRecursive(ex)}
+Operating system: {1} [{2}]
+Core architecture: {3}
+System language: {4}
+Logical processors: {5}
+{6}
 --------------------------------------------------
 You should report this error if it is reproduceable or you could not solve it by yourself.
-Go To: {URL} to report this crash there.
-[/CODE]";
+Go To: http://pokemon3d.net/forum/threads/12901/ to report this crash there.
+[/CODE]",
+                Assembly.GetExecutingAssembly().GetName().Version,
+                Environment.OSVersion,
+                Type.GetType("Mono.Runtime") != null ? "Mono" : ".NET",
+                Environment.Is64BitOperatingSystem ? "64 Bit" : "32 Bit",
+                CultureInfo.CurrentCulture.EnglishName,
+                Environment.ProcessorCount,
+                BuildErrorStringRecursive(ex));
 
             var crashFile = FileSystemWrapper.CrashLogFolder.CreateFileAsync($"{DateTime.Now:yyyy-MM-dd_HH.mm.ss}.log", CreationCollisionOption.OpenIfExists).Result;
             using (var stream = crashFile.OpenAsync(PCLStorage.FileAccess.ReadAndWrite).Result)
@@ -151,21 +158,36 @@ Go To: {URL} to report this crash there.
 
         private static string BuildErrorStringRecursive(Exception ex)
         {
-            return $@"
+            var sb = new StringBuilder();
+            sb.AppendFormat(@"
 --------------------------------------------------
 Error information:
-Type: {ex.GetType().FullName}
-Message: {ex.Message}
-HelpLink: {(string.IsNullOrWhiteSpace(ex.HelpLink) ? "Empty" : ex.HelpLink)}
-Source: {ex.Source}
-TargetSite : {ex.TargetSite}
+Type: {0}
+Message: {1}
+HelpLink: {2}
+Source: {3}
+TargetSite : {4}
 --------------------------------------------------
 CallStack:
-{ex.StackTrace}
-{(ex.InnerException != null ? $@"
---------------------------------------------------
-InnerException:
-{BuildErrorStringRecursive(ex.InnerException)}" : "")}";
+{5}
+",
+                ex.GetType().FullName,
+                ex.Message,
+                string.IsNullOrWhiteSpace(ex.HelpLink) ? "Empty" : ex.HelpLink,
+                ex.Source,
+                ex.TargetSite,
+                ex.StackTrace);
+
+            if (ex.InnerException != null)
+            {
+                sb.AppendFormat($"" +
+                    "--------------------------------------------------" +
+                    "InnerException:" +
+                    "{0}",
+                    BuildErrorStringRecursive(ex.InnerException));
+            }
+
+            return sb.ToString();
         }
     }
 }
