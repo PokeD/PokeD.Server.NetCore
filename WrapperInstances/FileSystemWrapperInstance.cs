@@ -13,6 +13,8 @@ namespace PokeD.Server.Desktop.WrapperInstances
         public IFolder LuaFolder { get; }
         public IFolder AssemblyFolder { get; }
         public IFolder DatabaseFolder { get; }
+        public IFolder ContentFolder { get; }
+        public IFolder OutputFolder { get; }
 
         public FileSystemWrapperInstance()
         {

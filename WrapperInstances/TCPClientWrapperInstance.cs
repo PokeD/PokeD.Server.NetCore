@@ -36,6 +36,8 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
         public int RefreshConnectionInfoTime { get { return RefreshConnectionInfoTimeStatic; } set { RefreshConnectionInfoTimeStatic = value; } }
 
+        public ushort Port { get; }
+
         public bool Connected
         {
             get
@@ -169,6 +171,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
         public int RefreshConnectionInfoTime { get; set; }
 
         public string IP => !IsDisposed && Client != null && Client.Connected ? (Client.RemoteEndPoint as IPEndPoint)?.Address.ToString() : "";
+        public ushort Port => (ushort)(!IsDisposed && Client != null && Client.Connected ? (Client.RemoteEndPoint as IPEndPoint)?.Port : 0);
         public bool Connected => !IsDisposed && Client != null && Client.Connected;
         public int DataAvailable => !IsDisposed && Client != null ? Client.Available : 0;
 
