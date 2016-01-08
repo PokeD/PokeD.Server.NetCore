@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using PCLStorage;
 
 using PokeD.Core.Data.PokeD;
-
+using PokeD.Core.Extensions;
 using PokeD.Server.Desktop.WrapperInstances;
 
 using RestSharp;
@@ -164,6 +164,8 @@ namespace PokeD.Server.Desktop
             TCPClientWrapper.Instance = new TCPClientWrapperInstance();
             TCPListenerWrapper.Instance = new TCPServerWrapperInstance();
             ThreadWrapper.Instance = new ThreadWrapperInstance();
+
+            PacketExtensions.Init();
         }
 
 
