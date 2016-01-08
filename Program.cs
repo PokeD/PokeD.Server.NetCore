@@ -8,14 +8,141 @@ using System.Threading;
 
 using Aragas.Core.Wrappers;
 
+using Newtonsoft.Json;
+
 using PCLStorage;
 
+using PokeD.Core.Data.PokeD;
+
 using PokeD.Server.Desktop.WrapperInstances;
+
+using RestSharp;
 
 namespace PokeD.Server.Desktop
 {
     public static partial class Program
     {
+        public static void TestShit()
+        {
+            var client = new RestClient("http://pokeapi.co/api/V1/");
+
+            ///*
+            for (int id = 1; id <= 719; id++)
+            {
+                var request = new RestRequest($"pokemon/{id}", Method.POST);
+
+                var response = client.Execute<PokemonJson>(request);
+                if (response.ErrorException != null)
+                    throw response.ErrorException;
+
+                if (!Directory.Exists("Pokemons"))
+                    Directory.CreateDirectory("Pokemons");
+                using (var file = File.Create($"Pokemons/{response.Data.national_id}.json"))
+                using (var writer = new StreamWriter(file))
+                {
+                    var obj = JsonConvert.DeserializeObject(response.Content);
+                    var str = JsonConvert.SerializeObject(obj, Formatting.Indented);
+
+                    writer.BaseStream.Position = 0;
+                    writer.Write(str);
+                }
+            }
+            //*/
+
+            ///*
+            for (int id = 1; id <= 18; id++)
+            {
+                var request = new RestRequest($"type/{id}", Method.POST);
+
+                var response = client.Execute<PokemonTypeJson>(request);
+                if (response.ErrorException != null)
+                    throw response.ErrorException;
+
+                if (!Directory.Exists("Types"))
+                    Directory.CreateDirectory("Types");
+                using (var file = File.Create($"Types/{response.Data.id}.json"))
+                using (var writer = new StreamWriter(file))
+                {
+                    var obj = JsonConvert.DeserializeObject(response.Content);
+                    var str = JsonConvert.SerializeObject(obj, Formatting.Indented);
+
+                    writer.BaseStream.Position = 0;
+                    writer.Write(str);
+                }
+            }
+            //*/
+
+            ///*
+            for (int id = 1; id <= 248; id++)
+            {
+                var request = new RestRequest($"ability/{id}", Method.POST);
+
+                var response = client.Execute<AbilitiesJson>(request);
+                if (response.ErrorException != null)
+                    throw response.ErrorException;
+
+                if (!Directory.Exists("Abilities"))
+                    Directory.CreateDirectory("Abilities");
+                using (var file = File.Create($"Abilities/{response.Data.id}.json"))
+                using (var writer = new StreamWriter(file))
+                {
+                    var obj = JsonConvert.DeserializeObject(response.Content);
+                    var str = JsonConvert.SerializeObject(obj, Formatting.Indented);
+
+                    writer.BaseStream.Position = 0;
+                    writer.Write(str);
+                }
+            }
+            //*/
+
+            ///*
+            for (int id = 1; id <= 15; id++)
+            {
+                var request = new RestRequest($"egg/{id}", Method.POST);
+
+                var response = client.Execute<EggGroupJson>(request);
+                if (response.ErrorException != null)
+                    throw response.ErrorException;
+
+                if (!Directory.Exists("Egg Groups"))
+                    Directory.CreateDirectory("Egg Groups");
+                using (var file = File.Create($"Egg Groups/{response.Data.id}.json"))
+                using (var writer = new StreamWriter(file))
+                {
+                    var obj = JsonConvert.DeserializeObject(response.Content);
+                    var str = JsonConvert.SerializeObject(obj, Formatting.Indented);
+
+                    writer.BaseStream.Position = 0;
+                    writer.Write(str);
+                }
+            }
+            //*/
+
+           ///*
+           for (int id = 1; id <= 625; id++)
+           {
+               var request = new RestRequest($"move/{id}", Method.POST);
+
+               var response = client.Execute<MoveJson>(request);
+               if (response.ErrorException != null)
+                   throw response.ErrorException;
+
+               if (!Directory.Exists("Moves"))
+                   Directory.CreateDirectory("Moves");
+               using (var file = File.Create($"Moves/{response.Data.id}.json"))
+               using (var writer = new StreamWriter(file))
+               {
+                   var obj = JsonConvert.DeserializeObject(response.Content);
+                   var str = JsonConvert.SerializeObject(obj, Formatting.Indented);
+
+                   writer.BaseStream.Position = 0;
+                   writer.Write(str);
+               }
+           }
+           //*/
+        }
+
+
         const string URL = "http://pokemon3d.net/forum/threads/12901/";
         static Server Server { get; set; }
 
@@ -38,6 +165,8 @@ namespace PokeD.Server.Desktop
             TCPListenerWrapper.Instance = new TCPServerWrapperInstance();
             ThreadWrapper.Instance = new ThreadWrapperInstance();
         }
+
+
 
         public static void Main(params string[] args)
         {

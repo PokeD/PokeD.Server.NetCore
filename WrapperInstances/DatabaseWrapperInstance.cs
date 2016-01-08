@@ -14,7 +14,7 @@ using SQLite.Net.Platform.Generic;
 namespace PokeD.Server.Desktop.WrapperInstances
 {
     /// <summary>
-    /// SQL Database, only Primitive types.
+    /// SQL Database, only Primitive Types.
     /// </summary>
     public class SQLiteDatabase : IDatabase
     {
@@ -57,7 +57,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
     }
 
     /// <summary>
-    /// NoSQL Database, only Primitive types.
+    /// NoSQL Database, only Primitive Types.
     /// </summary>
     public class FileDBDatabase : IDatabase
     {
@@ -136,7 +136,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
                     dataType = DataTypeEnum.Bool;
                 else
 					if (!Enum.TryParse(info.PropertyType.Name, out dataType))
-                        throw new Exception("Only Primitive types supported!");
+                        throw new Exception("Only Primitive Types supported!");
 
 
                 var field = new Field(info.Name, dataType);
