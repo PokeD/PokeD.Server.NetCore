@@ -20,7 +20,6 @@ namespace PokeD.Server.Desktop.WrapperInstances
         {
             var baseDirectory = FileSystem.Current.GetFolderFromPathAsync(AppDomain.CurrentDomain.BaseDirectory).Result;
 
-            UsersFolder     = baseDirectory.CreateFolderAsync("Users", CreationCollisionOption.OpenIfExists).Result;
             SettingsFolder  = baseDirectory.CreateFolderAsync("Settings", CreationCollisionOption.OpenIfExists).Result;
             LogFolder       = baseDirectory.CreateFolderAsync("Logs", CreationCollisionOption.OpenIfExists).Result;
             CrashLogFolder  = LogFolder.CreateFolderAsync("Crash", CreationCollisionOption.OpenIfExists).Result;
