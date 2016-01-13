@@ -47,7 +47,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
             if (IsDisposed)
                 return null;
 
-            return TCPClientWrapperInstance.CreateTCPClient(Listener.Accept());
+            return TCPClientFactoryInstance.CreateTCPClient(Listener.Accept());
         }
 
         public void Dispose()
@@ -100,7 +100,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
             if (IsDisposed)
                 return null;
 
-            return TCPClientWrapperInstance.CreateTCPClient(Listener.AcceptSocket());
+            return TCPClientFactoryInstance.CreateTCPClient(Listener.AcceptSocket());
         }
 
         public void Dispose()

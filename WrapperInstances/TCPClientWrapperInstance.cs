@@ -259,7 +259,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
         }
     }
 
-    public class TCPClientWrapperInstance : ITCPClientWrapper
+    public class TCPClientFactoryInstance : ITCPClientFactory
     {
         public ITCPClient CreateTCPClient() { return new SocketTCPClient(); }
         internal static ITCPClient CreateTCPClient(Socket socket) { return new SocketTCPClient(socket); }
