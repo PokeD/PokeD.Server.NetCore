@@ -6,7 +6,6 @@ namespace PokeD.Server.Desktop.WrapperInstances
 {
     public class FileSystemWrapperInstance : Aragas.Core.Wrappers.IFileSystem
     {
-        public IFolder UsersFolder { get; }
         public IFolder SettingsFolder { get; }
         public IFolder LogFolder { get; }
         public IFolder CrashLogFolder { get; }
