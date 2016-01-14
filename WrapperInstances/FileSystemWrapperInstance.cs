@@ -24,6 +24,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
             CrashLogFolder  = LogFolder.CreateFolderAsync("Crash", CreationCollisionOption.OpenIfExists).Result;
             LuaFolder       = baseDirectory.CreateFolderAsync("Lua", CreationCollisionOption.OpenIfExists).Result;
             DatabaseFolder  = baseDirectory.CreateFolderAsync("Database", CreationCollisionOption.OpenIfExists).Result;
+            ContentFolder = baseDirectory.CreateFolderAsync("Content", CreationCollisionOption.OpenIfExists).Result;
         }
     }
 }
