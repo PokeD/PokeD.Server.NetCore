@@ -10,9 +10,9 @@ namespace PokeD.Server.Desktop.WrapperInstances
         public ushort Port { get; }
         public bool AvailableClients => Listener.Poll(0, SelectMode.SelectRead);
 
-        private bool IsDisposed { get; set; }
-
         private Socket Listener { get; }
+
+        private bool IsDisposed { get; set; }
 
 
         internal SocketTCPListener(ushort port)
@@ -20,8 +20,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
             Port = port;
 
             var endpoint = new IPEndPoint(IPAddress.Any, Port);
-            Listener = new Socket(endpoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            Listener.NoDelay = true;
+            Listener = new Socket(endpoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
 
             Listener.Bind(endpoint);
         }
@@ -33,7 +32,6 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
             Listener.Listen(1000);
         }
-
         public void Stop()
         {
             if (IsDisposed)
@@ -66,9 +64,9 @@ namespace PokeD.Server.Desktop.WrapperInstances
         public ushort Port { get; }
         public bool AvailableClients => Listener.Pending();
 
-        private bool IsDisposed { get; set; }
-
         private TcpListener Listener { get; }
+
+        private bool IsDisposed { get; set; }
 
 
         internal TCPListener(ushort port)
@@ -86,7 +84,6 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
             Listener.Start();
         }
-
         public void Stop()
         {
             if (IsDisposed)

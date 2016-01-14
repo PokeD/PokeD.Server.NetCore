@@ -82,8 +82,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
         public MonitoredSocketTCPClient()
         {
-            Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            Client.NoDelay = true;
+            Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
         }
         internal MonitoredSocketTCPClient(Socket socket)
         {
@@ -92,7 +91,6 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
             UpdateConnectedTCPs();
         }
-
 
         public ITCPClient Connect(string ip, ushort port)
         {
@@ -151,7 +149,6 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
         public Stream GetStream() { return Stream; }
 
-
         public void Dispose()
         {
             if (IsDisposed)
@@ -183,8 +180,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
         public SocketTCPClient()
         {
-            Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            Client.NoDelay = true;
+            Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
         }
         internal SocketTCPClient(Socket socket)
         {

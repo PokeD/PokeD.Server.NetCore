@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using Aragas.Core.Wrappers;
 
@@ -22,10 +23,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
             return null;
         }
 
-        public string ResolveFileName(string filename, Table globalContext)
-        {
-            return $"{filename}.lua";
-        }
+        public string ResolveFileName(string filename, Table globalContext) => $"{filename}.lua";
 
         public string ResolveModuleName(string modname, Table globalContext)
         {
@@ -40,9 +38,23 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
     public class MoonLua : ILua
     {
-        string LuaName { get; }
+        private string LuaName { get; }
 
-        Script LuaScript { get; }
+        private Script LuaScript { get; }
+
+
+        public object this[string fullPath]
+        {
+            get { return LuaScript.Globals[fullPath]; }
+            set
+            {
+                var type = value.GetType();
+                if (!UserData.IsTypeRegistered(type))
+                    UserData.RegisterType(type);
+
+                LuaScript.Globals[fullPath] = value;
+            }
+        }
 
         public MoonLua() { LuaScript = new Script(); }
         public MoonLua(string luaName, bool instantInit = false)
@@ -70,62 +82,32 @@ namespace PokeD.Server.Desktop.WrapperInstances
             return false;
         }
 
-        public object this[string fullPath]
-        {
-            get { return LuaScript.Globals[fullPath]; }
-            set
-            {
-                var type = value.GetType();
-                if (!UserData.IsTypeRegistered(type))
-                    UserData.RegisterType(type);
-                
-                LuaScript.Globals[fullPath] = value;
-            }
-        }
-
         public object[] CallFunction(string functionName, params object[] args)
         {
             return LuaScript.Call(LuaScript.Globals[functionName], args).Tuple;
+            //return LuaScript.Call(LuaScript.Globals[functionName], args).Tuple.Select(obj => (object) obj).ToArray();
         }
     }
 
     public class MoonLuaTable : ILuaTable
     {
-        Table TableScript { get; }
+        private Table TableScript { get; }
 
         private MoonLuaTable(Table tableScript) { TableScript = tableScript; }
         public MoonLuaTable(ILua lua, string tableName) { TableScript = lua[tableName] as Table; }
 
         public object this[object field]
         {
-            get
-            {
-                if (TableScript[field] is Table)
-                    return new MoonLuaTable((Table) TableScript[field]);
-                return TableScript[field];
-            }
+            get { return TableScript[field] is Table ? new MoonLuaTable((Table) TableScript[field]) : TableScript[field]; }
             set { TableScript[field] = value; }
         }
         public object this[string field]
         {
-            get
-            {
-                if (TableScript[field] is Table)
-                    return new MoonLuaTable((Table) TableScript[field]);
-                return TableScript[field];
-            }
+            get { return TableScript[field] is Table ? new MoonLuaTable((Table) TableScript[field]) : TableScript[field]; }
             set { TableScript[field] = value; }
         }
 
-        public Dictionary<object, object> ToDictionary()
-        {
-            var dictionary = new Dictionary<object, object>();
-
-            foreach (var pair in TableScript.Pairs)
-                dictionary.Add(pair.Key, RecursiveParse(pair.Value));
-            
-            return dictionary;
-        }
+        public Dictionary<object, object> ToDictionary() => TableScript.Pairs.ToDictionary<TablePair, object, object>(pair => pair.Key, pair => RecursiveParse(pair.Value));
         private static object RecursiveParse(object value)
         {
             if (value is Table)
@@ -134,22 +116,8 @@ namespace PokeD.Server.Desktop.WrapperInstances
             return value;
         }
 
-        public List<object> ToList()
-        {
-            var list = new List<object>();
-            foreach (var value in TableScript.Values)
-                list.Add(value);
-
-            return list;
-        }
-        public object[] ToArray()
-        {
-            var list = new List<object>();
-            foreach (var value in TableScript.Values)
-                list.Add(value);
-
-            return list.ToArray();
-        }
+        public List<object> ToList() => TableScript.Values.Cast<object>().ToList();
+        public object[] ToArray() => TableScript.Values.Cast<object>().ToArray();
     }
 
     public class MoonLuaWrapperInstance : ILuaWrapper

@@ -1,22 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using Aragas.Core.Wrappers;
 
 using Nancy;
-using Nancy.Bootstrapper;
 using Nancy.ErrorHandling;
 using Nancy.Hosting.Self;
-using Nancy.ViewEngines;
 
 namespace PokeD.Server.Desktop.WrapperInstances
 {
-    public class CustomStatusCode : DefaultViewRenderer, IStatusCodeHandler
+    public class CustomStatusCode : IStatusCodeHandler
     {
-        public CustomStatusCode(IViewFactory factory) : base(factory) { }
-
-
         public void Handle(HttpStatusCode statusCode, NancyContext context) { context.Response.StatusCode = HttpStatusCode.Forbidden; }
 
         public bool HandlesStatusCode(HttpStatusCode statusCode, NancyContext context) =>
@@ -27,24 +20,22 @@ namespace PokeD.Server.Desktop.WrapperInstances
     {
         public string GetRootPath() => FileSystemWrapper.ContentFolder.Path;
     }
-
-
-    public class ApiNancyWrapperInstance : NancyModule
+    public class CustomBootstrapper : DefaultNancyBootstrapper
     {
-        public ApiNancyWrapperInstance() : base("/api")
+        protected override IRootPathProvider RootPathProvider => new CustomRootPathProvider();
+    }
+
+    public class ApiNancyModule : NancyModule
+    {
+        public ApiNancyModule() : base("/api")
         {
-            foreach (var pageAction in NancyCreatorWrapperInstance.DataApi.List)
+            foreach (var pageAction in NancyWrapperInstance.DataApi.List)
                 Get[$"/{pageAction.Page}"] = pageAction.Action;
         }
     }
 
-    public class Bootstrapper : DefaultNancyBootstrapper
-    {
-        protected override IRootPathProvider RootPathProvider => new CustomRootPathProvider();
 
-        protected override IEnumerable<ModuleRegistration> Modules => GetType().Assembly.GetTypes().Where(type => type.BaseType == typeof(NancyModule)).Select(type => new ModuleRegistration(type));
-    }
-    public class NancyCreatorWrapperInstance : INancyCreatorWrapper
+    public class NancyWrapperInstance : INancyWrapper
     {
         public static NancyData DataApi { get; private set; }
 
@@ -58,8 +49,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
             var config = new HostConfiguration { RewriteLocalhost = false };
 
             Server?.Stop();
-            Server = new NancyHost(new Bootstrapper(), config, new Uri($"http://{url}:{port}/"));
-            //Server = new NancyHost(config, new Uri($"http://{url}:{port}/api/"));
+            Server = new NancyHost(new CustomBootstrapper(), config, new Uri($"http://{url}:{port}/"));
             Server.Start();
         }
         public void Stop() { Server?.Dispose(); }

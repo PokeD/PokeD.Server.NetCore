@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using Aragas.Core.Wrappers;
 
@@ -11,10 +12,17 @@ namespace PokeD.Server.Desktop.WrapperInstances
 {
     public class NLua : ILua
     {
-        string LuaName { get; }
+        private string LuaName { get; }
 
         internal Lua InternalLua => LuaScript;
-        Lua LuaScript { get; }
+        private Lua LuaScript { get; }
+
+
+        public object this[string fullPath]
+        {
+            get { return LuaScript[fullPath]; }
+            set { LuaScript[fullPath] = value; }
+        }
 
         public NLua() { LuaScript = new Lua(); }
         public NLua(string luaName, bool instantInit = false)
@@ -41,28 +49,20 @@ namespace PokeD.Server.Desktop.WrapperInstances
             return false;
         }
 
-        public object this[string fullPath]
-        {
-            get { return LuaScript[fullPath]; }
-            set { LuaScript[fullPath] = value; }
-        }
-
-        public object[] CallFunction(string functionName, params object[] args) { return (LuaScript[functionName] as LuaFunction)?.Call(args); }
+        public object[] CallFunction(string functionName, params object[] args) => (LuaScript[functionName] as LuaFunction)?.Call(args);
     }
 
     public class NLuaTable : ILuaTable
     {
-        LuaTable TableScript { get; }
+        private LuaTable TableScript { get; }
 
-        private NLuaTable(LuaTable tableScript) { TableScript = tableScript; }
-        public NLuaTable(ILua lua, string tableName) { TableScript = ((NLua) lua).InternalLua.GetTable(tableName); }
 
         public object this[object field]
         {
             get
             {
                 if (TableScript[field] is LuaTable)
-                    return new NLuaTable((LuaTable) TableScript[field]);
+                    return new NLuaTable((LuaTable)TableScript[field]);
                 return TableScript[field];
             }
             set { TableScript[field] = value; }
@@ -72,11 +72,14 @@ namespace PokeD.Server.Desktop.WrapperInstances
             get
             {
                 if (TableScript[field] is LuaTable)
-                    return new NLuaTable((LuaTable) TableScript[field]);
+                    return new NLuaTable((LuaTable)TableScript[field]);
                 return TableScript[field];
             }
             set { TableScript[field] = value; }
         }
+
+        private NLuaTable(LuaTable tableScript) { TableScript = tableScript; }
+        public NLuaTable(ILua lua, string tableName) { TableScript = ((NLua) lua).InternalLua.GetTable(tableName); }
 
         public Dictionary<object, object> ToDictionary()
         {
@@ -96,22 +99,8 @@ namespace PokeD.Server.Desktop.WrapperInstances
             return value;
         }
 
-        public List<object> ToList()
-        {
-            var list = new List<object>();
-            foreach (var value in TableScript.Values)
-                list.Add(value);
-
-            return list;
-        }
-        public object[] ToArray()
-        {
-            var list = new List<object>();
-            foreach (var value in TableScript.Values)
-                list.Add(value);
-
-            return list.ToArray();
-        }
+        public List<object> ToList() => TableScript.Values.Cast<object>().ToList();
+        public object[] ToArray() => TableScript.Values.Cast<object>().ToArray();
     }
 
     public class NLuaWrapperInstance : ILuaWrapper

@@ -26,6 +26,8 @@ namespace PokeD.Server.Desktop
 
         public static bool InputAvailable => ConsoleInput.Count > 0;
 
+        private static bool Stopped { get; set; } = false;
+
 
         public static void WriteLine(string text) { ConsoleOutput.Add(text); }
 
@@ -35,7 +37,7 @@ namespace PokeD.Server.Desktop
         public static void Start(int fps = 60)
         {
             if (ConsoleManagerThread != null && ConsoleManagerThread.IsAlive)
-                return;
+                Stop();
 
             ScreenBufferArray = new char[Console.WindowWidth, Console.WindowHeight];
             ScreenFPS = fps;
@@ -47,13 +49,14 @@ namespace PokeD.Server.Desktop
             ConsoleManagerThread = new Thread(Cycle) { IsBackground = true, Name = "ConsoleManagerThread" };
             ConsoleManagerThread.Start();
         }
+        public static void Stop() { Stopped = true; }
 
 
         private static long ConsoleManagerThreadTime { get; set; }
         private static void Cycle()
         {
             var watch = Stopwatch.StartNew();
-            while (true)
+            while (!Stopped)
             {
                 Array.Clear(ScreenBufferArray, 0, ScreenBufferArray.Length);
                 ScreenBuffer = string.Empty;
@@ -107,15 +110,12 @@ namespace PokeD.Server.Desktop
                     break;
 
                 case ConsoleKey.Escape:
+                case ConsoleKey.UpArrow:
+                case ConsoleKey.DownArrow:
                 case ConsoleKey.LeftArrow:
                 case ConsoleKey.RightArrow:
-                case ConsoleKey.Home:
-                case ConsoleKey.End:
-                case ConsoleKey.Delete:
-                case ConsoleKey.Oem6:
-                case ConsoleKey.DownArrow:
-                case ConsoleKey.UpArrow:
                 case ConsoleKey.Tab:
+                case ConsoleKey.Delete:
                     break;
 
                 default:
@@ -146,14 +146,8 @@ namespace PokeD.Server.Desktop
             Console.Write(ScreenBuffer);
         }
 
-        private static void UpdateTitle()
-        {
-            Console.Title = $"PokeD Server FPS: {ScreenFPS}";
-        }
+        private static void UpdateTitle() { Console.Title = $"PokeD Server FPS: {ScreenFPS}"; }
 
-        public static void Clear()
-        {
-            ConsoleOutput.Clear();
-        }
+        public static void Clear() { ConsoleOutput.Clear(); }
     }
 }

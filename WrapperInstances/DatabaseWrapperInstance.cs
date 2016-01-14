@@ -30,8 +30,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
             return this;
         }
-
-
+        
         public void CreateTable<T>() where T : DatabaseTable, new()
         {
 			Connection.CreateTable<T>(CreateFlags.ImplicitPK | CreateFlags.AutoIncPK);
@@ -47,10 +46,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
             Connection.Update(obj);
         }
 
-        public T Find<T>(Expression<Func<T, bool>> predicate) where T : DatabaseTable, new()
-        {
-            return Connection.Find(predicate);
-        }
+        public T Find<T>(Expression<Func<T, bool>> predicate) where T : DatabaseTable, new() => Connection.Find(predicate);
 
 
         private string CombinePath(string fileName) { return Path.Combine(FileSystemWrapper.DatabaseFolder.Path, fileName + FileExtension); }
@@ -73,8 +69,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
             return this;
         }
-
-
+        
         public void CreateTable<T>() where T : DatabaseTable, new()
         {
             Database.Create(CombinePath(typeof(T).Name), CreateFields(new T()));
