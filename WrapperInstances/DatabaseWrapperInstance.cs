@@ -19,7 +19,6 @@ namespace PokeD.Server.Desktop.WrapperInstances
     public class SQLiteDatabase : IDatabase
     {
         public string FileExtension => ".sqlite3";
-        public bool PrimitivesOnly => true;
 
         private SQLiteConnection Connection { get; set; }
 
@@ -58,7 +57,6 @@ namespace PokeD.Server.Desktop.WrapperInstances
     public class FileDBDatabase : IDatabase
     {
         public string FileExtension => ".fdb";
-        public bool PrimitivesOnly => true;
 
         private FileDb Database { get; set; }
 
