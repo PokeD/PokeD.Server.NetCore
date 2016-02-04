@@ -8,6 +8,8 @@ using System.Threading;
 
 using Aragas.Core.Wrappers;
 
+using NDesk.Options;
+
 using PCLStorage;
 
 using PokeD.Core.Extensions;
@@ -28,13 +30,9 @@ namespace PokeD.Server.Desktop
             FileSystemWrapper.Instance = new FileSystemWrapperInstance();
             InputWrapper.Instance = new InputWrapperInstance();
 
-            //LuaWrapper.Instance = new NLuaWrapperInstance();
             LuaWrapper.Instance = new MoonLuaWrapperInstance();
 
 			DatabaseWrapper.Instance = new SQLiteDatabase();
-            //DatabaseWrapper.Instance = new CouchbaseDatabase();
-            //DatabaseWrapper.Instance = new FileDBDatabase();
-            //DatabaseWrapper.Instance = new SiaqodbDatabase();
 
             NancyWrapper.Instance = new NancyWrapperInstance();
 
@@ -47,8 +45,6 @@ namespace PokeD.Server.Desktop
 
         public static void Main(params string[] args)
         {
-            //var m = new Monster(25);
-
             try { AppDomain.CurrentDomain.UnhandledException += (sender, e) => CatchErrorObject(e.ExceptionObject); }
             catch (Exception exception)
             {
@@ -58,34 +54,104 @@ namespace PokeD.Server.Desktop
 
                 CatchError(exception);
             }
-            Start(args);
+
+            #region Args parsing
+            var options = new OptionSet();
+            try
+            {
+                options = new OptionSet()
+                    .Add("c|console", "enables the console", s => ConsoleManager.Start())
+                    .Add("fps=", "{FPS} of the console, integer", fps => ConsoleManager.ScreenFPS = int.Parse(fps))
+                    .Add("db=", "used {DATABASE_WRAPPER}", ParseDatabase)
+                    .Add("lua=", "used {LUA_WRAPPER}", ParseLua)
+                    .Add("h|help", "show help", str => ShowHelp(options));
+
+                options.Parse(args);
+            }
+            catch (Exception ex) when (ex is OptionException || ex is FormatException)
+            {
+                ConsoleManager.Stop();
+
+                Console.Write("PokeD.Server.Desktop: ");
+                Console.WriteLine(ex.Message);
+                Console.WriteLine("Try `PokeD.Server.Desktop --help' for more information.");
+
+                ShowHelp(options, true);
+
+                Console.ReadLine();
+                return;
+            }
+            #endregion Args parsing
+
+            Start();
+        }
+        private static void ShowHelp(OptionSet options, bool direct = false)
+        {
+            if (direct)
+            {
+                Console.WriteLine("Usage: PokeD.Server.Desktop [OPTIONS]");
+                Console.WriteLine();
+                Console.WriteLine("Options:");
+
+                options.WriteOptionDescriptions(Console.Out);
+            }
+            else
+            {
+                ConsoleManager.WriteLine("Usage: PokeD.Server.Desktop [OPTIONS]");
+                ConsoleManager.WriteLine();
+                ConsoleManager.WriteLine("Options:");
+
+                var opt = new StringWriter();
+                options.WriteOptionDescriptions(opt);
+                foreach (var line in opt.GetStringBuilder().ToString().Split(new[] { Environment.NewLine }, StringSplitOptions.None))
+                    ConsoleManager.WriteLine(line);
+            }
+        }
+        private static void ParseDatabase(string db)
+        {
+            switch (db.ToLowerInvariant())
+            {
+                case "file":
+                case "filedb":
+                case "fdb":
+                    DatabaseWrapper.Instance = new FileDBDatabase();
+                    break;
+
+                case "sql":
+                case "sqldb":
+                case "sqlite":
+                case "sqlitedb":
+                    DatabaseWrapper.Instance = new SQLiteDatabase();
+                    break;
+            }
+        }
+        private static void ParseLua(string lua)
+        {
+            switch (lua.ToLowerInvariant())
+            {
+                case "ms":
+                case "moon":
+                case "moonsharp":
+                case "filedb":
+                    LuaWrapper.Instance = new MoonLuaWrapperInstance();
+                    break;
+
+                case "nl":
+                case "nlua":
+                    LuaWrapper.Instance = new NLuaWrapperInstance();
+                    break;
+            }
         }
 
-        private static void Start(params string[] args)
+        private static void Start()
         {
-            foreach (var arg in args)
-            {
-                if (arg.StartsWith("-enableconsole"))
-                    ConsoleManager.Start();
-
-                if (arg.StartsWith("-usenlua"))
-                    LuaWrapper.Instance = new NLuaWrapperInstance();
-
-				//if (arg.StartsWith("-usecouchbase"))
-				//    DatabaseWrapper.Instance = new CouchbaseDatabase();
-
-                if (arg.StartsWith("-usefiledb"))
-                    DatabaseWrapper.Instance = new FileDBDatabase();
-
-                //if (arg.StartsWith("-usensiaqodb"))
-                //    DatabaseWrapper.Instance = new SiaqodbDatabase();
-            }
-
             Server = new Server();
             Server.Start();
 
             Update();
         }
+
+
 
         public static long MainThreadTime { get; private set; }
         private static void Update()
@@ -136,7 +202,7 @@ namespace PokeD.Server.Desktop
         {
             var errorLog = 
 $@"[CODE]
-PokeD.Server Crash Log v {Assembly.GetExecutingAssembly().GetName().Version}
+PokeD.Server.Desktop Crash Log v {Assembly.GetExecutingAssembly().GetName().Version}
 
 System specifications:
 Operating system: {Environment.OSVersion} [{(Type.GetType("Mono.Runtime") != null ? "Mono" : ".NET")}]
