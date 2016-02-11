@@ -25,14 +25,18 @@ namespace PokeD.Server.Desktop
         private static string CurrentConsoleInput { get; set; } = string.Empty;
         private static int CurrentLine { get; set; }
 
-        public static bool InputAvailable => ConsoleInput.Count > 0;
+        public static bool InputAvailable => !Stopped && ConsoleInput.Count > 0;
 
         private static bool Stopped { get; set; }
 
 
 
-        public static void WriteLine(string text = "") { ConsoleOutput.Add(text); }
-        public static string ReadLine() => ConsoleInput.Dequeue();
+        public static void WriteLine(string text = "")
+        {
+            if(!Stopped)
+                ConsoleOutput.Add(text);
+        }
+        public static string ReadLine() => Stopped ? string.Empty : ConsoleInput.Dequeue();
 
 
         public static void Start(int fps = 20, bool cursorVisible = false)
@@ -180,6 +184,10 @@ namespace PokeD.Server.Desktop
 
         private static void UpdateTitle() { Console.Title = $"PokeD Server FPS: {ScreenFPS}"; }
 
-        public static void Clear() { ConsoleOutput.Clear(); }
+        public static void Clear()
+        {
+            if (!Stopped)
+                ConsoleOutput.Clear();
+        }
     }
 }
