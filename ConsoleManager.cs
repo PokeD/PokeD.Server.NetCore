@@ -23,6 +23,7 @@ namespace PokeD.Server.Desktop
         private static int ConsoleOutputLength => ScreenHeight - 6 - 2;
         private static Queue<string> ConsoleInput { get; } = new Queue<string>();
         private static string CurrentConsoleInput { get; set; } = string.Empty;
+        private static int CurrentLine { get; set; }
 
         public static bool InputAvailable => ConsoleInput.Count > 0;
 
@@ -69,18 +70,19 @@ namespace PokeD.Server.Desktop
                 var emptyLine = string.Empty.PadRight(ScreenWidth).ToCharArray();
                 for (var cy = 0; cy < ScreenHeight; cy++)
                     ScreenBuffer[cy] = emptyLine;
+                CurrentLine = 0;
 
+                DrawLine($"Main              thread execution time: {Program.MainThreadTime} ms");
+                DrawLine($"ClientConnections thread execution time: {Server.ClientConnectionsThreadTime} ms");
+                DrawLine($"PlayerWatcher     thread execution time: {ModuleP3D.PlayerWatcherThreadTime} ms");
+                DrawLine($"PlayerCorrection  thread execution time: {ModuleP3D.PlayerCorrectionThreadTime} ms");
+                DrawLine($"ConsoleManager    thread execution time: {ConsoleManagerThreadTime} ms");
 
-                DrawLine($"Main              thread execution time: {Program.MainThreadTime} ms", 0);
-                DrawLine($"ClientConnections thread execution time: {Server.ClientConnectionsThreadTime} ms", 1);
-                DrawLine($"PlayerWatcher     thread execution time: {ModuleP3D.PlayerWatcherThreadTime} ms", 2);
-                DrawLine($"PlayerCorrection  thread execution time: {ModuleP3D.PlayerCorrectionThreadTime} ms", 3);
-                DrawLine($"ConsoleManager    thread execution time: {ConsoleManagerThreadTime} ms", 4);
+                DrawLine();
 
-                var currentLineCursor = 6;
-                foreach (var line in ConsoleOutput)
-                    DrawLine(line, currentLineCursor++);
-
+                for (var i = 0; i < ConsoleOutput.Count; i++)
+                    DrawLine(ConsoleOutput[i]);
+                
                 HandleInput();
                 DrawLine(CurrentConsoleInput, ScreenHeight > 0 ? ScreenHeight - 1 : ScreenHeight);
 
@@ -140,9 +142,33 @@ namespace PokeD.Server.Desktop
             }
         }
 
+        private static void DrawLine(string text = "")
+        {
+            if (text.Length > ScreenWidth)
+            {
+                DrawLineInternal(text.Substring(0, ScreenWidth));
+                DrawLine(text.Remove(0, ScreenWidth));
+            }
+            else
+                DrawLineInternal(text);
+        }
         private static void DrawLine(string text, int y)
         {
-            if(ScreenBuffer.Length > y)
+            if (text.Length > ScreenWidth)
+                DrawLineInternal(text.Substring(0, ScreenWidth), y);
+            else
+                DrawLineInternal(text, y);
+        }
+        private static void DrawLineInternal(string text)
+        {
+            if (ScreenBuffer.Length > CurrentLine)
+                ScreenBuffer[CurrentLine] = text.PadRight(ScreenWidth).ToCharArray();
+
+            CurrentLine++;
+        }
+        private static void DrawLineInternal(string text, int y)
+        {
+            if (ScreenBuffer.Length > y)
                 ScreenBuffer[y] = text.PadRight(ScreenWidth).ToCharArray();
         }
         private static void DrawScreen()

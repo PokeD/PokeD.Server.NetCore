@@ -20,7 +20,7 @@ namespace PokeD.Server.Desktop
 {
     public static partial class Program
     {
-        private const string URL = "http://pokemon3d.net/forum/threads/12901/";
+        private const string URL = "http://poked.github.io/report/";
         private static Server Server { get; set; }
 
 
@@ -132,7 +132,6 @@ namespace PokeD.Server.Desktop
                 case "ms":
                 case "moon":
                 case "moonsharp":
-                case "filedb":
                     LuaWrapper.Instance = new MoonLuaWrapperInstance();
                     break;
 
@@ -163,12 +162,8 @@ namespace PokeD.Server.Desktop
                 {
                     var input = ConsoleManager.ReadLine();
 
-                    if (input.StartsWith("/"))
-                    {
-                        ConsoleManager.Clear();
-                        ConsoleManager.WriteLine(input);
-                        ExecuteCommand(input);
-                    }
+                    if (input.StartsWith("/") && !ExecuteCommand(input))
+                        ConsoleManager.WriteLine("Invalid command!");
                 }
 
                 if(Server == null || (Server != null && Server.IsDisposing))

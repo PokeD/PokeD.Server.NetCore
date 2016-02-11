@@ -4,7 +4,7 @@ namespace PokeD.Server.Desktop
 {
     public static partial class Program
     {
-        private static void ExecuteCommand(string message)
+        private static bool ExecuteCommand(string message)
         {
             var command = message.Remove(0, 1).ToLower();
             message = message.Remove(0, 1);
@@ -21,18 +21,17 @@ namespace PokeD.Server.Desktop
                 ConsoleManager.Clear();
 
             else if (command.StartsWith("help server"))
-                Server.ExecuteCommand(message.Remove(0, 11));
+                return Server.ExecuteCommand(message.Remove(0, 11));
 
             else if (command.StartsWith("help"))
-                ExecuteHelpCommand(message.Remove(0, 4));
+                return ExecuteHelpCommand(message.Remove(0, 4));
 
             else
-                Server.ExecuteCommand(message);
+                return Server.ExecuteCommand(message);
+
+            return true;
         }
 
-        private static void ExecuteHelpCommand(string command)
-        {
-
-        }
+        private static bool ExecuteHelpCommand(string command) { return false; }
     }
 }
