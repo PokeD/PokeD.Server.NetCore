@@ -8,6 +8,10 @@ using System.Threading;
 
 using Aragas.Core.Wrappers;
 
+using FireSharp;
+using FireSharp.Config;
+using FireSharp.Interfaces;
+
 using NDesk.Options;
 
 using PCLStorage;
@@ -48,11 +52,10 @@ namespace PokeD.Server.Desktop
             try { AppDomain.CurrentDomain.UnhandledException += (sender, e) => CatchErrorObject(e.ExceptionObject); }
             catch (Exception exception)
             {
-                // Maybe it will cause a recursive exception.
-                Server?.Stop();
-                ConsoleManager.Stop();
-
-                CatchError(exception);
+                var exceptionText = CatchError(exception);
+                ReportErrorLocal(exceptionText);
+                ReportErrorWeb(exceptionText);
+                Stop();
             }
 
             #region Args parsing
@@ -141,6 +144,22 @@ namespace PokeD.Server.Desktop
                     break;
             }
         }
+        private static void ReportErrorLocal(string exception)
+        {
+            var crashFile = FileSystemWrapper.CrashLogFolder.CreateFileAsync($"{DateTime.Now:yyyy-MM-dd_HH.mm.ss}.log", CreationCollisionOption.OpenIfExists).Result;
+            using (var stream = crashFile.OpenAsync(PCLStorage.FileAccess.ReadAndWrite).Result)
+            using (var writer = new StreamWriter(stream))
+                writer.Write(exception);
+        }
+        private static void ReportErrorWeb(string exception)
+        {
+            if (!Server.AutomaticErrorReporting)
+                return;
+
+
+            IFirebaseClient client = new FirebaseClient(new FirebaseConfig { BasePath = "https://poked.firebaseio.com/" });
+            client.Push("", exception);
+        }
 
         private static void Start()
         {
@@ -148,6 +167,16 @@ namespace PokeD.Server.Desktop
             Server.Start();
 
             Update();
+        }
+        private static void Stop()
+        {
+            // Maybe it will cause a recursive exception.
+            Server?.Stop();
+            ConsoleManager.Stop();
+
+#if !DEBUG
+            Environment.Exit((int) ExitCodes.UnknownError);
+#endif
         }
 
 
@@ -191,9 +220,13 @@ namespace PokeD.Server.Desktop
         private static void CatchErrorObject(object exceptionObject)
         {
             var exception = exceptionObject as Exception ?? new NotSupportedException("Unhandled exception doesn't derive from System.Exception: " + exceptionObject);
-            CatchError(exception);
+
+            var exceptionText = CatchError(exception);
+            ReportErrorLocal(exceptionText);
+            ReportErrorWeb(exceptionText);
+            Stop();
         }
-        private static void CatchError(Exception ex)
+        private static string CatchError(Exception ex)
         {
             var errorLog = 
 $@"[CODE]
@@ -211,14 +244,7 @@ You should report this error if it is reproduceable or you could not solve it by
 Go To: {URL} to report this crash there.
 [/CODE]";
 
-            var crashFile = FileSystemWrapper.CrashLogFolder.CreateFileAsync($"{DateTime.Now:yyyy-MM-dd_HH.mm.ss}.log", CreationCollisionOption.OpenIfExists).Result;
-            using (var stream = crashFile.OpenAsync(PCLStorage.FileAccess.ReadAndWrite).Result)
-            using (var writer = new StreamWriter(stream))
-                writer.Write(errorLog);
-
-#if !DEBUG
-            Environment.Exit((int) ExitCodes.UnknownError);
-#endif
+            return errorLog;
         }
         private static string BuildErrorStringRecursive(Exception ex)
         {
