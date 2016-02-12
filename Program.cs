@@ -22,6 +22,13 @@ using PokeD.Server.Desktop.WrapperInstances;
 
 namespace PokeD.Server.Desktop
 {
+    public struct FBReport
+    {
+        public string Description;
+        public string ErrorCode;
+        public DateTime Date;
+    }
+
     public static partial class Program
     {
         private const string URL = "http://poked.github.io/report/";
@@ -158,7 +165,12 @@ namespace PokeD.Server.Desktop
 
 
             IFirebaseClient client = new FirebaseClient(new FirebaseConfig { BasePath = "https://poked.firebaseio.com/" });
-            client.Push("", exception);
+            client.Push("", new FBReport()
+            {
+                Description = "Sent from PokeD",
+                ErrorCode = exception,
+                Date = DateTime.Now
+            });
         }
 
         private static void Start()
