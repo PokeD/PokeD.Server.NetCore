@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -14,6 +15,10 @@ using FireSharp.Interfaces;
 
 using NDesk.Options;
 
+using Nito.AsyncEx.Synchronous;
+
+using Open.Nat;
+
 using PCLStorage;
 
 using PokeD.Core.Extensions;
@@ -22,17 +27,20 @@ using PokeD.Server.Desktop.WrapperInstances;
 
 namespace PokeD.Server.Desktop
 {
-    public struct FBReport
-    {
-        public string Description;
-        public string ErrorCode;
-        public DateTime Date;
-    }
-
     public static partial class Program
     {
+        private struct FBReport
+        {
+            public string Description;
+            public string ErrorCode;
+            public DateTime Date;
+        }
+
+
         private const string URL = "http://poked.github.io/report/";
         private static Server Server { get; set; }
+
+        private static bool NATForwardingEnabled { get; set; }
 
 
         static Program()
@@ -74,6 +82,7 @@ namespace PokeD.Server.Desktop
                     .Add("fps=", "{FPS} of the console, integer", fps => ConsoleManager.ScreenFPS = int.Parse(fps))
                     .Add("db=", "used {DATABASE_WRAPPER}", ParseDatabase)
                     .Add("lua=", "used {LUA_WRAPPER}", ParseLua)
+                    .Add("n|nat", "enable NAT port forwarding", str => NATForwardingEnabled = true)
                     .Add("h|help", "show help", str => ShowHelp(options));
 
                 options.Parse(args);
@@ -178,12 +187,39 @@ namespace PokeD.Server.Desktop
             Server = new Server();
             Server.Start();
 
+            NATForwarding();
+
             Update();
+        }
+        private static void NATForwarding()
+        {
+            if (!NATForwardingEnabled)
+                return;
+
+            try
+            {
+                Logger.Log(LogType.Info, $"Initializing NAT Port Forwarding.");
+                var discoverer = new NatDiscoverer();
+                Logger.Log(LogType.Info, $"Getting your external IP. Please wait...");
+                var device = discoverer.DiscoverDeviceAsync().WaitAndUnwrapException(new CancellationTokenSource(10000).Token);
+                Logger.Log(LogType.Info, $"Your external IP is {device.GetExternalIPAsync().WaitAndUnwrapException(new CancellationTokenSource(2000).Token)}.");
+
+                foreach (var module in Server.Modules.Where(module => module.Enabled))
+                {
+                    Logger.Log(LogType.Info, $"Forwarding port {module.Port}.");
+                    device.CreatePortMapAsync(new Mapping(Protocol.Tcp, module.Port, module.Port, "PokeD Port Mapping")).WaitAndUnwrapException(new CancellationTokenSource(2000).Token);
+                }
+            }
+            catch (NatDeviceNotFoundException)
+            {
+                Logger.Log(LogType.Error, $"No NAT device is present or, Upnp is disabled in the router or Antivirus software is filtering SSDP (discovery protocol).");
+            }
         }
         private static void Stop()
         {
             // Maybe it will cause a recursive exception.
             Server?.Stop();
+            NatDiscoverer.ReleaseAll();
             ConsoleManager.Stop();
 
 #if !DEBUG
