@@ -17,7 +17,7 @@ using NDesk.Options;
 
 using Nito.AsyncEx.Synchronous;
 
-using Open.Nat;
+//using Open.Nat;
 
 using PCLStorage;
 
@@ -198,8 +198,8 @@ namespace PokeD.Server.Desktop
 
             try
             {
-                Logger.Log(LogType.Info, $"Initializing NAT Port Forwarding.");
-                var discoverer = new NatDiscoverer();
+                Logger.Log(LogType.Info, $"Initializing NAT Discovery.");
+                var discoverer = new Open.Nat.NatDiscoverer();
                 Logger.Log(LogType.Info, $"Getting your external IP. Please wait...");
                 var device = discoverer.DiscoverDeviceAsync().WaitAndUnwrapException(new CancellationTokenSource(10000).Token);
                 Logger.Log(LogType.Info, $"Your external IP is {device.GetExternalIPAsync().WaitAndUnwrapException(new CancellationTokenSource(2000).Token)}.");
@@ -207,10 +207,10 @@ namespace PokeD.Server.Desktop
                 foreach (var module in Server.Modules.Where(module => module.Enabled))
                 {
                     Logger.Log(LogType.Info, $"Forwarding port {module.Port}.");
-                    device.CreatePortMapAsync(new Mapping(Protocol.Tcp, module.Port, module.Port, "PokeD Port Mapping")).WaitAndUnwrapException(new CancellationTokenSource(2000).Token);
+                    device.CreatePortMapAsync(new Open.Nat.Mapping(Open.Nat.Protocol.Tcp, module.Port, module.Port, "PokeD Port Mapping")).WaitAndUnwrapException(new CancellationTokenSource(2000).Token);
                 }
             }
-            catch (NatDeviceNotFoundException)
+            catch (Open.Nat.NatDeviceNotFoundException)
             {
                 Logger.Log(LogType.Error, $"No NAT device is present or, Upnp is disabled in the router or Antivirus software is filtering SSDP (discovery protocol).");
             }
@@ -219,7 +219,7 @@ namespace PokeD.Server.Desktop
         {
             // Maybe it will cause a recursive exception.
             Server?.Stop();
-            NatDiscoverer.ReleaseAll();
+            Open.Nat.NatDiscoverer.ReleaseAll();
             ConsoleManager.Stop();
 
 #if !DEBUG
