@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 using Aragas.Core.Wrappers;
 
@@ -15,9 +17,7 @@ using FireSharp.Interfaces;
 
 using NDesk.Options;
 
-using Nito.AsyncEx.Synchronous;
-
-//using Open.Nat;
+using Open.Nat;
 
 using PCLStorage;
 
@@ -27,6 +27,22 @@ using PokeD.Server.Desktop.WrapperInstances;
 
 namespace PokeD.Server.Desktop
 {
+    public static class TaskExtension
+    {
+        public static TResult Wait<TResult>(this Task<TResult> task, CancellationTokenSource cancellationTokenSource)
+        {
+            try
+            {
+                task.Wait(cancellationTokenSource.Token);
+                return task.Result;
+            }
+            catch
+            {
+                throw task.Exception;
+            }
+        }
+    }
+
     public static partial class Program
     {
         private struct FBReport
@@ -37,7 +53,8 @@ namespace PokeD.Server.Desktop
         }
 
 
-        private const string URL = "http://poked.github.io/report/";
+        private const string REPORTURL = "http://poked.github.io/report/";
+        private const string FBURL = "https://poked.firebaseio.com/";
         private static Server Server { get; set; }
 
         private static bool NATForwardingEnabled { get; set; }
@@ -49,9 +66,13 @@ namespace PokeD.Server.Desktop
             FileSystemWrapper.Instance = new FileSystemWrapperInstance();
             InputWrapper.Instance = new InputWrapperInstance();
 
+            ConfigWrapper.Instance = new YamlConfigFactoryInstance();
+            
             LuaWrapper.Instance = new MoonLuaWrapperInstance();
 
 			DatabaseWrapper.Instance = new SQLiteDatabase();
+
+            LuaWrapper.Instance = new MoonLuaWrapperInstance();
 
             NancyWrapper.Instance = new NancyWrapperInstance();
 
@@ -73,17 +94,23 @@ namespace PokeD.Server.Desktop
                 Stop();
             }
 
-            #region Args parsing
+            ParseArgs(args);
+
+            Start();
+        }
+
+        private static void ParseArgs(IEnumerable<string> args)
+        {
             var options = new OptionSet();
             try
             {
                 options = new OptionSet()
-                    .Add("c|console", "enables the console", s => ConsoleManager.Start())
-                    .Add("fps=", "{FPS} of the console, integer", fps => ConsoleManager.ScreenFPS = int.Parse(fps))
-                    .Add("db=", "used {DATABASE_WRAPPER}", ParseDatabase)
-                    .Add("lua=", "used {LUA_WRAPPER}", ParseLua)
-                    .Add("n|nat", "enable NAT port forwarding", str => NATForwardingEnabled = true)
-                    .Add("h|help", "show help", str => ShowHelp(options));
+                    .Add("c|console", "enables the console.", s => ConsoleManager.Start())
+                    .Add("fps=", "{FPS} of the console, integer.", fps => ConsoleManager.ScreenFPS = int.Parse(fps))
+                    .Add("db=", "used {DATABASE_WRAPPER}.", ParseDatabase)
+                    .Add("cf=", "used {CONFIG_WRAPPER}.", ParseConfig)
+                    .Add("n|nat", "enables NAT port forwarding.", str => NATForwardingEnabled = true)
+                    .Add("h|help", "show help.", str => ShowHelp(options));
 
                 options.Parse(args);
             }
@@ -97,12 +124,11 @@ namespace PokeD.Server.Desktop
 
                 ShowHelp(options, true);
 
-                Console.ReadLine();
-                return;
+                Console.WriteLine();
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+                Environment.Exit((int) ExitCodes.Success);
             }
-            #endregion Args parsing
-
-            Start();
         }
         private static void ShowHelp(OptionSet options, bool direct = false)
         {
@@ -126,10 +152,12 @@ namespace PokeD.Server.Desktop
                     ConsoleManager.WriteLine(line);
             }
         }
-        private static void ParseDatabase(string db)
+        private static void ParseDatabase(string database)
         {
-            switch (db.ToLowerInvariant())
+            switch (database.ToLowerInvariant())
             {
+                case "nosql":
+                case "nosqldb":
                 case "file":
                 case "filedb":
                 case "fdb":
@@ -142,22 +170,26 @@ namespace PokeD.Server.Desktop
                 case "sqlitedb":
                     DatabaseWrapper.Instance = new SQLiteDatabase();
                     break;
+
+                default:
+                    throw new FormatException("DATABASE_WRAPPER not correct.");
             }
         }
-        private static void ParseLua(string lua)
+        private static void ParseConfig(string config)
         {
-            switch (lua.ToLowerInvariant())
+            switch (config.ToLowerInvariant())
             {
-                case "ms":
-                case "moon":
-                case "moonsharp":
-                    LuaWrapper.Instance = new MoonLuaWrapperInstance();
+                case "json":
+                    ConfigWrapper.Instance = new JsonConfigFactoryInstance();
                     break;
 
-                case "nl":
-                case "nlua":
-                    LuaWrapper.Instance = new NLuaWrapperInstance();
+                case "yml":
+                case "yaml":
+                    ConfigWrapper.Instance = new YamlConfigFactoryInstance();
                     break;
+
+                default:
+                    throw new FormatException("CONFIG_WRAPPER not correct.");
             }
         }
         private static void ReportErrorLocal(string exception)
@@ -173,7 +205,7 @@ namespace PokeD.Server.Desktop
                 return;
 
 
-            IFirebaseClient client = new FirebaseClient(new FirebaseConfig { BasePath = "https://poked.firebaseio.com/" });
+            IFirebaseClient client = new FirebaseClient(new FirebaseConfig { BasePath = FBURL });
             client.Push("", new FBReport()
             {
                 Description = "Sent from PokeD",
@@ -199,32 +231,29 @@ namespace PokeD.Server.Desktop
             try
             {
                 Logger.Log(LogType.Info, $"Initializing NAT Discovery.");
-                var discoverer = new Open.Nat.NatDiscoverer();
+                var discoverer = new NatDiscoverer();
                 Logger.Log(LogType.Info, $"Getting your external IP. Please wait...");
-                var device = discoverer.DiscoverDeviceAsync().WaitAndUnwrapException(new CancellationTokenSource(10000).Token);
-                Logger.Log(LogType.Info, $"Your external IP is {device.GetExternalIPAsync().WaitAndUnwrapException(new CancellationTokenSource(2000).Token)}.");
+                var device = discoverer.DiscoverDeviceAsync().Wait(new CancellationTokenSource(10000));
+                Logger.Log(LogType.Info, $"Your external IP is {device.GetExternalIPAsync().Wait(new CancellationTokenSource(2000))}.");
 
                 foreach (var module in Server.Modules.Where(module => module.Enabled))
                 {
                     Logger.Log(LogType.Info, $"Forwarding port {module.Port}.");
-                    device.CreatePortMapAsync(new Open.Nat.Mapping(Open.Nat.Protocol.Tcp, module.Port, module.Port, "PokeD Port Mapping")).WaitAndUnwrapException(new CancellationTokenSource(2000).Token);
+                    device.CreatePortMapAsync(new Mapping(Protocol.Tcp, module.Port, module.Port, "PokeD Port Mapping")).Wait(new CancellationTokenSource(2000).Token);
                 }
             }
-            catch (Open.Nat.NatDeviceNotFoundException)
+            catch (NatDeviceNotFoundException)
             {
                 Logger.Log(LogType.Error, $"No NAT device is present or, Upnp is disabled in the router or Antivirus software is filtering SSDP (discovery protocol).");
             }
         }
         private static void Stop()
         {
-            // Maybe it will cause a recursive exception.
-            Server?.Stop();
-            Open.Nat.NatDiscoverer.ReleaseAll();
             ConsoleManager.Stop();
 
-#if !DEBUG
+            Server?.Stop();
+            NatDiscoverer.ReleaseAll();
             Environment.Exit((int) ExitCodes.UnknownError);
-#endif
         }
 
 
@@ -289,7 +318,7 @@ Logical processors: {Environment.ProcessorCount}
 {BuildErrorStringRecursive(ex)}
 
 You should report this error if it is reproduceable or you could not solve it by yourself.
-Go To: {URL} to report this crash there.
+Go To: {REPORTURL} to report this crash there.
 [/CODE]";
 
             return errorLog;

@@ -27,14 +27,19 @@ namespace PokeD.Server.Desktop
 
         public static bool InputAvailable => !Stopped && ConsoleInput.Count > 0;
 
+        public static bool Enabled => !Stopped;
         private static bool Stopped { get; set; }
 
 
 
         public static void WriteLine(string text = "")
         {
-            if(!Stopped)
+            if (!Stopped)
+            {
                 ConsoleOutput.Add(text);
+                if (ConsoleOutput.Count > ConsoleOutputLength)
+                    ConsoleOutput.RemoveAt(0);
+            }
         }
         public static string ReadLine() => Stopped ? string.Empty : ConsoleInput.Dequeue();
 
@@ -141,7 +146,8 @@ namespace PokeD.Server.Desktop
                     break;
 
                 default:
-                    CurrentConsoleInput += input.KeyChar;
+                    if(char.IsLetterOrDigit(input.KeyChar) || input.KeyChar == '/')
+                        CurrentConsoleInput += input.KeyChar;
                     break;
             }
         }

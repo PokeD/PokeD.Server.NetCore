@@ -22,7 +22,10 @@ namespace PokeD.Server.Desktop.WrapperInstances
             LogManager.WriteLine(msg_0);
 
             var msg_1 = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {message}";
-            ConsoleManager.WriteLine(msg_1);
+            if (ConsoleManager.Enabled)
+                ConsoleManager.WriteLine(msg_1);
+            else
+                Console.WriteLine(msg_1);
         }
     }
 }
