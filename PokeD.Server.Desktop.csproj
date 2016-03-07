@@ -86,6 +86,13 @@
     <Compile Include="ExitCodes.cs" />
     <Compile Include="LogManager.cs" />
     <Compile Include="ConsoleManager.cs" />
+    <None Include="Lua\lang\ru.lua">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Lua\lang\en.lua">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Lua\modules\README" />
     <Compile Include="Program.Commands.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,6 +118,15 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Content Include="Lua\modules\hook.lua">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lua\modules\translator.lua">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Lua\npc_announcer.lua">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="Lua\npc_gregory.lua" />
     <ProjectReference Include="Aragas.Core\Aragas.Core.csproj">
       <Project>{468d9d51-dfe7-47a8-b0d6-52d035fc714d}</Project>
       <Name>Aragas.Core</Name>

@@ -36,10 +36,7 @@ namespace PokeD.Server.Desktop
                 task.Wait(cancellationTokenSource.Token);
                 return task.Result;
             }
-            catch
-            {
-                throw task.Exception;
-            }
+            catch(Exception ex) { throw task?.Exception ?? ex; }
         }
     }
 
@@ -107,8 +104,8 @@ namespace PokeD.Server.Desktop
                 options = new OptionSet()
                     .Add("c|console", "enables the console.", s => ConsoleManager.Start())
                     .Add("fps=", "{FPS} of the console, integer.", fps => ConsoleManager.ScreenFPS = int.Parse(fps))
-                    .Add("db=", "used {DATABASE_WRAPPER}.", ParseDatabase)
-                    .Add("cf=", "used {CONFIG_WRAPPER}.", ParseConfig)
+                    .Add("db|database=", "used {DATABASE_WRAPPER}.", ParseDatabase)
+                    .Add("cf|config=", "used {CONFIG_WRAPPER}.", ParseConfig)
                     .Add("n|nat", "enables NAT port forwarding.", str => NATForwardingEnabled = true)
                     .Add("h|help", "show help.", str => ShowHelp(options));
 
@@ -236,7 +233,7 @@ namespace PokeD.Server.Desktop
                 var device = discoverer.DiscoverDeviceAsync().Wait(new CancellationTokenSource(10000));
                 Logger.Log(LogType.Info, $"Your external IP is {device.GetExternalIPAsync().Wait(new CancellationTokenSource(2000))}.");
 
-                foreach (var module in Server.Modules.Where(module => module.Enabled))
+                foreach (var module in Server.Modules.Where(module => module.Enabled && module.Port != 0))
                 {
                     Logger.Log(LogType.Info, $"Forwarding port {module.Port}.");
                     device.CreatePortMapAsync(new Mapping(Protocol.Tcp, module.Port, module.Port, "PokeD Port Mapping")).Wait(new CancellationTokenSource(2000).Token);

@@ -70,6 +70,6 @@ namespace PokeD.Server.Desktop.WrapperInstances
     public class JsonConfigFactoryInstance : IConfigFactory
     {
 
-        public IConfigWrapper CreateConfig() => new JsonConfigWrapperInstance();
+        public IConfigWrapper Create() => new JsonConfigWrapperInstance();
     }
 }

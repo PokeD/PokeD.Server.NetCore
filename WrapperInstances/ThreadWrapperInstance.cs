@@ -24,9 +24,9 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
     public class ThreadWrapperInstance : IThreadWrapper
     {
-        public IThread CreateThread(Aragas.Core.Wrappers.ThreadStart action) { return new CustomThread(action); }
+        public IThread Create(Aragas.Core.Wrappers.ThreadStart action) { return new CustomThread(action); }
 
-        public IThread CreateThread(Aragas.Core.Wrappers.ParameterizedThreadStart action) { return new CustomThread(action); }
+        public IThread Create(Aragas.Core.Wrappers.ParameterizedThreadStart action) { return new CustomThread(action); }
 
         public void Sleep(int milliseconds) { Thread.Sleep(milliseconds); }
 

@@ -114,6 +114,6 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
     public class TCPServerWrapperInstance : ITCPListenerWrapper
     {  
-        public ITCPListener CreateTCPListener(ushort port) { return new SocketTCPListener (port); }
+        public ITCPListener Create(ushort port) { return new SocketTCPListener(port); }
     }
 }

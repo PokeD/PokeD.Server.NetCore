@@ -16,36 +16,36 @@ namespace PokeD.Server.Desktop.WrapperInstances
     /// <summary>
     /// SQL Database, only Primitive Types.
     /// </summary>
-    public class SQLiteDatabase : IDatabase
+    public class SQLiteDatabase : Aragas.Core.Wrappers.Database
     {
-        public string FileExtension => ".sqlite3";
+        public override string FileExtension => ".sqlite3";
 
         private SQLiteConnection Connection { get; set; }
 
 
-        public IDatabase CreateDB(string databaseName)
+        public override Aragas.Core.Wrappers.Database Create(string databaseName)
         {
 			Connection = new SQLiteConnection(new SQLitePlatformGeneric(), CombinePath(databaseName));
 
             return this;
         }
         
-        public void CreateTable<T>() where T : DatabaseTable, new()
+        public override void CreateTable<T>()
         {
 			Connection.CreateTable<T>(CreateFlags.ImplicitPK | CreateFlags.AutoIncPK);
         }
 
-        public void Insert<T>(T obj) where T : DatabaseTable, new()
+        public override void Insert<T>(T obj)
         {
             Connection.Insert(obj);
         }
 
-        public void Update<T>(T obj) where T : DatabaseTable, new()
+        public override void Update<T>(T obj)
         {
             Connection.Update(obj);
         }
 
-        public T Find<T>(Expression<Func<T, bool>> predicate) where T : DatabaseTable, new() => Connection.Find(predicate);
+        public override T Find<T>(Expression<Func<T, bool>> predicate) => Connection.Find(predicate);
 
 
         private string CombinePath(string fileName) { return Path.Combine(FileSystemWrapper.DatabaseFolder.Path, fileName + FileExtension); }
@@ -54,34 +54,34 @@ namespace PokeD.Server.Desktop.WrapperInstances
     /// <summary>
     /// NoSQL Database, only Primitive Types.
     /// </summary>
-    public class FileDBDatabase : IDatabase
+    public class FileDBDatabase : Aragas.Core.Wrappers.Database
     {
-        public string FileExtension => ".fdb";
+        public override string FileExtension => ".fdb";
 
         private FileDb Database { get; set; }
 
 
-        public IDatabase CreateDB(string databaseName)
+        public override Aragas.Core.Wrappers.Database Create(string databaseName)
         {
             Database = new FileDb();
 
             return this;
         }
         
-        public void CreateTable<T>() where T : DatabaseTable, new()
+        public override void CreateTable<T>()
         {
             Database.Create(CombinePath(typeof(T).Name), CreateFields(new T()));
             Database.Close();
         }
 
-        public void Insert<T>(T obj) where T : DatabaseTable, new()
+        public override void Insert<T>(T obj)
         {
             Database.Open(CombinePath(typeof(T).Name), false);
             Database.AddRecord(CreateFieldValues(obj));
             Database.Close();
         }
 
-        public void Update<T>(T obj) where T : DatabaseTable, new()
+        public override void Update<T>(T obj)
         {
             Database.Open(CombinePath(typeof(T).Name), false);
 
@@ -92,7 +92,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
             Database.Close();
         }
 
-        public T Find<T>(Expression<Func<T, bool>> predicate) where T : DatabaseTable, new()
+        public override T Find<T>(Expression<Func<T, bool>> predicate)
         {
             Database.Open(CombinePath(typeof(T).Name), true);
 

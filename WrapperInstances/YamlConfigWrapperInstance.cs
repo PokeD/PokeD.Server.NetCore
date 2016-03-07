@@ -72,6 +72,6 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
     public class YamlConfigFactoryInstance : IConfigFactory
     {
-        public IConfigWrapper CreateConfig() => new YamlConfigWrapperInstance();
+        public IConfigWrapper Create() => new YamlConfigWrapperInstance();
     }
 }
