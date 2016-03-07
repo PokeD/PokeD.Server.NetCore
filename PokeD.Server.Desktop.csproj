@@ -124,8 +124,9 @@
     <Content Include="Lua\modules\translator.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Lua\npc_announcer.lua">
+    <Content Include="Lua\npc_announcer.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Lua\npc_gregory.lua" />
     <ProjectReference Include="Aragas.Core\Aragas.Core.csproj">
       <Project>{468d9d51-dfe7-47a8-b0d6-52d035fc714d}</Project>
