@@ -21,7 +21,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
             var endpoint = new IPEndPoint(IPAddress.Any, Port);
             Listener = new Socket(endpoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
-            Listener.SetIPProtectionLevel(IPProtectionLevel.Unrestricted);
+            //Listener.SetIPProtectionLevel(IPProtectionLevel.Unrestricted);
 
             Listener.Bind(endpoint);
         }
