@@ -11,10 +11,6 @@ using System.Threading.Tasks;
 
 using Aragas.Core.Wrappers;
 
-using FireSharp;
-using FireSharp.Config;
-using FireSharp.Interfaces;
-
 using NDesk.Options;
 
 using Open.Nat;
@@ -202,13 +198,13 @@ namespace PokeD.Server.Desktop
                 return;
 
 
-            IFirebaseClient client = new FirebaseClient(new FirebaseConfig { BasePath = FBURL });
-            client.Push("", new FBReport()
-            {
-                Description = "Sent from PokeD",
-                ErrorCode = exception,
-                Date = DateTime.Now
-            });
+            //IFirebaseClient client = new FirebaseClient(new FirebaseConfig { BasePath = FBURL });
+            //client.Push("", new FBReport()
+            //{
+            //    Description = "Sent from PokeD",
+            //    ErrorCode = exception,
+            //    Date = DateTime.Now
+            //});
         }
 
         private static void Start()
