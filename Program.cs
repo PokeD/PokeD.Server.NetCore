@@ -1,4 +1,5 @@
-﻿using System;
+﻿//#define OPENNAT
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -13,7 +14,9 @@ using Aragas.Core.Wrappers;
 
 using NDesk.Options;
 
+#if OPENNAT
 using Open.Nat;
+#endif
 
 using PCLStorage;
 
@@ -212,10 +215,13 @@ namespace PokeD.Server.Desktop
             Server = new Server();
             Server.Start();
 
+#if OPENNAT
             NATForwarding();
+#endif
 
             Update();
         }
+#if OPENNAT
         private static void NATForwarding()
         {
             if (!NATForwardingEnabled)
@@ -240,12 +246,15 @@ namespace PokeD.Server.Desktop
                 Logger.Log(LogType.Error, $"No NAT device is present or, Upnp is disabled in the router or Antivirus software is filtering SSDP (discovery protocol).");
             }
         }
+#endif
         private static void Stop()
         {
             ConsoleManager.Stop();
 
             Server?.Stop();
+#if OPENNAT
             NatDiscoverer.ReleaseAll();
+#endif
             Environment.Exit((int) ExitCodes.UnknownError);
         }
 

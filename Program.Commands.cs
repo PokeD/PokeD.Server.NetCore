@@ -1,6 +1,8 @@
 ﻿using System;
 
+#if OPENNAT
 using Open.Nat;
+#endif
 
 namespace PokeD.Server.Desktop
 {
@@ -16,7 +18,9 @@ namespace PokeD.Server.Desktop
                 ConsoleManager.Stop();
 
                 Server?.Stop();
+ #if OPENNAT
                 NatDiscoverer.ReleaseAll();
+#endif
                 Console.WriteLine("Stopped the server. Press any key to continue...");
                 Console.ReadKey();
                 Environment.Exit((int) ExitCodes.Success);
