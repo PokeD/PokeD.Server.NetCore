@@ -89,7 +89,6 @@
     <Compile Include="ExitCodes.cs" />
     <Compile Include="LogManager.cs" />
     <Compile Include="ConsoleManager.cs" />
-    <None Include="app.config" />
     <None Include="Lua\lang\ru.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
