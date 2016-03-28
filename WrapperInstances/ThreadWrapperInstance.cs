@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Diagnostics;
+using System.Threading;
 
 using Aragas.Core.Wrappers;
 
@@ -11,7 +12,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
         public string Name { get { return _thread.Name; } set { _thread.Name = value; } }
         public bool IsBackground { get { return _thread.IsBackground; } set { _thread.IsBackground = value; } }
 
-        public bool IsRunning => _thread.ThreadState != ThreadState.Stopped;
+        public bool IsRunning => _thread.ThreadState != System.Threading.ThreadState.Stopped;
 
         internal CustomThread(Aragas.Core.Wrappers.ThreadStart action) { _thread = new Thread(new System.Threading.ThreadStart(action)); }
         internal CustomThread(Aragas.Core.Wrappers.ParameterizedThreadStart action) { _thread = new Thread(new System.Threading.ParameterizedThreadStart(action)); }
@@ -24,6 +25,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
     public class ThreadWrapperInstance : IThreadWrapper
     {
+        public int Threads => Process.GetCurrentProcess().Threads.Count;
         public IThread Create(Aragas.Core.Wrappers.ThreadStart action) { return new CustomThread(action); }
 
         public IThread Create(Aragas.Core.Wrappers.ParameterizedThreadStart action) { return new CustomThread(action); }

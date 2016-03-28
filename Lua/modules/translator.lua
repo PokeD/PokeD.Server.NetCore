@@ -38,26 +38,9 @@ function GetTranstation (languageTable, names)
     for k, name in pairs(names) do
         local a = rawget(languageTable, name)
         if a then
-            --if type(a) == "function" then
-            --    local ret = a(name)
-            --    if ret then
-            --        return ret
-            --    end
-            --end
             return a
         end
     end
-
-    --local a = rawget(languageTable, "default")
-    --if a then
-    --    if type(a) == "function" then
-    --       local ret = a(names[1])
-    --        if ret then
-    --           return ret
-    --       end
-    --   end
-    --   return a
-    --end
 end
 
 function Translate(client, ...)

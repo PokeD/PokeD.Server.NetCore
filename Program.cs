@@ -1,21 +1,24 @@
-﻿//#define OPENNAT
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 using Aragas.Core.Wrappers;
+
+using FireSharp;
+using FireSharp.Config;
 
 using NDesk.Options;
 
 #if OPENNAT
 using Open.Nat;
+using System.Linq;
+using System.Threading.Tasks;
 #endif
 
 using PCLStorage;
@@ -26,6 +29,7 @@ using PokeD.Server.Desktop.WrapperInstances;
 
 namespace PokeD.Server.Desktop
 {
+#if OPENNAT
     public static class TaskExtension
     {
         public static TResult Wait<TResult>(this Task<TResult> task, CancellationTokenSource cancellationTokenSource)
@@ -38,6 +42,7 @@ namespace PokeD.Server.Desktop
             catch(Exception ex) { throw task?.Exception ?? ex; }
         }
     }
+#endif
 
     public static partial class Program
     {
@@ -53,30 +58,28 @@ namespace PokeD.Server.Desktop
         private const string FBURL = "https://poked.firebaseio.com/";
         private static Server Server { get; set; }
 
+#if OPENNAT
         private static bool NATForwardingEnabled { get; set; }
+#endif
 
 
         static Program()
         {
-            AppDomainWrapper.Instance = new AppDomainWrapperInstance();
-            FileSystemWrapper.Instance = new FileSystemWrapperInstance();
-            InputWrapper.Instance = new InputWrapperInstance();
-
-            ConfigWrapper.Instance = new YamlConfigFactoryInstance();
-            
-            LuaWrapper.Instance = new MoonLuaWrapperInstance();
-
-			DatabaseWrapper.Instance = new SQLiteDatabase();
-
-            LuaWrapper.Instance = new MoonLuaWrapperInstance();
-
-            NancyWrapper.Instance = new NancyWrapperInstance();
-
-            TCPClientWrapper.Instance = new TCPClientFactoryInstance();
+            AppDomainWrapper.Instance   = new AppDomainWrapperInstance();
+            DatabaseWrapper.Instance    = new SQLiteDatabase();
+            FileSystemWrapper.Instance  = new FileSystemWrapperInstance();
+            InputWrapper.Instance       = new InputWrapperInstance();
+            LuaWrapper.Instance         = new MoonLuaWrapperInstance();
+            NancyWrapper.Instance       = new NancyWrapperInstance();
+            TCPClientWrapper.Instance   = new TCPClientFactoryInstance();
             TCPListenerWrapper.Instance = new TCPServerWrapperInstance();
-            ThreadWrapper.Instance = new ThreadWrapperInstance();
-
+            ThreadWrapper.Instance      = new ThreadWrapperInstance();
+            ConfigWrapper.Instance      = new YamlConfigFactoryInstance();
+            
             PacketExtensions.Init();
+
+            ServicePointManager.UseNagleAlgorithm = false;
+            ServicePointManager.DefaultConnectionLimit = 100;
         }
 
         public static void Main(params string[] args)
@@ -105,7 +108,9 @@ namespace PokeD.Server.Desktop
                     .Add("fps=", "{FPS} of the console, integer.", fps => ConsoleManager.ScreenFPS = int.Parse(fps))
                     .Add("db|database=", "used {DATABASE_WRAPPER}.", ParseDatabase)
                     .Add("cf|config=", "used {CONFIG_WRAPPER}.", ParseConfig)
+#if OPENNAT
                     .Add("n|nat", "enables NAT port forwarding.", str => NATForwardingEnabled = true)
+#endif
                     .Add("h|help", "show help.", str => ShowHelp(options));
 
                 options.Parse(args);
@@ -200,14 +205,13 @@ namespace PokeD.Server.Desktop
             if (!Server.AutomaticErrorReporting)
                 return;
 
-
-            //IFirebaseClient client = new FirebaseClient(new FirebaseConfig { BasePath = FBURL });
-            //client.Push("", new FBReport()
-            //{
-            //    Description = "Sent from PokeD",
-            //    ErrorCode = exception,
-            //    Date = DateTime.Now
-            //});
+            var client = new FirebaseClient(new FirebaseConfig { BasePath = FBURL });
+            client.Push("", new FBReport
+            {
+                Description = "Sent from PokeD",
+                ErrorCode = exception,
+                Date = DateTime.Now
+            });
         }
 
         private static void Start()

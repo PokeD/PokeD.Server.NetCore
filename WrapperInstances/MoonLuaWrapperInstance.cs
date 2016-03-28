@@ -11,6 +11,7 @@ using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Loaders;
 
 using PCLStorage;
+
 using PokeD.Server.Clients;
 using PokeD.Server.Clients.NPC;
 
@@ -100,8 +101,8 @@ namespace PokeD.Server.Desktop.WrapperInstances
         }
         private Table CompileFile(string path)
         {
-            CoreModules modules = CoreModules.Preset_SoftSandbox;
-            IFolder folder = FileSystemWrapper.LuaFolder;
+            var modules = CoreModules.Preset_SoftSandbox;
+            var folder = FileSystemWrapper.LuaFolder;
 
             var dirs = path.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Reverse().Skip(1).Reverse();
             foreach (var dir in dirs)
@@ -210,9 +211,9 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
     public class MoonLuaWrapperInstance : ILuaWrapper
     {
-        public LuaScript CreateLuaScript(string luaScriptName = "") { return new MoonLua(luaScriptName); }
+        public LuaScript CreateLuaScript(string luaScriptName = "") => new MoonLua(luaScriptName);
 
-        public LuaTable CreateTable(LuaScript luaScript, string tableName) { return new MoonLuaTable(luaScript, tableName); }
+        public LuaTable CreateTable(LuaScript luaScript, string tableName) => new MoonLuaTable(luaScript, tableName);
 
         public LuaTable ToLuaTable(object obj)
         {

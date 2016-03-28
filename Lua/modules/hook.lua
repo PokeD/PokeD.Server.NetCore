@@ -19,7 +19,7 @@ function Add(hookName, name, func)
 
 	if Hooks[hookName] == nil then Hooks[hookName] = {} end
 
-	Hooks[hookName][name] = func
+	Hooks[hookName][name] = func 
 end
 
 

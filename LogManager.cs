@@ -18,11 +18,14 @@ namespace PokeD.Server.Desktop
 
         public static void WriteLine(string message)
         {
-            using (var stream = LogFile.OpenAsync(PCLStorage.FileAccess.ReadAndWrite).Result)
-            using (var writer = new StreamWriter(stream) { AutoFlush = true })
+            lock (LogFile)
             {
-                writer.BaseStream.Seek(0, SeekOrigin.End);
-                writer.WriteLine(message);
+                using (var stream = LogFile.OpenAsync(PCLStorage.FileAccess.ReadAndWrite).Result)
+                using (var writer = new StreamWriter(stream) { AutoFlush = true })
+                {
+                    writer.BaseStream.Seek(0, SeekOrigin.End);
+                    writer.WriteLine(message);
+                }
             }
         }
     }
