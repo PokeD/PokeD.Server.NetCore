@@ -335,7 +335,7 @@ $@"[CODE]
 PokeD.Server.Desktop Crash Log v {Assembly.GetExecutingAssembly().GetName().Version}
 
 Software:
-    OS: {osInfo.Name} {osInfo.Architecture} Bit [{(Type.GetType("Mono.Runtime") != null ? "Mono" : ".NET")}]
+    OS: {osInfo.Name} {osInfo.Architecture} [{(Type.GetType("Mono.Runtime") != null ? "Mono" : ".NET")}]
     Language: {CultureInfo.CurrentCulture.EnglishName}, LCID {osInfo.LocaleID}
     Framework: Version {osInfo.FrameworkVersion}
 Hardware:
@@ -343,7 +343,7 @@ Hardware:
         Physical count: {osInfo.Hardware.CPUs.Count}
         Name: {osInfo.Hardware.CPUs.First().Name}
         Brand: {osInfo.Hardware.CPUs.First().Brand}
-        Architecture: {osInfo.Hardware.CPUs.First().Architecture} Bit
+        Architecture: {osInfo.Hardware.CPUs.First().Architecture}
         Cores: {osInfo.Hardware.CPUs.First().Cores}
     GPU:
         Physical count: {osInfo.Hardware.GPUs.Count}
