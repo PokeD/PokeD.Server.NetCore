@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-
+using SystemInfoLibrary.OperatingSystem;
 using Aragas.Core.Wrappers;
-
+using ConsoleManager;
 using FireSharp;
 using FireSharp.Config;
 
@@ -104,8 +105,8 @@ namespace PokeD.Server.Desktop
             try
             {
                 options = new OptionSet()
-                    .Add("c|console", "enables the console.", s => ConsoleManager.Start())
-                    .Add("fps=", "{FPS} of the console, integer.", fps => ConsoleManager.ScreenFPS = int.Parse(fps))
+                    .Add("c|console", "enables the console.", StartFastConsole)
+                    .Add("fps=", "{FPS} of the console, integer.", fps => FastConsole.ScreenFPS = int.Parse(fps))
                     .Add("db|database=", "used {DATABASE_WRAPPER}.", ParseDatabase)
                     .Add("cf|config=", "used {CONFIG_WRAPPER}.", ParseConfig)
 #if OPENNAT
@@ -117,7 +118,7 @@ namespace PokeD.Server.Desktop
             }
             catch (Exception ex) when (ex is OptionException || ex is FormatException)
             {
-                ConsoleManager.Stop();
+                FastConsole.Stop();
 
                 Console.Write("PokeD.Server.Desktop: ");
                 Console.WriteLine(ex.Message);
@@ -131,6 +132,21 @@ namespace PokeD.Server.Desktop
                 Environment.Exit((int) ExitCodes.Success);
             }
         }
+        private static void StartFastConsole(string s)
+        {
+            FastConsole.ConstantAddLine(
+                "Main              thread execution time: {0} ms", () => new object[] { MainThreadTime });
+            FastConsole.ConstantAddLine(
+                "ClientConnections thread execution time: {0} ms", () => new object[] { Server.ClientConnectionsThreadTime });
+            FastConsole.ConstantAddLine(
+                "PlayerWatcher     thread execution time: {0} ms", () => new object[] { ModuleP3D.PlayerWatcherThreadTime });
+            FastConsole.ConstantAddLine(
+                "PlayerCorrection  thread execution time: {0} ms", () => new object[] { ModuleP3D.PlayerCorrectionThreadTime });
+            FastConsole.ConstantAddLine(
+                "ConsoleManager    thread execution time: {0} ms", () => new object[] { FastConsole.ConsoleManagerThreadTime });
+
+            FastConsole.Start();
+        }
         private static void ShowHelp(OptionSet options, bool direct = false)
         {
             if (direct)
@@ -143,14 +159,14 @@ namespace PokeD.Server.Desktop
             }
             else
             {
-                ConsoleManager.WriteLine("Usage: PokeD.Server.Desktop [OPTIONS]");
-                ConsoleManager.WriteLine();
-                ConsoleManager.WriteLine("Options:");
+                FastConsole.WriteLine("Usage: PokeD.Server.Desktop [OPTIONS]");
+                FastConsole.WriteLine();
+                FastConsole.WriteLine("Options:");
 
                 var opt = new StringWriter();
                 options.WriteOptionDescriptions(opt);
                 foreach (var line in opt.GetStringBuilder().ToString().Split(new[] { Environment.NewLine }, StringSplitOptions.None))
-                    ConsoleManager.WriteLine(line);
+                    FastConsole.WriteLine(line);
             }
         }
         private static void ParseDatabase(string database)
@@ -253,7 +269,7 @@ namespace PokeD.Server.Desktop
 #endif
         private static void Stop()
         {
-            ConsoleManager.Stop();
+            FastConsole.Stop();
 
             Server?.Stop();
 #if OPENNAT
@@ -270,12 +286,12 @@ namespace PokeD.Server.Desktop
             var watch = Stopwatch.StartNew();
             while (true)
             {
-                if (ConsoleManager.InputAvailable)
+                if (FastConsole.InputAvailable)
                 {
-                    var input = ConsoleManager.ReadLine();
+                    var input = FastConsole.ReadLine();
 
                     if (input.StartsWith("/") && !ExecuteCommand(input))
-                        ConsoleManager.WriteLine("Invalid command!");
+                        FastConsole.WriteLine("Invalid command!");
                 }
 
                 if(Server == null || (Server != null && Server.IsDisposing))
@@ -311,15 +327,34 @@ namespace PokeD.Server.Desktop
         }
         private static string CatchError(Exception ex)
         {
+            var osInfo = OperatingSystemInfo.GetOperatingSystemInfo();
+
+            // TODO: Log every physical cpu\gpu, not the first in entry
             var errorLog = 
 $@"[CODE]
 PokeD.Server.Desktop Crash Log v {Assembly.GetExecutingAssembly().GetName().Version}
 
-System specifications:
-Operating system: {Environment.OSVersion} [{(Type.GetType("Mono.Runtime") != null ? "Mono" : ".NET")}]
-Core architecture: {(Environment.Is64BitOperatingSystem ? "64 Bit" : "32 Bit")}
-System language: {CultureInfo.CurrentCulture.EnglishName}
-Logical processors: {Environment.ProcessorCount}
+Software:
+    OS: {osInfo.Name} {osInfo.Architecture} Bit [{(Type.GetType("Mono.Runtime") != null ? "Mono" : ".NET")}]
+    Language: {CultureInfo.CurrentCulture.EnglishName}, LCID {osInfo.LocaleID}
+    Framework: Version {osInfo.FrameworkVersion}
+Hardware:
+    CPU:
+        Physical count: {osInfo.Hardware.CPUs.Count}
+        Name: {osInfo.Hardware.CPUs.First().Name}
+        Brand: {osInfo.Hardware.CPUs.First().Brand}
+        Architecture: {osInfo.Hardware.CPUs.First().Architecture} Bit
+        Cores: {osInfo.Hardware.CPUs.First().Cores}
+    GPU:
+        Physical count: {osInfo.Hardware.GPUs.Count}
+        Name: {osInfo.Hardware.GPUs.First().Name}
+        Brand: {osInfo.Hardware.GPUs.First().Brand}
+        Architecture: {osInfo.Hardware.GPUs.First().Architecture}
+        Resolution: {osInfo.Hardware.GPUs.First().Resolution} {osInfo.Hardware.GPUs.First().RefreshRate} Hz
+        Memory Total: {osInfo.Hardware.GPUs.First().MemoryTotal} KB
+    RAM:
+        Memory Total: {osInfo.Hardware.RAM.Total} KB
+        Memory Free: {osInfo.Hardware.RAM.Free} KB
 
 {BuildErrorStringRecursive(ex)}
 

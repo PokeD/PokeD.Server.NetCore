@@ -14,7 +14,7 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
         public void HideKeyboard() { }
 
-        public void ConsoleWrite(string message) { ConsoleManager.WriteLine(message); }
+        public void ConsoleWrite(string message) { ConsoleManager.FastConsole.WriteLine(message); }
 
         public void LogWriteLine(DateTime time, string message)
         {
@@ -22,8 +22,8 @@ namespace PokeD.Server.Desktop.WrapperInstances
             LogManager.WriteLine(msg_0);
 
             var msg_1 = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {message}";
-            if (ConsoleManager.Enabled)
-                ConsoleManager.WriteLine(msg_1);
+            if (ConsoleManager.FastConsole.Enabled)
+                ConsoleManager.FastConsole.WriteLine(msg_1);
             else
                 Console.WriteLine(msg_1);
         }

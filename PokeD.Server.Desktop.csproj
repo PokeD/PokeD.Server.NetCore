@@ -38,6 +38,9 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ConsoleManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\ConsoleManager.1.0.0\lib\net45\ConsoleManager.dll</HintPath>
+    </Reference>
     <Reference Include="FileDb, Version=6.1.0.0, Culture=neutral, PublicKeyToken=ba3f58a0e60cd01d, processorArchitecture=MSIL">
       <HintPath>packages\FileDb.NET.6.1.0\lib\net40\FileDb.dll</HintPath>
     </Reference>
@@ -81,6 +84,9 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="SystemInfoLibrary, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\SystemInfoLibrary.1.2.0\lib\net45\SystemInfoLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="YamlDotNet, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\YamlDotNet.3.8.0\lib\net35\YamlDotNet.dll</HintPath>
     </Reference>
@@ -88,7 +94,6 @@
   <ItemGroup>
     <Compile Include="ExitCodes.cs" />
     <Compile Include="LogManager.cs" />
-    <Compile Include="ConsoleManager.cs" />
     <None Include="Lua\lang\ru.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

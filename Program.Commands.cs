@@ -1,4 +1,5 @@
 ﻿using System;
+using ConsoleManager;
 
 #if OPENNAT
 using Open.Nat;
@@ -15,7 +16,7 @@ namespace PokeD.Server.Desktop
 
             if (message.StartsWith("stop"))
             {
-                ConsoleManager.Stop();
+                FastConsole.Stop();
 
                 Server?.Stop();
  #if OPENNAT
@@ -27,7 +28,7 @@ namespace PokeD.Server.Desktop
             }
 
             else if (message.StartsWith("clear"))
-                ConsoleManager.Clear();
+                FastConsole.ClearOutput();
 
             else if (command.StartsWith("help server"))
                 return Server.ExecuteCommand(message.Remove(0, 11));

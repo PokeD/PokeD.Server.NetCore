@@ -6,10 +6,57 @@ using Aragas.Core.Wrappers;
 
 namespace PokeD.Server.Desktop.WrapperInstances
 {
+    public class SafeNetworkStream : Stream
+    {
+        private Socket Socket { get; }
+        private NetworkStream Stream { get; }
+
+        public override bool CanRead => Stream.CanRead;
+        public override bool CanSeek => Stream.CanSeek;
+        public override bool CanWrite => Stream.CanWrite;
+        public override long Length => Stream.Length;
+        public override long Position { get { return Stream.Position; } set { Stream.Position = value; } }
+
+
+        public SafeNetworkStream(Socket socket)
+        {
+            Socket = socket;
+            Stream = new NetworkStream(Socket);
+        }
+
+
+
+        public override long Seek(long offset, SeekOrigin origin) => Stream.Seek(offset, origin);
+        public override void SetLength(long value) { Stream.SetLength(value); }
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            try
+            {
+                var bytesReceived = 0;
+                while (bytesReceived < count)
+                    bytesReceived += Socket.Receive(buffer, bytesReceived, count - bytesReceived, 0);
+
+                return bytesReceived;
+            }
+            catch (IOException) { return -1; }
+            catch (SocketException) { return -1; }
+        }
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            try
+            {
+                var bytesSend = 0;
+                while (bytesSend < count)
+                    bytesSend += Socket.Send(buffer, bytesSend, count - bytesSend, 0);
+            }
+            catch (IOException) { }
+            catch (SocketException) { }
+        }
+        public override void Flush() { Stream.Flush(); }
+    }
+
     public class SocketTCPClient: ITCPClient
     {
-        public int RefreshConnectionInfoTime { get; set; }
-
         public string IP => !IsDisposed && Client != null && Client.Connected ? (Client.RemoteEndPoint as IPEndPoint)?.Address.ToString() : "";
         public ushort Port => (ushort)(!IsDisposed && Client != null && Client.Connected ? (Client.RemoteEndPoint as IPEndPoint)?.Port : 0);
         public bool Connected => !IsDisposed && Client != null && Client.Connected;
@@ -21,23 +68,18 @@ namespace PokeD.Server.Desktop.WrapperInstances
         private bool IsDisposed { get; set; }
 
 
-        public SocketTCPClient()
-        {
-            Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
-        }
-        internal SocketTCPClient(Socket socket)
-        {
-            Client = socket;
-            Stream = new NetworkStream(Client);
-        }
-        
+        public SocketTCPClient() { Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) { NoDelay = true }; }
+        internal SocketTCPClient(Socket socket) { Client = socket; Stream = new SafeNetworkStream(Client); }
+
+        public Stream GetStream() { return Stream; }
+
         public ITCPClient Connect(string ip, ushort port)
         {
             if (Connected)
                 Disconnect();
 
             Client.Connect(ip, port);
-            Stream = new NetworkStream(Client);
+            Stream = new SafeNetworkStream(Client);
 
             return this;
         }
@@ -48,43 +90,6 @@ namespace PokeD.Server.Desktop.WrapperInstances
 
             return this;
         }
-
-        public int Write(byte[] buffer, int offset, int count)
-        {
-            if (IsDisposed)
-                return -1;
-
-            try
-            {
-                return Client.Send(buffer, offset, count, SocketFlags.None);
-                //var bytesSend = 0;
-                //while (bytesSend < count)
-                //    bytesSend += Client.Send(buffer, bytesSend, count - bytesSend, 0);
-                //
-                //return bytesSend;
-            }
-            catch (IOException) { Dispose(); return -1; }
-            catch (SocketException) { Dispose(); return -1; }
-        }
-        public int Read(byte[] buffer, int offset, int count)
-        {
-            if (IsDisposed)
-                return -1;
-
-            try
-            {
-                return Client.Receive(buffer, offset, count, SocketFlags.None);
-                //var bytesReceived = 0;
-                //while (bytesReceived < count)
-                //    bytesReceived += Client.Receive(buffer, bytesReceived, count - bytesReceived, 0);
-                //
-                //return bytesReceived;
-            }
-            catch (IOException) { Dispose(); return -1; }
-            catch (SocketException) { Dispose(); return -1; }
-        }
-
-        public Stream GetStream() { return Stream; }
 
         public void Dispose()
         {
