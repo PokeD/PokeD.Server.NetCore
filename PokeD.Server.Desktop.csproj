@@ -101,9 +101,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Lua\modules\README" />
-    <Compile Include="Program.Commands.cs" />
+    <Compile Include="Program.Exception.cs" />
+    <Compile Include="Program.ParseArgs.cs" />
+    <Compile Include="Program.Execute.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Extensions\TaskExtension.cs" />
     <Compile Include="WrapperInstances\DatabaseWrapperInstance.cs" />
     <Compile Include="WrapperInstances\FileSystemWrapperInstance.cs" />
     <Compile Include="WrapperInstances\InputWrapperInstance.cs" />
@@ -117,7 +120,6 @@
     <Compile Include="WrapperInstances\NancyWrapperInstance.cs" />
     <Compile Include="WrapperInstances\ThreadWrapperInstance.cs" />
     <Compile Include="WrapperInstances\YamlSerialization.cs" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition=" '$(OS)' == 'Unix' ">
