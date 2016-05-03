@@ -7,12 +7,11 @@ using System.Text;
 
 using SystemInfoLibrary.OperatingSystem;
 
-using Aragas.Core.Wrappers;
-
 using FireSharp;
 using FireSharp.Config;
+using PokeD.Core.IO;
 
-using PCLStorage;
+using PCLExt.FileStorage;
 
 namespace PokeD.Server.Desktop
 {
@@ -78,7 +77,6 @@ Hardware:
         Physical count: {osInfo.Hardware.GPUs.Count}
         Name: {osInfo.Hardware.GPUs.First().Name}
         Brand: {osInfo.Hardware.GPUs.First().Brand}
-        Architecture: {osInfo.Hardware.GPUs.First().Architecture}
         Resolution: {osInfo.Hardware.GPUs.First().Resolution} {osInfo.Hardware.GPUs.First().RefreshRate} Hz
         Memory Total: {osInfo.Hardware.GPUs.First().MemoryTotal} KB
     RAM:
@@ -120,8 +118,8 @@ InnerException:
 
         private static void ReportErrorLocal(string exception)
         {
-            var crashFile = FileSystemWrapper.CrashLogFolder.CreateFileAsync($"{DateTime.Now:yyyy-MM-dd_HH.mm.ss}.log", CreationCollisionOption.OpenIfExists).Result;
-            using (var stream = crashFile.OpenAsync(PCLStorage.FileAccess.ReadAndWrite).Result)
+            var crashFile = Storage.CrashLogFolder.CreateFileAsync($"{DateTime.Now:yyyy-MM-dd_HH.mm.ss}.log", CreationCollisionOption.OpenIfExists).Result;
+            using (var stream = crashFile.OpenAsync(PCLExt.FileStorage.FileAccess.ReadAndWrite).Result)
             using (var writer = new StreamWriter(stream))
                 writer.Write(exception);
         }

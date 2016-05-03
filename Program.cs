@@ -3,13 +3,9 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading;
 
-using Aragas.Core.Wrappers;
-
 using ConsoleManager;
 
 using PokeD.Core.Extensions;
-
-using PokeD.Server.Desktop.WrapperInstances;
 
 #if OPENNAT
 using System.Linq;
@@ -25,18 +21,7 @@ namespace PokeD.Server.Desktop
 
 
         static Program()
-        {
-            AppDomainWrapper.Instance   = new AppDomainWrapperInstance();
-            DatabaseWrapper.Instance    = new SQLiteDatabase();
-            FileSystemWrapper.Instance  = new FileSystemWrapperInstance();
-            InputWrapper.Instance       = new InputWrapperInstance();
-            LuaWrapper.Instance         = new MoonLuaWrapperInstance();
-            NancyWrapper.Instance       = new NancyWrapperInstance();
-            TCPClientWrapper.Instance   = new TCPClientFactoryInstance();
-            TCPListenerWrapper.Instance = new TCPServerWrapperInstance();
-            ThreadWrapper.Instance      = new ThreadWrapperInstance();
-            ConfigWrapper.Instance      = new YamlConfigFactoryInstance();
-            
+        {          
             PacketExtensions.Init();
 
             ServicePointManager.UseNagleAlgorithm = false;
@@ -56,7 +41,7 @@ namespace PokeD.Server.Desktop
 
         private static void Start()
         {
-            Server = new Server();
+            Server = new Server(ConfigType, DatabaseType);
             Server.Start();
 
 #if OPENNAT
@@ -75,7 +60,7 @@ namespace PokeD.Server.Desktop
             {
                 Logger.Log(LogType.Info, $"Initializing NAT Discovery.");
                 var discoverer = new NatDiscoverer();
-                Logger.Log(LogType.Info, $"Getting your external IP. Please wait...");
+                Logger.Log(LogType.Info, $"Getting your external IP. Please wait$(SolutionDir).");
                 var device = discoverer.DiscoverDeviceAsync().Wait(new CancellationTokenSource(10000));
                 Logger.Log(LogType.Info, $"Your external IP is {device.GetExternalIPAsync().Wait(new CancellationTokenSource(2000))}.");
 

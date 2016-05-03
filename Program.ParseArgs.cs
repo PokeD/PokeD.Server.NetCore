@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 
-using Aragas.Core.Wrappers;
-
 using ConsoleManager;
 
 using NDesk.Options;
 
-using PokeD.Server.Desktop.WrapperInstances;
+using PCLExt.Config;
+using PCLExt.Database;
 
 namespace PokeD.Server.Desktop
 {
     public static partial class Program
     {
+        private static ConfigType ConfigType { get; set; } = ConfigType.YamlConfig;
+        private static DatabaseType DatabaseType { get; set; } = DatabaseType.SQLiteDatabase;
+
 #if OPENNAT
         private static bool NATForwardingEnabled { get; set; }
 #endif
@@ -47,7 +49,7 @@ namespace PokeD.Server.Desktop
                 ShowHelp(options, true);
 
                 Console.WriteLine();
-                Console.WriteLine("Press any key to continue...");
+                Console.WriteLine("Press any key to continue$(SolutionDir).");
                 Console.ReadKey();
                 Environment.Exit((int)ExitCodes.Success);
             }
@@ -98,14 +100,14 @@ namespace PokeD.Server.Desktop
                 case "file":
                 case "filedb":
                 case "fdb":
-                    DatabaseWrapper.Instance = new FileDBDatabase();
+                    DatabaseType = DatabaseType.FileDBDatabase;
                     break;
 
                 case "sql":
                 case "sqldb":
                 case "sqlite":
                 case "sqlitedb":
-                    DatabaseWrapper.Instance = new SQLiteDatabase();
+                    DatabaseType = DatabaseType.SQLiteDatabase;
                     break;
 
                 default:
@@ -117,12 +119,12 @@ namespace PokeD.Server.Desktop
             switch (config.ToLowerInvariant())
             {
                 case "json":
-                    ConfigWrapper.Instance = new JsonConfigFactoryInstance();
+                    ConfigType = ConfigType.JsonConfig;
                     break;
 
                 case "yml":
                 case "yaml":
-                    ConfigWrapper.Instance = new YamlConfigFactoryInstance();
+                    ConfigType = ConfigType.YamlConfig;
                     break;
 
                 default:

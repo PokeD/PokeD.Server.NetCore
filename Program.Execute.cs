@@ -23,7 +23,7 @@ namespace PokeD.Server.Desktop
  #if OPENNAT
                 NatDiscoverer.ReleaseAll();
 #endif
-                Console.WriteLine("Stopped the server. Press any key to continue...");
+                Console.WriteLine("Stopped the server. Press any key to continue$(SolutionDir).");
                 Console.ReadKey();
                 Environment.Exit((int) ExitCodes.Success);
             }
