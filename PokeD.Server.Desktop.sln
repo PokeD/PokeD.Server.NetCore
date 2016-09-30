@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeD.Core", "PokeD.Core\Po
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeD.Server", "PokeD.Server\PokeD.Server.csproj", "{32FDE5FC-8692-414A-A0A5-921CE83C709C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeD.Core.Test", "PokeD.Core\PokeD.Core.Test\PokeD.Core.Test.csproj", "{FE30A2DD-7AA3-4C3D-BA9F-20B02BB4FF4A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeD.BattleEngine", "PokeD.BattleEngine\PokeD.BattleEngine.csproj", "{A90F84DF-CCFA-4722-9490-A3DF98DAEC95}"
 EndProject
 Global
@@ -31,10 +29,6 @@ Global
 		{32FDE5FC-8692-414A-A0A5-921CE83C709C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32FDE5FC-8692-414A-A0A5-921CE83C709C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32FDE5FC-8692-414A-A0A5-921CE83C709C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE30A2DD-7AA3-4C3D-BA9F-20B02BB4FF4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE30A2DD-7AA3-4C3D-BA9F-20B02BB4FF4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE30A2DD-7AA3-4C3D-BA9F-20B02BB4FF4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE30A2DD-7AA3-4C3D-BA9F-20B02BB4FF4A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A90F84DF-CCFA-4722-9490-A3DF98DAEC95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A90F84DF-CCFA-4722-9490-A3DF98DAEC95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A90F84DF-CCFA-4722-9490-A3DF98DAEC95}.Release|Any CPU.ActiveCfg = Release|Any CPU
