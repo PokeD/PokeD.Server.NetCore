@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>6</LangVersion>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,14 +37,14 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ConsoleManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\ConsoleManager.1.0.0\lib\net45\ConsoleManager.dll</HintPath>
+    <Reference Include="ConsoleManager, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\ConsoleManager.1.0.4\lib\net45\ConsoleManager.dll</HintPath>
     </Reference>
     <Reference Include="FileDb, Version=6.1.0.0, Culture=neutral, PublicKeyToken=ba3f58a0e60cd01d, processorArchitecture=MSIL">
       <HintPath>packages\FileDb.NET.6.1.0\lib\net40\FileDb.dll</HintPath>
     </Reference>
     <Reference Include="FireSharp, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\FireSharp.2.0.3\lib\portable-net45+sl5+wp8+win8\FireSharp.dll</HintPath>
+      <HintPath>packages\FireSharp.2.0.4\lib\portable-net45+sl5+wp8+win8\FireSharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
@@ -54,8 +55,8 @@
     <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
     </Reference>
-    <Reference Include="MoonSharp.Interpreter, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\MoonSharp.1.5.0.1\lib\net40-client\MoonSharp.Interpreter.dll</HintPath>
+    <Reference Include="MoonSharp.Interpreter, Version=1.6.0.0, Culture=neutral, PublicKeyToken=921e73ce94aa17f8, processorArchitecture=MSIL">
+      <HintPath>packages\MoonSharp.1.6.0.0\lib\net40-client\MoonSharp.Interpreter.dll</HintPath>
     </Reference>
     <Reference Include="Nancy, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Nancy.1.4.3\lib\net40\Nancy.dll</HintPath>
@@ -66,12 +67,11 @@
     <Reference Include="NDesk.Options, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Open.Nat, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f22a6a4582336c76, processorArchitecture=MSIL">
-      <HintPath>packages\Open.NAT.2.0.16\lib\net45\Open.Nat.dll</HintPath>
+      <HintPath>packages\Open.NAT.2.1.0.0\lib\net45\Open.Nat.dll</HintPath>
     </Reference>
     <Reference Include="PCLExt.AppDomain, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\PCLExt.AppDomain.1.0.8\lib\net45\PCLExt.AppDomain.dll</HintPath>
@@ -79,36 +79,35 @@
     <Reference Include="PCLExt.AppDomain.Abstractions, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\PCLExt.AppDomain.1.0.8\lib\net45\PCLExt.AppDomain.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="PCLExt.Config, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PCLExt.Config.1.0.1\lib\net45\PCLExt.Config.dll</HintPath>
+    <Reference Include="PCLExt.Config, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PCLExt.Config.1.0.6\lib\net45\PCLExt.Config.dll</HintPath>
     </Reference>
-    <Reference Include="PCLExt.Config.Abstractions, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PCLExt.Config.1.0.1\lib\net45\PCLExt.Config.Abstractions.dll</HintPath>
+    <Reference Include="PCLExt.Config.Abstractions, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PCLExt.Config.1.0.6\lib\net45\PCLExt.Config.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="PCLExt.Database, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PCLExt.Database.1.0.3\lib\net45\PCLExt.Database.dll</HintPath>
+    <Reference Include="PCLExt.Database, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PCLExt.Database.1.0.5\lib\net45\PCLExt.Database.dll</HintPath>
     </Reference>
-    <Reference Include="PCLExt.Database.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PCLExt.Database.1.0.3\lib\net45\PCLExt.Database.Abstractions.dll</HintPath>
+    <Reference Include="PCLExt.Database.Abstractions, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PCLExt.Database.1.0.5\lib\net45\PCLExt.Database.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="PCLExt.FileStorage, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\PCLExt.FileStorage.1.0.5\lib\net45\PCLExt.FileStorage.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="PCLExt.FileStorage.Abstractions, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\PCLExt.FileStorage.1.0.5\lib\net45\PCLExt.FileStorage.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="PCLExt.Input, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PCLExt.Input.1.0.4\lib\net45\PCLExt.Input.dll</HintPath>
+    <Reference Include="PCLExt.Input, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PCLExt.Input.1.0.5\lib\net45\PCLExt.Input.dll</HintPath>
     </Reference>
-    <Reference Include="PCLExt.Input.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PCLExt.Input.1.0.4\lib\net45\PCLExt.Input.Abstractions.dll</HintPath>
+    <Reference Include="PCLExt.Input.Abstractions, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PCLExt.Input.1.0.5\lib\net45\PCLExt.Input.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="PCLExt.Lua, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PCLExt.Lua.1.0.2\lib\net45\PCLExt.Lua.dll</HintPath>
+    <Reference Include="PCLExt.Lua, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PCLExt.Lua.1.0.6\lib\net45\PCLExt.Lua.dll</HintPath>
     </Reference>
-    <Reference Include="PCLExt.Lua.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PCLExt.Lua.1.0.2\lib\net45\PCLExt.Lua.Abstractions.dll</HintPath>
+    <Reference Include="PCLExt.Lua.Abstractions, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PCLExt.Lua.1.0.6\lib\net45\PCLExt.Lua.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="PCLExt.Nancy, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\PCLExt.Nancy.1.0.0\lib\net45\PCLExt.Nancy.dll</HintPath>
@@ -116,17 +115,29 @@
     <Reference Include="PCLExt.Nancy.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\PCLExt.Nancy.1.0.0\lib\net45\PCLExt.Nancy.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="PCLExt.Network, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PCLExt.Network.1.0.8\lib\net45\PCLExt.Network.dll</HintPath>
+    <Reference Include="PCLExt.Network, Version=1.0.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PCLExt.Network.1.0.12\lib\net45\PCLExt.Network.dll</HintPath>
     </Reference>
-    <Reference Include="PCLExt.Network.Abstractions, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PCLExt.Network.1.0.8\lib\net45\PCLExt.Network.Abstractions.dll</HintPath>
+    <Reference Include="PCLExt.Network.Abstractions, Version=1.0.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PCLExt.Network.1.0.12\lib\net45\PCLExt.Network.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="PCLExt.Thread, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\PCLExt.Thread.1.0.5\lib\net45\PCLExt.Thread.dll</HintPath>
     </Reference>
     <Reference Include="PCLExt.Thread.Abstractions, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\PCLExt.Thread.1.0.5\lib\net45\PCLExt.Thread.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLite.Net, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\SQLite.Net.Core-PCL.3.1.1\lib\portable-win8+net45+wp8+wpa81+MonoAndroid1+MonoTouch1\SQLite.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLite.Net.Platform.Generic, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\SQLite.Net-PCL.3.1.1\lib\net40\SQLite.Net.Platform.Generic.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLite.Net.Platform.Win32, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\SQLite.Net-PCL.3.1.1\lib\net4\SQLite.Net.Platform.Win32.dll</HintPath>
+    </Reference>
+    <Reference Include="SystemInfoLibrary, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\SystemInfoLibrary.1.3.0\lib\net45\SystemInfoLibrary.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Net" />
@@ -138,9 +149,6 @@
       <HintPath>packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
-    <Reference Include="SystemInfoLibrary, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\SystemInfoLibrary.1.3.0\lib\net45\SystemInfoLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="YamlDotNet, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\YamlDotNet.3.8.0\lib\net35\YamlDotNet.dll</HintPath>
     </Reference>
@@ -148,20 +156,15 @@
   <ItemGroup>
     <Compile Include="ExitCodes.cs" />
     <None Include="app.config" />
-    <None Include="Lua\lang\ru.lua">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Lua\lang\en.lua">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Lua\modules\README" />
     <Compile Include="Program.Exception.cs" />
     <Compile Include="Program.ParseArgs.cs" />
     <Compile Include="Program.Execute.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\TaskExtension.cs" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="PokeD.Core\PokeD.Core.csproj">
@@ -174,24 +177,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Lua\modules\hook.lua">
+    <None Include="Lua\**\*.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Lua\modules\translator.lua">
+    </None>
+    <None Include="Lua\modules\README" />
+    <None Include="Content\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Lua\npc_announcer.lua">
+    </None>
+    <None Include="icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Lua\npc_gregory.lua">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\favicon.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="icon.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
     <EmbeddedResource Include="sqlite3.dll">
       <Link>sqlite3.dll</Link>
       <LogicalName>sqlite3.dll</LogicalName>

@@ -9,7 +9,6 @@ using SystemInfoLibrary.OperatingSystem;
 
 using FireSharp;
 using FireSharp.Config;
-using PokeD.Core.IO;
 
 using PCLExt.FileStorage;
 

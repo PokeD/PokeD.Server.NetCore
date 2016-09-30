@@ -34,10 +34,9 @@ namespace PokeD.Server.Desktop
             catch (Exception exception) { CatchException(exception); }
 
             ParseArgs(args);
-
+            
             Start();
         }
-
 
         private static void Start()
         {
@@ -99,7 +98,7 @@ namespace PokeD.Server.Desktop
                     var input = FastConsole.ReadLine();
 
                     if (input.StartsWith("/") && !ExecuteCommand(input))
-                        FastConsole.WriteLine("Invalid command!");
+                        Console.WriteLine("Invalid command!");
                 }
 
                 if(Server == null || (Server != null && Server.IsDisposing))

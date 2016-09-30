@@ -32,13 +32,13 @@ namespace PokeD.Server.Desktop
                 FastConsole.ClearOutput();
 
             else if (command.StartsWith("help server"))
-                return Server.ExecuteCommand(message.Remove(0, 11));
+                return Server.ExecuteServerCommand(message.Remove(0, 11));
 
             else if (command.StartsWith("help"))
                 return ExecuteHelpCommand(message.Remove(0, 4));
 
             else
-                return Server.ExecuteCommand(message);
+                return Server.ExecuteServerCommand(message);
 
             return true;
         }

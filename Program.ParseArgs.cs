@@ -81,14 +81,14 @@ namespace PokeD.Server.Desktop
             }
             else
             {
-                FastConsole.WriteLine("Usage: PokeD.Server.Desktop [OPTIONS]");
-                FastConsole.WriteLine();
-                FastConsole.WriteLine("Options:");
+                Console.WriteLine("Usage: PokeD.Server.Desktop [OPTIONS]");
+                Console.WriteLine();
+                Console.WriteLine("Options:");
 
                 var opt = new StringWriter();
                 options.WriteOptionDescriptions(opt);
                 foreach (var line in opt.GetStringBuilder().ToString().Split(new[] { Environment.NewLine }, StringSplitOptions.None))
-                    FastConsole.WriteLine(line);
+                    Console.WriteLine(line);
             }
         }
         private static void ParseDatabase(string database)
