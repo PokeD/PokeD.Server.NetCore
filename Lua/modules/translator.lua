@@ -70,8 +70,8 @@ end
 --
 -- Stuff after file loaded
 --
-local files = GetFiles("lang/")
-for k, v in pairs(files) do
-    local name = v:sub(1, -5)
+files = GetFiles("lang/")
+for _, file in pairs(files) do
+    local name = file:sub(1, -5)
     LoadLanguage(name)
 end

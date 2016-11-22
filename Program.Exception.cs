@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 
+using SystemInfoLibrary.Hardware.CPU;
+using SystemInfoLibrary.Hardware.GPU;
 using SystemInfoLibrary.OperatingSystem;
 
 using FireSharp;
@@ -42,21 +44,20 @@ namespace PokeD.Server.Desktop
             var exceptionText = CatchError(exception);
             ReportErrorLocal(exceptionText);
             ReportErrorWeb(exceptionText);
-            Stop();
+            Stop(true);
         }
         private static void CatchException(Exception exception)
         {
             var exceptionText = CatchError(exception);
             ReportErrorLocal(exceptionText);
             ReportErrorWeb(exceptionText);
-            Stop();
+            Stop(true);
         }
 
         private static string CatchError(Exception ex)
         {
             var osInfo = OperatingSystemInfo.GetOperatingSystemInfo();
 
-            // TODO: Log every physical cpu\gpu, not the first in entry
             var errorLog =
 $@"[CODE]
 PokeD.Server.Desktop Crash Log v {Assembly.GetExecutingAssembly().GetName().Version}
@@ -66,23 +67,13 @@ Software:
     Language: {CultureInfo.CurrentCulture.EnglishName}, LCID {osInfo.LocaleID}
     Framework: Version {osInfo.FrameworkVersion}
 Hardware:
-    CPU:
-        Physical count: {osInfo.Hardware.CPUs.Count}
-        Name: {osInfo.Hardware.CPUs.First().Name}
-        Brand: {osInfo.Hardware.CPUs.First().Brand}
-        Architecture: {osInfo.Hardware.CPUs.First().Architecture}
-        Cores: {osInfo.Hardware.CPUs.First().Cores}
-    GPU:
-        Physical count: {osInfo.Hardware.GPUs.Count}
-        Name: {osInfo.Hardware.GPUs.First().Name}
-        Brand: {osInfo.Hardware.GPUs.First().Brand}
-        Resolution: {osInfo.Hardware.GPUs.First().Resolution} {osInfo.Hardware.GPUs.First().RefreshRate} Hz
-        Memory Total: {osInfo.Hardware.GPUs.First().MemoryTotal} KB
+{RecursiveCPU(osInfo.Hardware.CPUs, 0)}
+{RecursiveGPU(osInfo.Hardware.GPUs, 0)}
     RAM:
         Memory Total: {osInfo.Hardware.RAM.Total} KB
         Memory Free: {osInfo.Hardware.RAM.Free} KB
 
-{BuildErrorStringRecursive(ex)}
+{RecursiveException(ex)}
 
 You should report this error if it is reproduceable or you could not solve it by yourself.
 Go To: {REPORTURL} to report this crash there.
@@ -90,11 +81,41 @@ Go To: {REPORTURL} to report this crash there.
 
             return errorLog;
         }
-        private static string BuildErrorStringRecursive(Exception ex)
+        private static string RecursiveCPU(IList<CPUInfo> cpus, int index)
         {
             var sb = new StringBuilder();
             sb.AppendFormat(
-$@"Error information:
+$@"    CPU{index}:
+        Name: {cpus[index].Name}
+        Brand: {cpus[index].Brand}
+        Architecture: {cpus[index].Architecture}
+        Cores: {cpus[index].Cores}");
+
+            if (index + 1 < cpus.Count)
+                sb.AppendFormat(RecursiveCPU(cpus, ++index));
+
+            return sb.ToString();
+        }
+        private static string RecursiveGPU(IList<GPUInfo> gpus, int index)
+        {
+            var sb = new StringBuilder();
+            sb.AppendFormat(
+$@"    GPU{index}:
+        Name: {gpus[index].Name}
+        Brand: {gpus[index].Brand}
+        Resolution: {gpus[index].Resolution} {gpus[index].RefreshRate} Hz
+        Memory Total: {gpus[index].MemoryTotal} KB");
+
+            if (index + 1 < gpus.Count)
+                sb.AppendFormat(RecursiveGPU(gpus, ++index));
+
+            return sb.ToString();
+        }
+        private static string RecursiveException(Exception ex)
+        {
+            var sb = new StringBuilder();
+            sb.AppendFormat(
+$@"Exception information:
 Type: {ex.GetType().FullName}
 Message: {ex.Message}
 HelpLink: {(string.IsNullOrWhiteSpace(ex.HelpLink) ? "Empty" : ex.HelpLink)}
@@ -108,7 +129,7 @@ CallStack:
                 sb.AppendFormat($@"
 --------------------------------------------------
 InnerException:
-{BuildErrorStringRecursive(ex.InnerException)}");
+{RecursiveException(ex.InnerException)}");
             }
 
             return sb.ToString();

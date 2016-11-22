@@ -7,14 +7,12 @@ using ConsoleManager;
 using NDesk.Options;
 
 using PCLExt.Config;
-using PCLExt.Database;
 
 namespace PokeD.Server.Desktop
 {
     public static partial class Program
     {
         private static ConfigType ConfigType { get; set; } = ConfigType.YamlConfig;
-        private static DatabaseType DatabaseType { get; set; } = DatabaseType.SQLiteDatabase;
 
 #if OPENNAT
         private static bool NATForwardingEnabled { get; set; }
@@ -56,6 +54,7 @@ namespace PokeD.Server.Desktop
         }
         private static void StartFastConsole(string s)
         {
+            FastConsole.TitleFormatted = "PokeD Server FPS: {0}";
             FastConsole.ConstantAddLine(
                 "Main              thread execution time: {0} ms", () => new object[] { MainThreadTime });
             FastConsole.ConstantAddLine(
@@ -100,18 +99,18 @@ namespace PokeD.Server.Desktop
                 case "file":
                 case "filedb":
                 case "fdb":
-                    DatabaseType = DatabaseType.FileDBDatabase;
+                    //DatabaseType = DatabaseType.FileDBDatabase;
                     break;
 
                 case "sql":
                 case "sqldb":
                 case "sqlite":
                 case "sqlitedb":
-                    DatabaseType = DatabaseType.SQLiteDatabase;
+                    //DatabaseType = DatabaseType.SQLiteDatabase;
                     break;
 
                 default:
-                    throw new FormatException("DATABASE_WRAPPER not correct.");
+                    throw new FormatException("Invalid DATABASE_WRAPPER.");
             }
         }
         private static void ParseConfig(string config)
@@ -128,7 +127,7 @@ namespace PokeD.Server.Desktop
                     break;
 
                 default:
-                    throw new FormatException("CONFIG_WRAPPER not correct.");
+                    throw new FormatException("Invalid CONFIG_WRAPPER.");
             }
         }
     }

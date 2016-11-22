@@ -40,7 +40,7 @@ namespace PokeD.Server.Desktop
 
         private static void Start()
         {
-            Server = new Server(ConfigType, DatabaseType);
+            Server = new Server(ConfigType);
             Server.Start();
 
 #if OPENNAT
@@ -75,7 +75,7 @@ namespace PokeD.Server.Desktop
             }
         }
 #endif
-        private static void Stop()
+        private static void Stop(bool error = false)
         {
             FastConsole.Stop();
 
@@ -83,7 +83,7 @@ namespace PokeD.Server.Desktop
 #if OPENNAT
             NatDiscoverer.ReleaseAll();
 #endif
-            Environment.Exit((int) ExitCodes.UnknownError);
+            Environment.Exit(error ? (int) ExitCodes.UnknownError : (int) ExitCodes.Success);
         }
 
         
