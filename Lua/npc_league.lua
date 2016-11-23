@@ -1,4 +1,4 @@
-NPC.SetNickname("League")
+NPC.NPCName = "League"
 
 NPC.LevelFile = "goldenrod.dat"
 

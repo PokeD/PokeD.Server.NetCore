@@ -1,6 +1,7 @@
 ﻿Name		= "time"
 Description = "Shows the current world time."
 Aliases		= {}
+Permission = "Default"
 
 
 --[[---------------------------------------------------------
