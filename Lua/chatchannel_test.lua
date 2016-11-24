@@ -11,9 +11,9 @@ local Subscribers = {}
     Desc:
 -----------------------------------------------------------]]
 function MessageSend(chatMessage)
-	for key,value in pairs(Subscribers) do
-		Subscribers[key].SendChatMessage(chatMessage)
-	end
+	--for key,value in pairs(Subscribers) do
+	--	Subscribers[key].SendChatMessage(chatMessage)
+	--end
 
 	return false
 end
@@ -24,9 +24,9 @@ hook.Add ("MessageSend", "Test_MessageSend", MessageSend)
     Desc:
 -----------------------------------------------------------]]
 function Subscribe(client)
-	table.insert (Subscribers, client)
+	--table.insert (Subscribers, client)
 
-	return true
+	return false
 end
 hook.Add ("Subscribe", "Test_Subscribe", Subscribe)
 
@@ -35,8 +35,8 @@ hook.Add ("Subscribe", "Test_Subscribe", Subscribe)
     Desc:
 -----------------------------------------------------------]]
 function UnSubscribe(client)
-	table.remove (Subscribers, client)
+	--table.remove (Subscribers, client)
 
-	return true
+	return false
 end
 hook.Add ("UnSubscribe", "Test_Subscribe", UnSubscribe)

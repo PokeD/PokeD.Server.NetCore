@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Threading;
 
 using ConsoleManager;
 
-using PokeD.Core.Extensions;
-
-#if OPENNAT
-using System.Linq;
 using Open.Nat;
+
+using PokeD.Core.Extensions;
 using PokeD.Server.Desktop.Extensions;
-#endif
 
 namespace PokeD.Server.Desktop
 {
@@ -43,13 +41,10 @@ namespace PokeD.Server.Desktop
             Server = new Server(ConfigType);
             Server.Start();
 
-#if OPENNAT
             NATForwarding();
-#endif
 
             Update();
         }
-#if OPENNAT
         private static void NATForwarding()
         {
             if (!NATForwardingEnabled)
@@ -74,15 +69,15 @@ namespace PokeD.Server.Desktop
                 Logger.Log(LogType.Error, $"No NAT device is present or, Upnp is disabled in the router or Antivirus software is filtering SSDP (discovery protocol).");
             }
         }
-#endif
+
         private static void Stop(bool error = false)
         {
             FastConsole.Stop();
 
             Server?.Stop();
-#if OPENNAT
+
             NatDiscoverer.ReleaseAll();
-#endif
+
             Environment.Exit(error ? (int) ExitCodes.UnknownError : (int) ExitCodes.Success);
         }
 

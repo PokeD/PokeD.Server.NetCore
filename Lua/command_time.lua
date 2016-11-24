@@ -9,7 +9,7 @@ Permission = "Default"
     Desc:
 -----------------------------------------------------------]]
 function Handle(client)
-	client:SendMessage(World.CurrentTime:ToString())
+	client:SendServerMessage(World.CurrentTime:ToString())
 end
 hook.Add ("Handle", "Time_Handle", Handle)
 
@@ -17,7 +17,7 @@ hook.Add ("Handle", "Time_Handle", Handle)
     Name: Help
     Desc:
 -----------------------------------------------------------]]
-function Help(client)
-	client:SendMessage("/"..alias..": "..Description)
+function Help(client, alias)
+	client:SendServerMessage("/"..alias..": "..Description)
 end
 hook.Add ("Help", "Time_Help", Help)

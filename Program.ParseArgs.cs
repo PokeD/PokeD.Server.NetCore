@@ -14,9 +14,7 @@ namespace PokeD.Server.Desktop
     {
         private static ConfigType ConfigType { get; set; } = ConfigType.YamlConfig;
 
-#if OPENNAT
         private static bool NATForwardingEnabled { get; set; }
-#endif
 
 
         private static void ParseArgs(IEnumerable<string> args)
@@ -27,11 +25,9 @@ namespace PokeD.Server.Desktop
                 options = new OptionSet()
                     .Add("c|console", "enables the console.", StartFastConsole)
                     .Add("fps=", "{FPS} of the console, integer.", fps => FastConsole.ScreenFPS = int.Parse(fps))
-                    .Add("db|database=", "used {DATABASE_WRAPPER}.", ParseDatabase)
                     .Add("cf|config=", "used {CONFIG_WRAPPER}.", ParseConfig)
-#if OPENNAT
+                    //.Add("db|database=", "used {DATABASE_WRAPPER}.", ParseDatabase)
                     .Add("n|nat", "enables NAT port forwarding.", str => NATForwardingEnabled = true)
-#endif
                     .Add("h|help", "show help.", str => ShowHelp(options));
 
                 options.Parse(args);
@@ -90,29 +86,6 @@ namespace PokeD.Server.Desktop
                     Console.WriteLine(line);
             }
         }
-        private static void ParseDatabase(string database)
-        {
-            switch (database.ToLowerInvariant())
-            {
-                case "nosql":
-                case "nosqldb":
-                case "file":
-                case "filedb":
-                case "fdb":
-                    //DatabaseType = DatabaseType.FileDBDatabase;
-                    break;
-
-                case "sql":
-                case "sqldb":
-                case "sqlite":
-                case "sqlitedb":
-                    //DatabaseType = DatabaseType.SQLiteDatabase;
-                    break;
-
-                default:
-                    throw new FormatException("Invalid DATABASE_WRAPPER.");
-            }
-        }
         private static void ParseConfig(string config)
         {
             switch (config.ToLowerInvariant())
@@ -130,5 +103,30 @@ namespace PokeD.Server.Desktop
                     throw new FormatException("Invalid CONFIG_WRAPPER.");
             }
         }
+        /*
+        private static void ParseDatabase(string database)
+        {
+            switch (database.ToLowerInvariant())
+            {
+                case "nosql":
+                case "nosqldb":
+                case "file":
+                case "filedb":
+                case "fdb":
+                    DatabaseType = DatabaseType.FileDBDatabase;
+                    break;
+
+                case "sql":
+                case "sqldb":
+                case "sqlite":
+                case "sqlitedb":
+                    DatabaseType = DatabaseType.SQLiteDatabase;
+                    break;
+
+                default:
+                    throw new FormatException("Invalid DATABASE_WRAPPER.");
+            }
+        }
+        */
     }
 }

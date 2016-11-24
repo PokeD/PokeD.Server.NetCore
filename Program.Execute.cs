@@ -2,9 +2,7 @@
 
 using ConsoleManager;
 
-#if OPENNAT
 using Open.Nat;
-#endif
 
 namespace PokeD.Server.Desktop
 {
@@ -20,9 +18,8 @@ namespace PokeD.Server.Desktop
                 FastConsole.Stop();
 
                 Server?.Stop();
- #if OPENNAT
+
                 NatDiscoverer.ReleaseAll();
-#endif
                 Console.WriteLine("Stopped the server. Press any key to continue$(SolutionDir).");
                 Console.ReadKey();
                 Environment.Exit((int) ExitCodes.Success);

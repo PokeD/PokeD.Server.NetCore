@@ -9,32 +9,13 @@ using SystemInfoLibrary.Hardware.CPU;
 using SystemInfoLibrary.Hardware.GPU;
 using SystemInfoLibrary.OperatingSystem;
 
-using FireSharp;
-using FireSharp.Config;
-
 using PCLExt.FileStorage;
 
 namespace PokeD.Server.Desktop
 {
     public static partial class Program
     {
-        private class FBReport
-        {
-            public string Description;
-            public string ErrorCode;
-            public DateTime Date;
-
-            public FBReport(string description, string errorCode, DateTime date)
-            {
-                Description = description;
-                ErrorCode = errorCode;
-                Date = date;
-            }
-        }
-
-
         private const string REPORTURL = "http://poked.github.io/report/";
-        private const string FBURL = "https://poked.firebaseio.com/";
 
 
         private static void CatchException(object exceptionObject)
@@ -145,11 +126,8 @@ InnerException:
         }
         private static void ReportErrorWeb(string exception)
         {
-            if (!Server.AutomaticErrorReporting)
-                return;
-
-            var client = new FirebaseClient(new FirebaseConfig { BasePath = FBURL });
-            client.Push("", new FBReport("Sent from PokeD", exception, DateTime.Now));
+            //if (!Server.AutomaticErrorReporting)
+            //    return;
         }
     }
 }
