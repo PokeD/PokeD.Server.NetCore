@@ -2,8 +2,6 @@
 
 using ConsoleManager;
 
-using Open.Nat;
-
 namespace PokeD.Server.Desktop
 {
     public static partial class Program
@@ -19,7 +17,7 @@ namespace PokeD.Server.Desktop
 
                 Server?.Stop();
 
-                NatDiscoverer.ReleaseAll();
+                Open.Nat.NatDiscoverer.ReleaseAll();
                 Console.WriteLine("Stopped the server. Press any key to continue$(SolutionDir).");
                 Console.ReadKey();
                 Environment.Exit((int) ExitCodes.Success);

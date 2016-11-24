@@ -6,8 +6,6 @@ using System.Threading;
 
 using ConsoleManager;
 
-using Open.Nat;
-
 using PokeD.Core.Extensions;
 using PokeD.Server.Desktop.Extensions;
 
@@ -53,7 +51,7 @@ namespace PokeD.Server.Desktop
             try
             {
                 Logger.Log(LogType.Info, $"Initializing NAT Discovery.");
-                var discoverer = new NatDiscoverer();
+                var discoverer = new Open.Nat.NatDiscoverer();
                 Logger.Log(LogType.Info, $"Getting your external IP. Please wait$(SolutionDir).");
                 var device = discoverer.DiscoverDeviceAsync().Wait(new CancellationTokenSource(10000));
                 Logger.Log(LogType.Info, $"Your external IP is {device.GetExternalIPAsync().Wait(new CancellationTokenSource(2000))}.");
@@ -61,10 +59,10 @@ namespace PokeD.Server.Desktop
                 foreach (var module in Server.Modules.Where(module => module.Enabled && module.Port != 0))
                 {
                     Logger.Log(LogType.Info, $"Forwarding port {module.Port}.");
-                    device.CreatePortMapAsync(new Mapping(Protocol.Tcp, module.Port, module.Port, "PokeD Port Mapping")).Wait(new CancellationTokenSource(2000).Token);
+                    device.CreatePortMapAsync(new Open.Nat.Mapping(Open.Nat.Protocol.Tcp, module.Port, module.Port, "PokeD Port Mapping")).Wait(new CancellationTokenSource(2000).Token);
                 }
             }
-            catch (NatDeviceNotFoundException)
+            catch (Open.Nat.NatDeviceNotFoundException)
             {
                 Logger.Log(LogType.Error, $"No NAT device is present or, Upnp is disabled in the router or Antivirus software is filtering SSDP (discovery protocol).");
             }
@@ -76,7 +74,7 @@ namespace PokeD.Server.Desktop
 
             Server?.Stop();
 
-            NatDiscoverer.ReleaseAll();
+            Open.Nat.NatDiscoverer.ReleaseAll();
 
             Environment.Exit(error ? (int) ExitCodes.UnknownError : (int) ExitCodes.Success);
         }
