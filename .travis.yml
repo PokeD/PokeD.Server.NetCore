@@ -11,7 +11,7 @@ install:
   - nuget restore PokeD.Server.Desktop.sln
 
 script:
-  - mv /home/travis/build/PokeD/PokeD.Server.Desktop/packages/Open.Nat.2.1.0.0 /home/travis/build/PokeD/PokeD.Server.Desktop/packages/Open.NAT.2.1.0.0
+  - mv TRAVIS_BUILD_DIR/packages/Open.Nat.2.1.0.0 TRAVIS_BUILD_DIR/packages/Open.NAT.2.1.0.0
   - xbuild /p:Configuration=Release PokeD.Server.Desktop.sln
   - xbuild /p:Configuration=Debug PokeD.Server.Desktop.sln
 
