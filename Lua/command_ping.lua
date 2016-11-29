@@ -1,7 +1,7 @@
 ﻿Name		= "ping"
 Description = "Ping pong."
 Aliases		= {"pingP", "pingpong"}
-Permission = "Default"
+Permission = "UnVerifiedOrHigher"
 
 
 --[[---------------------------------------------------------

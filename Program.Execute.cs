@@ -13,33 +13,25 @@ namespace PokeD.Server.Desktop
             var command = message.Remove(0, 1).ToLower();
             message = message.Remove(0, 1);
 
-            if (message.StartsWith("stop"))
+            if (command.StartsWith("stop"))
             {
                 FastConsole.Stop();
 
                 Server?.Stop();
 
                 NatDiscoverer.ReleaseAll();
-                Console.WriteLine("Stopped the server. Press any key to continue$(SolutionDir).");
+                Console.WriteLine("Stopped the server. Press any key to continue...");
                 Console.ReadKey();
                 Environment.Exit((int) ExitCodes.Success);
             }
 
-            else if (message.StartsWith("clear"))
+            else if (command.StartsWith("clear"))
                 FastConsole.ClearOutput();
-
-            else if (command.StartsWith("help server"))
-                return Server.ExecuteServerCommand(message.Remove(0, 11));
-
-            else if (command.StartsWith("help"))
-                return ExecuteHelpCommand(message.Remove(0, 4));
 
             else
                 return Server.ExecuteServerCommand(message);
 
             return true;
         }
-
-        private static bool ExecuteHelpCommand(string command) { return false; }
     }
 }

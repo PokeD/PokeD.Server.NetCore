@@ -61,11 +61,11 @@
     <Reference Include="PCLExt.AppDomain.Abstractions, Version=1.0.11.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\PCLExt.AppDomain.1.0.11\lib\net45\PCLExt.AppDomain.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="PCLExt.Config, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PCLExt.Config.1.0.6\lib\net45\PCLExt.Config.dll</HintPath>
+    <Reference Include="PCLExt.Config, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PCLExt.Config.1.0.7\lib\net45\PCLExt.Config.dll</HintPath>
     </Reference>
-    <Reference Include="PCLExt.Config.Abstractions, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PCLExt.Config.1.0.6\lib\net45\PCLExt.Config.Abstractions.dll</HintPath>
+    <Reference Include="PCLExt.Config.Abstractions, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\PCLExt.Config.1.0.7\lib\net45\PCLExt.Config.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="PCLExt.FileStorage, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\PCLExt.FileStorage.1.0.5\lib\net45\PCLExt.FileStorage.dll</HintPath>
@@ -142,7 +142,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Lua\**\*.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

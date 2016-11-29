@@ -93,7 +93,7 @@ namespace PokeD.Server.Desktop
                     var input = FastConsole.ReadLine();
 
                     if (input.StartsWith("/") && !ExecuteCommand(input))
-                        Console.WriteLine("Invalid command!");
+                        Logger.Log(LogType.Command, "Invalid command!");
                 }
 
                 if(Server == null || (Server != null && Server.IsDisposing))
