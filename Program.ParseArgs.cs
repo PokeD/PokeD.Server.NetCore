@@ -26,7 +26,6 @@ namespace PokeD.Server.Desktop
                     .Add("c|console", "enables the console.", StartFastConsole)
                     .Add("fps=", "{FPS} of the console, integer.", fps => FastConsole.ScreenFPS = int.Parse(fps))
                     .Add("cf|config=", "used {CONFIG_WRAPPER}.", ParseConfig)
-                    //.Add("db|database=", "used {DATABASE_WRAPPER}.", ParseDatabase)
                     .Add("n|nat", "enables NAT port forwarding.", str => NATForwardingEnabled = true)
                     .Add("h|help", "show help.", str => ShowHelp(options));
 
@@ -53,8 +52,6 @@ namespace PokeD.Server.Desktop
             FastConsole.TitleFormatted = "PokeD Server FPS: {0}";
             FastConsole.ConstantAddLine(
                 "Main              thread execution time: {0} ms", () => new object[] { MainThreadTime });
-            FastConsole.ConstantAddLine(
-                "ClientConnections thread execution time: {0} ms", () => new object[] { Server.ClientConnectionsThreadTime });
             FastConsole.ConstantAddLine(
                 "PlayerWatcher     thread execution time: {0} ms", () => new object[] { ModuleP3D.PlayerWatcherThreadTime });
             FastConsole.ConstantAddLine(
@@ -103,30 +100,5 @@ namespace PokeD.Server.Desktop
                     throw new FormatException("Invalid CONFIG_WRAPPER.");
             }
         }
-        /*
-        private static void ParseDatabase(string database)
-        {
-            switch (database.ToLowerInvariant())
-            {
-                case "nosql":
-                case "nosqldb":
-                case "file":
-                case "filedb":
-                case "fdb":
-                    DatabaseType = DatabaseType.FileDBDatabase;
-                    break;
-
-                case "sql":
-                case "sqldb":
-                case "sqlite":
-                case "sqlitedb":
-                    DatabaseType = DatabaseType.SQLiteDatabase;
-                    break;
-
-                default:
-                    throw new FormatException("Invalid DATABASE_WRAPPER.");
-            }
-        }
-        */
     }
 }
