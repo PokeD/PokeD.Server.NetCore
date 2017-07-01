@@ -79,7 +79,7 @@ namespace PokeD.Server.NetCore
 
         private void Stop(bool error = false)
         {
-            UpdateToken.Cancel();
+            UpdateToken?.Cancel();
             Server?.Stop();
 
             if (NATForwardingEnabled)

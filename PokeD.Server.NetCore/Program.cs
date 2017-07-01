@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text;
-
+using PCLExt.FileStorage;
 using PokeD.Core.Extensions;
 using PokeD.Server.Storage.Files;
 
@@ -180,11 +180,15 @@ InnerException:
         }
 
 
+        private static IFile CrashFile { get; } = new CrashLogFile();
         private static void ReportErrorLocal(string exception)
         {
-            using (var stream = new CrashLogFile().Open(PCLExt.FileStorage.FileAccess.ReadAndWrite))
-            using (var writer = new StreamWriter(stream))
-                writer.Write(exception);
+            lock (CrashFile)
+            {
+                using (var stream = CrashFile.Open(PCLExt.FileStorage.FileAccess.ReadAndWrite))
+                using (var writer = new StreamWriter(stream))
+                    writer.Write(exception);
+            }
         }
         private static void ReportErrorWeb(string exception)
         {
