@@ -131,6 +131,8 @@ namespace PokeD.Server.NetCore
             Logger.LogMessage -= Logger_LogMessage;
 
             Server?.Dispose();
+            
+            UpdateToken.Dispose();
         }
     }
 }

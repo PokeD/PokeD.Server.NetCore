@@ -24,29 +24,18 @@ namespace PokeD.Server.NetCore
 
         public static void Main(params string[] args)
         {
-#if !DEBUG
-            //try
-            //{
-                LastRunTime = DateTime.UtcNow;
-                using (var serverManager = new ServerManager())
-                    serverManager.Run(args);
-            //}
-            //catch (Exception e)
-            //{
-            //    CatchException(e);
-            //    throw;
-            //}
-#else
+            ServerManager serverManager = null;
             Start:
             try
             {
                 LastRunTime = DateTime.UtcNow;
-                using (var serverManager = new ServerManager())
-                    serverManager.Run(args);
+                serverManager = new ServerManager();
+                serverManager.Run(args);
             }
             catch (Exception e)
             {
                 CatchException(e);
+                serverManager?.Dispose();
 
                 if (DateTime.UtcNow - LastRunTime > new TimeSpan(0, 0, 0, 10))
                     goto Start;
@@ -56,7 +45,6 @@ namespace PokeD.Server.NetCore
                     Environment.Exit((int) ExitCodes.UnknownError);
                 }
             }
-#endif
 
             Environment.Exit((int) ExitCodes.Success);
         }
@@ -180,16 +168,13 @@ InnerException:
         }
 
 
-        private static IFile CrashFile { get; } = new CrashLogFile();
         private static void ReportErrorLocal(string exception)
         {
-            lock (CrashFile)
-            {
-                using (var stream = CrashFile.Open(PCLExt.FileStorage.FileAccess.ReadAndWrite))
-                using (var writer = new StreamWriter(stream))
-                    writer.Write(exception);
-            }
+            using (var stream = new CrashLogFile().Open(PCLExt.FileStorage.FileAccess.ReadAndWrite))
+            using (var writer = new StreamWriter(stream))
+                writer.Write(exception);
         }
+
         private static void ReportErrorWeb(string exception)
         {
             //if (!Server.AutomaticErrorReporting)
