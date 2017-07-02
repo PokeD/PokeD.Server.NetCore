@@ -103,7 +103,7 @@ namespace PokeD.Server.NetCore
                         Logger.Log(LogType.Command, "Invalid command!");
                 }
 
-                if(Server == null || (Server != null && Server.IsDisposing))
+                if(UpdateToken.IsCancellationRequested || Server == null || (Server != null && Server.IsDisposing))
                     break;
 
                 Server.Update();
@@ -123,7 +123,7 @@ namespace PokeD.Server.NetCore
             }
 
             Logger.Log(LogType.Warning, "Update loop stopped!");
-            Logger.Log(LogType.Debug, $"Update loop stop StackTrace: {Environment.StackTrace}");
+            //Logger.Log(LogType.Debug, $"Update loop stop StackTrace: {Environment.StackTrace}");
         }
 
 

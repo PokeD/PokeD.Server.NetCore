@@ -17,7 +17,7 @@ namespace PokeD.Server.NetCore
 
             if (command.StartsWith("stop"))
             {
-                Server?.Stop();
+                Stop();
                 NatDiscoverer.ReleaseAll();
 
                 Console.WriteLine();

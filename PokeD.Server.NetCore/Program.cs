@@ -35,15 +35,18 @@ namespace PokeD.Server.NetCore
             catch (Exception e)
             {
                 CatchException(e);
-                serverManager?.Dispose();
 
                 if (DateTime.UtcNow - LastRunTime > new TimeSpan(0, 0, 0, 10))
-                    goto Start;
-                else
                 {
-                    CatchException(e);
-                    Environment.Exit((int) ExitCodes.UnknownError);
+                    serverManager?.Dispose();
+                    goto Start;
                 }
+                else
+                    Environment.Exit((int) ExitCodes.UnknownError);
+            }
+            finally
+            {
+                serverManager?.Dispose();
             }
 
             Environment.Exit((int) ExitCodes.Success);
