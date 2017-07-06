@@ -129,8 +129,6 @@ namespace PokeD.Server.NetCore
 
         public void Dispose()
         {
-            Stop();
-
             Logger.LogMessage -= Logger_LogMessage;
 
             Server?.Dispose();
