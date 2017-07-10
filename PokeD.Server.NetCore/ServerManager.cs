@@ -106,7 +106,7 @@ namespace PokeD.Server.NetCore
                 if(UpdateToken.IsCancellationRequested || Server == null || (Server != null && Server.IsDisposing))
                     break;
 
-                Server.Update();
+                //Server.Update();
 
 
                 if (watch.ElapsedMilliseconds < 10)
@@ -133,7 +133,7 @@ namespace PokeD.Server.NetCore
 
             Server?.Dispose();
             
-            UpdateToken.Dispose();
+            //UpdateToken.Dispose();
         }
     }
 }

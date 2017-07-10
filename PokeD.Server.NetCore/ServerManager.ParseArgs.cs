@@ -6,6 +6,7 @@ using ConsoleManager;
 using PCLExt.Config;
 
 using PokeD.Server.Modules;
+using PokeD.Server.Services;
 
 namespace PokeD.Server.NetCore
 {
@@ -75,20 +76,23 @@ namespace PokeD.Server.NetCore
         private void ParseArgs(IEnumerable<string> args)
         {
             StartFastConsole(string.Empty);
+            NATForwardingEnabled = true;
             ParseConfig("yaml");
         }
 #endif
         private void StartFastConsole(string s)
         {
             FastConsole.TitleFormatted = "PokeD Server FPS: {0}";
+            //FastConsole.ConstantAddLine(
+            //    "Main              thread execution time: {0} ms", () => new object[] { MainThreadTime });
             FastConsole.ConstantAddLine(
-                "Main              thread execution time: {0} ms", () => new object[] { MainThreadTime });
+                "ModuleManagerUpdate thread execution time: {0} ms", () => new object[] { ModuleManagerService.UpdateThread });
             FastConsole.ConstantAddLine(
-                "PlayerWatcher     thread execution time: {0} ms", () => new object[] { ModuleP3D.PlayerWatcherThreadTime });
+                "PlayerWatcher       thread execution time: {0} ms", () => new object[] { ModuleP3D.PlayerWatcherThreadTime });
             FastConsole.ConstantAddLine(
-                "PlayerCorrection  thread execution time: {0} ms", () => new object[] { ModuleP3D.PlayerCorrectionThreadTime });
+                "PlayerCorrection    thread execution time: {0} ms", () => new object[] { ModuleP3D.PlayerCorrectionThreadTime });
             FastConsole.ConstantAddLine(
-                "ConsoleManager    thread execution time: {0} ms", () => new object[] { FastConsole.ConsoleManagerThreadTime });
+                "ConsoleManager      thread execution time: {0} ms", () => new object[] { FastConsole.ConsoleManagerThreadTime });
 
             FastConsole.Start();
         }
