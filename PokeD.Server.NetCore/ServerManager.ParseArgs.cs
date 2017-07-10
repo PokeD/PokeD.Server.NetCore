@@ -76,7 +76,7 @@ namespace PokeD.Server.NetCore
         private void ParseArgs(IEnumerable<string> args)
         {
             StartFastConsole(string.Empty);
-            NATForwardingEnabled = true;
+            NATForwardingEnabled = false;
             ParseConfig("yaml");
         }
 #endif
