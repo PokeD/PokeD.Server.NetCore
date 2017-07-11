@@ -17,6 +17,7 @@ namespace PokeD.Server.NetCore
 
             if (command.StartsWith("stop"))
             {
+                Program.LastRunTime = DateTime.UtcNow;
                 Stop();
                 NatDiscoverer.ReleaseAll();
 

@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using PCLExt.FileStorage;
+
 using PokeD.Core.Extensions;
 using PokeD.Server.Storage.Files;
 
@@ -12,14 +12,13 @@ namespace PokeD.Server.NetCore
 {
     public static class Program
     {
-        private static DateTime LastRunTime { get; set; }
+        internal static DateTime LastRunTime { get; set; }
 
         static Program()
         {
             PacketExtensions.Init();
 
             ServicePointManager.UseNagleAlgorithm = false;
-
         }
 
         public static void Main(params string[] args)

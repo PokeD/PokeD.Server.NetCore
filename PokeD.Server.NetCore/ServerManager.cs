@@ -123,7 +123,6 @@ namespace PokeD.Server.NetCore
             }
 
             Logger.Log(LogType.Warning, "Update loop stopped!");
-            //Logger.Log(LogType.Debug, $"Update loop stop StackTrace: {Environment.StackTrace}");
         }
 
 
