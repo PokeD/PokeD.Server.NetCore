@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ConsoleManager" Version="1.1.2" />
+    <PackageReference Include="ConsoleManager" Version="1.2.1" />
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="Open.NAT.Core" Version="2.1.0" />
     <PackageReference Include="PCLExt.Config" Version="1.2.1.3" />

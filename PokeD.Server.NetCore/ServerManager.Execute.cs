@@ -24,11 +24,14 @@ namespace PokeD.Server.NetCore
                 Console.WriteLine();
                 Console.WriteLine("Stopped the server. Press any key to continue...");
                 Console.ReadKey();
-                FastConsole.Stop();
+                ConsoleEx.Stop();
             }
 
             else if (command.StartsWith("clear"))
-                FastConsole.ClearOutput();
+            {
+                ConsoleEx.ClearOutput();
+                Console.Clear();
+            }
 
             else
                 return Server.GetService<CommandManagerService>()?.ExecuteServerCommand(message) == true;

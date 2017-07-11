@@ -85,20 +85,19 @@ namespace PokeD.Server.NetCore
             if (NATForwardingEnabled)
                 NatDiscoverer.ReleaseAll();
 
-            FastConsole.Stop();
+            ConsoleEx.Stop();
         }
 
         
-        public long MainThreadTime { get; private set; }
         private void Update()
         {
             var watch = Stopwatch.StartNew();
+            
             while (!UpdateToken.IsCancellationRequested)
             {
-                if (FastConsole.InputAvailable)
+                string input;
+                if (!string.IsNullOrEmpty((input = Console.ReadLine())))
                 {
-                    var input = FastConsole.ReadLine();
-
                     if (input.StartsWith("/") && !ExecuteCommand(input))
                         Logger.Log(LogType.Command, "Invalid command!");
                 }
@@ -111,8 +110,6 @@ namespace PokeD.Server.NetCore
 
                 if (watch.ElapsedMilliseconds < 10)
                 {
-                    MainThreadTime = watch.ElapsedMilliseconds;
-
                     var time = (int) (10 - watch.ElapsedMilliseconds);
                     if (time < 0) time = 0;
                     Thread.Sleep(time);

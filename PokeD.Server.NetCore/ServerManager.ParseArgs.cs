@@ -82,19 +82,15 @@ namespace PokeD.Server.NetCore
 #endif
         private void StartFastConsole(string s)
         {
-            FastConsole.TitleFormatted = "PokeD Server FPS: {0}";
-            //FastConsole.ConstantAddLine(
-            //    "Main              thread execution time: {0} ms", () => new object[] { MainThreadTime });
-            FastConsole.ConstantAddLine(
+            ConsoleEx.TitleFormatted = "PokeD Server FPS: {0}";
+            ConsoleEx.ConstantAddLine(
                 "ModuleManagerUpdate thread execution time: {0} ms", () => new object[] { ModuleManagerService.UpdateThread });
-            FastConsole.ConstantAddLine(
+            ConsoleEx.ConstantAddLine(
                 "PlayerWatcher       thread execution time: {0} ms", () => new object[] { ModuleP3D.PlayerWatcherThreadTime });
-            FastConsole.ConstantAddLine(
+            ConsoleEx.ConstantAddLine(
                 "PlayerCorrection    thread execution time: {0} ms", () => new object[] { ModuleP3D.PlayerCorrectionThreadTime });
-            FastConsole.ConstantAddLine(
-                "ConsoleManager      thread execution time: {0} ms", () => new object[] { FastConsole.ConsoleManagerThreadTime });
 
-            FastConsole.Start();
+            ConsoleEx.Start();
         }
         private void ParseConfig(string config)
         {
