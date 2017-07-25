@@ -1,5 +1,4 @@
-﻿#if !NETCOREAPP2_0
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,4 +51,3 @@ namespace PokeD.Server.NetCore.Updater
         }
     }
 }
-#endif

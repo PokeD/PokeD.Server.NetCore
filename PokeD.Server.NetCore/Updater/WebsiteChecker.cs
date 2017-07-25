@@ -1,5 +1,4 @@
-﻿#if !NETCOREAPP2_0
-using System;
+﻿using System;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
@@ -31,4 +30,3 @@ namespace PokeD.Server.NetCore.Updater
         private bool IsSocketException(Exception e) => e is SocketException || e.InnerException is SocketException;
     }
 }
-#endif

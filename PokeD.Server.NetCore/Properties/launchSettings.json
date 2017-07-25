@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PokeD.Server.NetCore": {
+      "commandName": "Project",
+      "commandLineArgs": "-n -l"
+    }
+  }
+}

@@ -31,6 +31,7 @@ namespace PokeD.Server.NetCore
                 serverManager = new ServerManager();
                 serverManager.Run(args);
             }
+#if !DEBUG
             catch (Exception e)
             {
                 CatchException(e);
@@ -43,6 +44,7 @@ namespace PokeD.Server.NetCore
                 else
                     Environment.Exit((int) ExitCodes.UnknownError);
             }
+#endif
             finally
             {
                 serverManager?.Dispose();

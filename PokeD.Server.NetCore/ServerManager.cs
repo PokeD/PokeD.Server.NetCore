@@ -52,7 +52,7 @@ namespace PokeD.Server.NetCore
             UpdateToken = new CancellationTokenSource();
             Update();
         }
-        private void NATForwarding()
+        private async void NATForwarding()
         {
             if (!NATForwardingEnabled)
                 return;
@@ -62,7 +62,7 @@ namespace PokeD.Server.NetCore
                 Logger.Log(LogType.Info, "Initializing NAT Discovery.");
                 var discoverer = new NatDiscoverer();
                 Logger.Log(LogType.Info, "Getting your external IP. Please wait...");
-                var device = discoverer.DiscoverDeviceAsync().Wait(new CancellationTokenSource(10000));
+                var device = await discoverer.DiscoverDeviceAsync();
                 Logger.Log(LogType.Info, $"Your external IP is {device.GetExternalIPAsync().Wait(new CancellationTokenSource(2000))}.");
 
                 foreach (var module in Server.GetService<ModuleManagerService>().GetModuleSettings().Where(module => module.Enabled && module.Port != 0))

@@ -1,5 +1,4 @@
-﻿#if !NETCOREAPP2_0
-using System;
+﻿using System;
 
 using Octokit;
 
@@ -18,4 +17,3 @@ namespace PokeD.Server.NetCore.Updater
         public GitHubRelease(Release release) { Release = release; }
     }
 }
-#endif

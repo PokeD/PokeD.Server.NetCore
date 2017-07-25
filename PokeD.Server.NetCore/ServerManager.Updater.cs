@@ -3,11 +3,10 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 
-using ConsoleManager;
-
 using PokeD.Server.NetCore.Extensions;
 using PokeD.Server.NetCore.Storage.Files;
 using PokeD.Server.NetCore.Storage.Folders;
+using PokeD.Server.NetCore.Updater;
 
 namespace PokeD.Server.NetCore
 {
@@ -19,33 +18,25 @@ namespace PokeD.Server.NetCore
 
         private void CheckServerForUpdate()
         {
-#if !NETCOREAPP2_0
             if(DisableUpdate)
                 return;
 
-            var launcherReleases = PokeD.Server.Desktop.Updater.GitHub.GetAllReleases.ToList();
+            var launcherReleases = GitHub.GetAllReleases.ToList();
 
             if (launcherReleases.Any())
             {
                 var latestRelease = launcherReleases.First();
-                if (Assembly.GetExecutingAssembly().GetName().Version < new Version(latestRelease.TagName))
+                if (Assembly.GetExecutingAssembly().GetName().Version > new Version(latestRelease.TagName))
                 {
                     Console.WriteLine(UpdateAvailable);
 
                     string response;
-                    if (FastConsole.Enabled)
-                    {
-                        while (!FastConsole.InputAvailable)
-                            Thread.Sleep(100);
-
-                        response = FastConsole.ReadLine().ToLower();
-                    }
-                    else
-                        response = Console.ReadLine();
-
+                    while (string.IsNullOrEmpty(response = Console.ReadLine().ToLower()))
+                        Thread.Sleep(50);
+                    
                     if (response == "yes" || response == "ye" || response == "y" || response == "yup")
                     {
-                        using (var directUpdater = new PokeD.Server.Desktop.Updater.DirectUpdater(latestRelease.GetRelease(), new UpdateFolder()))
+                        using (var directUpdater = new DirectUpdater(latestRelease.GetRelease(), new UpdateFolder()))
                             directUpdater.Start();
 
                         new UpdaterFile().Start(createNoWindow: true);
@@ -57,7 +48,6 @@ namespace PokeD.Server.NetCore
             }
             else
                 Console.WriteLine(UpdateNotFound);
-#endif
         }
     }
 }

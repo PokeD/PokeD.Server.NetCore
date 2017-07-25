@@ -8,9 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Scripts\Lua\modules\README" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLine.Options" Version="0.0.2" />
     <PackageReference Include="ConsoleManager" Version="1.2.1" />
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="Open.NAT.Core" Version="2.1.0" />
+    <PackageReference Include="Octokit" Version="0.24.1-alpha0001" />
     <PackageReference Include="PCLExt.Config" Version="1.2.1.3" />
     <PackageReference Include="PCLExt.FileStorage" Version="1.2.1.1" />
   </ItemGroup>
@@ -23,6 +29,27 @@
 
   <ItemGroup>
     <None Update="Data\PokeApiCache\PokeApi.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Scripts\Lua\chatchannel_test.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Scripts\Lua\command_ping.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Scripts\Lua\command_time.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Scripts\Lua\lang\en.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Scripts\Lua\lang\ru.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Scripts\Lua\modules\hook.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Scripts\Lua\modules\translator.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

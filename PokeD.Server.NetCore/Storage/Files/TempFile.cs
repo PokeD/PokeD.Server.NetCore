@@ -2,7 +2,7 @@
 
 using PokeD.Server.NetCore.Storage.Folders;
 
-namespace PokeD.Server.Desktop.Storage.Files
+namespace PokeD.Server.NetCore.Storage.Files
 {
     internal sealed class TempFile : BaseFile
     {

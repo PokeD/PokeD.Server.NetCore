@@ -1,5 +1,4 @@
-﻿#if !NETCOREAPP2_0
-using System;
+﻿using System;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
@@ -86,4 +85,3 @@ namespace PokeD.Server.NetCore.Updater
         }
     }
 }
-#endif

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using CommandLine.Options;
+
 using ConsoleManager;
 
 using PCLExt.Config;
@@ -18,15 +20,14 @@ namespace PokeD.Server.NetCore
 
         private bool DisableUpdate { get; set; }
 
-#if !NETCOREAPP2_0
         private void ParseArgs(IEnumerable<string> args)
         {
-            var options = new NDesk.Options.OptionSet();
+            var options = new OptionSet();
             try
             {
-                options = new NDesk.Options.OptionSet()
+                options = new OptionSet()
                     .Add("c|console", "enables the console.", StartFastConsole)
-                    .Add("fps=", "{FPS} of the console, integer.", fps => FastConsole.ScreenFPS = int.Parse(fps))
+                    .Add("fps=", "{FPS} of the console, integer.", fps => ConsoleEx.ScreenFPS = int.Parse(fps))
                     .Add("cf|config=", "used {CONFIG_WRAPPER}.", ParseConfig)
                     .Add("n|nat", "enables NAT port forwarding.", str => NATForwardingEnabled = true)
                     .Add("h|help", "show help.", str => ShowHelp(options))
@@ -34,13 +35,13 @@ namespace PokeD.Server.NetCore
 
                 options.Parse(args);
             }
-            catch (Exception ex) when (ex is NDesk.Options.OptionException || ex is FormatException)
+            catch (Exception ex) when (ex is OptionException || ex is FormatException)
             {
-                FastConsole.Stop();
+                ConsoleEx.Stop();
 
                 Console.Write("PokeD.Server.Desktop: ");
                 Console.WriteLine(ex.Message);
-                Console.WriteLine("Try `PokeD.Server.Desktop --help' for more information.");
+                Console.WriteLine("Try `PokeD.Server.NetCore --help' for more information.");
 
                 ShowHelp(options, true);
 
@@ -50,11 +51,11 @@ namespace PokeD.Server.NetCore
                 Environment.Exit((int) ExitCodes.Success);
             }
         }
-        private void ShowHelp(NDesk.Options.OptionSet options, bool direct = false)
+        private void ShowHelp(OptionSet options, bool direct = false)
         {
             if (direct)
             {
-                Console.WriteLine("Usage: PokeD.Server.Desktop [OPTIONS]");
+                Console.WriteLine("Usage: PokeD.Server.NetCore [OPTIONS]");
                 Console.WriteLine();
                 Console.WriteLine("Options:");
 
@@ -62,7 +63,7 @@ namespace PokeD.Server.NetCore
             }
             else
             {
-                Console.WriteLine("Usage: PokeD.Server.Desktop [OPTIONS]");
+                Console.WriteLine("Usage: PokeD.Server.NetCore [OPTIONS]");
                 Console.WriteLine();
                 Console.WriteLine("Options:");
 
@@ -72,14 +73,14 @@ namespace PokeD.Server.NetCore
                     Console.WriteLine(line);
             }
         }
-#else
+        /*
         private void ParseArgs(IEnumerable<string> args)
         {
             StartFastConsole(string.Empty);
             NATForwardingEnabled = false;
             ParseConfig("yaml");
         }
-#endif
+        */
         private void StartFastConsole(string s)
         {
             ConsoleEx.TitleFormatted = "PokeD Server FPS: {0}";
