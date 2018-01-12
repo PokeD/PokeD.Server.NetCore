@@ -11,4 +11,4 @@
 	url = https://github.com/PokeD/PokeD.BattleEngine.git
 [submodule "kolben"]
 	path = kolben
-	url = https://github.com/nilllzz/kolben.git
+	url = https://github.com/PokeD/kolben
