@@ -1,0 +1,13 @@
+﻿var Name		= "pong";
+var Description = "Pong ping.";
+var Permission = "UnVerifiedOrHigher";
+
+var Handle = function(client)
+{
+	client.sendServerMessage("Ping!");
+};
+
+var Help = function(client, alias)
+{
+	client.sendServerMessage("Correct usage is /" + alias);
+};

@@ -31,6 +31,9 @@
     <None Update="Data\PokeApiCache\PokeApi.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Scripts\Kolben\command_pong.klb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Scripts\Lua\chatchannel_test.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

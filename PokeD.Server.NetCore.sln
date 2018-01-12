@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26621.2
+VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokeD.BattleEngine", "PokeD.BattleEngine\PokeD.BattleEngine.csproj", "{A90F84DF-CCFA-4722-9490-A3DF98DAEC95}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokeD.Server.NetCore", "PokeD.Server.NetCore\PokeD.Server.NetCore.csproj", "{805FDC92-37F5-4884-B487-D9437BE18E6B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokeD.Server.NetCore.Updater", "PokeD.Server.NetCore.Updater\PokeD.Server.NetCore.Updater.csproj", "{6E89E9A3-F142-4ED6-9195-60097996977D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kolben.Core", "PokeD.Server\kolben\Kolben\Kolben.Core.csproj", "{1F3793E7-2390-4707-81DC-C9B7126527E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{6E89E9A3-F142-4ED6-9195-60097996977D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E89E9A3-F142-4ED6-9195-60097996977D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E89E9A3-F142-4ED6-9195-60097996977D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F3793E7-2390-4707-81DC-C9B7126527E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F3793E7-2390-4707-81DC-C9B7126527E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F3793E7-2390-4707-81DC-C9B7126527E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F3793E7-2390-4707-81DC-C9B7126527E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
