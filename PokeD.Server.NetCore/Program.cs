@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -49,8 +50,6 @@ namespace PokeD.Server.NetCore
             {
                 serverManager?.Dispose();
             }
-
-            Environment.Exit((int) ExitCodes.Success);
         }
 
 

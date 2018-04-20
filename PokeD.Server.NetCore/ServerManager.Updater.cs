@@ -34,7 +34,7 @@ namespace PokeD.Server.NetCore
                     while (string.IsNullOrEmpty(response = Console.ReadLine().ToLower()))
                         Thread.Sleep(50);
                     
-                    if (response == "yes" || response == "ye" || response == "y" || response == "yup")
+                    if (response == "yes" || response == "ye" || response == "y" || response == "yup" || response == "yar")
                     {
                         using (var directUpdater = new DirectUpdater(latestRelease.GetRelease(), new UpdateFolder()))
                             directUpdater.Start();

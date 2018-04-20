@@ -16,9 +16,9 @@
     <PackageReference Include="ConsoleManager" Version="1.2.1" />
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="Open.NAT.Core" Version="2.1.0" />
-    <PackageReference Include="Octokit" Version="0.24.1-alpha0001" />
-    <PackageReference Include="PCLExt.Config" Version="1.2.1.3" />
-    <PackageReference Include="PCLExt.FileStorage" Version="1.2.1.1" />
+    <PackageReference Include="Octokit" Version="0.29.0" />
+    <PackageReference Include="PCLExt.Config" Version="1.3.1.1" />
+    <PackageReference Include="PCLExt.FileStorage" Version="1.3.2" />
   </ItemGroup>
 
   <ItemGroup>

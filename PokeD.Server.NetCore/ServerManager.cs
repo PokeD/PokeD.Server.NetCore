@@ -7,6 +7,7 @@ using ConsoleManager;
 
 using Open.Nat;
 
+using PokeD.Core;
 using PokeD.Core.Data.PokeApi;
 using PokeD.Server.NetCore.Extensions;
 using PokeD.Server.Services;
@@ -65,7 +66,7 @@ namespace PokeD.Server.NetCore
                 var device = await discoverer.DiscoverDeviceAsync();
                 Logger.Log(LogType.Info, $"Your external IP is {device.GetExternalIPAsync().Wait(new CancellationTokenSource(2000))}.");
 
-                foreach (var module in Server.GetService<ModuleManagerService>().GetModuleSettings().Where(module => module.Enabled && module.Port != 0))
+                foreach (var module in Server.Services.GetService<ModuleManagerService>().GetModuleSettings().Where(module => module.Enabled && module.Port != 0))
                 {
                     Logger.Log(LogType.Info, $"Forwarding port {module.Port}.");
                     device.CreatePortMapAsync(new Mapping(Protocol.Tcp, module.Port, module.Port, "PokeD Port Mapping")).Wait(new CancellationTokenSource(2000).Token);
@@ -77,7 +78,7 @@ namespace PokeD.Server.NetCore
             }
         }
 
-        private void Stop(bool error = false)
+        private void Stop()
         {
             UpdateToken?.Cancel();
             Server?.Stop();

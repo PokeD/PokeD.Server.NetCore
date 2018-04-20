@@ -5,6 +5,6 @@ namespace PokeD.Server.NetCore.Storage.Folders
 {
     internal sealed class UpdateFolder : BaseFolder
     {
-        public UpdateFolder() : base(new ApplicationFolder().CreateFolder("Update", CreationCollisionOption.OpenIfExists)) { }
+        public UpdateFolder() : base(new ApplicationRootFolder().CreateFolder("Update", CreationCollisionOption.OpenIfExists)) { }
     }
 }

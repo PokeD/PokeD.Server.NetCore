@@ -34,7 +34,7 @@ namespace PokeD.Server.NetCore
             }
 
             else
-                return Server.GetService<CommandManagerService>()?.ExecuteServerCommand(message) == true;
+                return Server.Services.GetService<CommandManagerService>()?.ExecuteServerCommand(message) == true;
 
             return true;
         }

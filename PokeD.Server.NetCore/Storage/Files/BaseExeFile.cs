@@ -12,13 +12,13 @@ namespace PokeD.Server.NetCore.Storage.Files
         public BaseExeFile(string fileName, IFolder folder = null) : base(NameFunc(fileName, folder))
         {
             if (folder == null)
-                folder = new ApplicationFolder();
+                folder = new ApplicationRootFolder();
             Exist = folder.CheckExists(fileName) == ExistenceCheckResult.FileExists;
         }
         private static IFile NameFunc(string fileName, IFolder folder = null)
         {
             if (folder == null)
-                folder = new ApplicationFolder();
+                folder = new ApplicationRootFolder();
 
             return folder.CheckExists(fileName) == ExistenceCheckResult.FileExists ? folder.GetFile(fileName) : null;
         }

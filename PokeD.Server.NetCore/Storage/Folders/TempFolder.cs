@@ -5,6 +5,6 @@ namespace PokeD.Server.NetCore.Storage.Folders
 {
     internal sealed class TempFolder : BaseFolder
     {
-        public TempFolder() : base(new ApplicationFolder().CreateFolder("Temp", CreationCollisionOption.OpenIfExists)) { }
+        public TempFolder() : base(new ApplicationRootFolder().CreateFolder("Temp", CreationCollisionOption.OpenIfExists)) { }
     }
 }
