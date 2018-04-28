@@ -14,11 +14,11 @@ namespace PokeD.Server.NetCore.Updater
     {
         private static readonly string Host = "github.com";
 
-        private static readonly string ClientHeader = "PokeD.Server.Desktop";
+        private static readonly string ClientHeader = "PokeD.Server.NetCore";
         private static readonly string ClientToken = "MjAxY2M4NDRiYWJiNzI3YjMyMGM0NDkzZjRmMmEyMTcyMTIzZjMzYg==";
 
         private static readonly string OrgName = "PokeD";
-        private static readonly string RepoName = "PokeD.Server.Desktop";
+        private static readonly string RepoName = "PokeD.Server.NetCore";
 
 
         private static GitHubClient Client => AsyncExtensions.RunSync(async () => await AnonymousHitRateLimit()) ? TokenClient : AnonymousClient;
@@ -41,6 +41,12 @@ namespace PokeD.Server.NetCore.Updater
                     catch (Exception) { return new List<Release>(); }
                 }
             }
+        }
+
+        public static async Task<byte[]> Download(Uri uri)
+        {
+            var response = await Client.Connection.Get<object>(uri, new Dictionary<string, string>(), "application/octet-stream");
+            return (byte[]) response.HttpResponse.Body;
         }
 
         private static async Task<bool> AnonymousHitRateLimit() => (await AnonymousClient.Miscellaneous.GetRateLimits()).Resources.Core.Remaining <= 0;

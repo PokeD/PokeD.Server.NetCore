@@ -8,7 +8,6 @@ using ConsoleManager;
 using Open.Nat;
 
 using PokeD.Core;
-using PokeD.Core.Data.PokeApi;
 using PokeD.Server.NetCore.Extensions;
 using PokeD.Server.Services;
 
@@ -21,8 +20,6 @@ namespace PokeD.Server.NetCore
 
         public ServerManager()
         {
-            PokeApiV2.CacheType = PokeApiV2.CacheTypeEnum.Zip;
-
             Logger.LogMessage += Logger_LogMessage;
         }
 
@@ -103,11 +100,8 @@ namespace PokeD.Server.NetCore
                         Logger.Log(LogType.Command, "Invalid command!");
                 }
 
-                if(UpdateToken.IsCancellationRequested || Server == null || (Server != null && Server.IsDisposing))
+                if(UpdateToken.IsCancellationRequested || Server == null)
                     break;
-
-                //Server.Update();
-
 
                 if (watch.ElapsedMilliseconds < 10)
                 {

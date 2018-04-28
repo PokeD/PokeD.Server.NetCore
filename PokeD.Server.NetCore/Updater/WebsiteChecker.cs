@@ -27,6 +27,6 @@ namespace PokeD.Server.NetCore.Updater
             else
                 return WebsiteIsUp;
         }
-        private bool IsSocketException(Exception e) => e is SocketException || e.InnerException is SocketException;
+        private static bool IsSocketException(Exception e) => e is SocketException || e.InnerException is SocketException;
     }
 }

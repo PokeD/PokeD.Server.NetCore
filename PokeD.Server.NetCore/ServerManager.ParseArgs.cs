@@ -14,7 +14,7 @@ namespace PokeD.Server.NetCore
 {
     public partial class ServerManager
     {
-        private ConfigType ConfigType { get; set; } = ConfigType.JsonConfig;
+        private ConfigType ConfigType { get; set; } = ConfigType.YamlConfig;
 
         private bool NATForwardingEnabled { get; set; }
 
@@ -28,10 +28,10 @@ namespace PokeD.Server.NetCore
                 options = new OptionSet()
                     .Add("c|console", "enables the console.", StartFastConsole)
                     .Add("fps=", "{FPS} of the console, integer.", fps => ConsoleEx.ScreenFPS = int.Parse(fps))
-                    .Add("cf|config=", "used {CONFIG_WRAPPER}.", ParseConfig)
+                    .Add("cf|config=", "used {CONFIG_WRAPPER} [json/yaml].", ParseConfig)
                     .Add("n|nat", "enables NAT port forwarding.", str => NATForwardingEnabled = true)
                     .Add("h|help", "show help.", str => ShowHelp(options))
-                    .Add("l", "started via Launcher.", str => DisableUpdate = true);
+                    .Add("l", "started via Launcher (disable update check).", str => DisableUpdate = true);
 
                 options.Parse(args);
             }
@@ -53,25 +53,25 @@ namespace PokeD.Server.NetCore
         }
         private void ShowHelp(OptionSet options, bool direct = false)
         {
+            Console.WriteLine("Usage: PokeD.Server.NetCore [OPTIONS]");
+            Console.WriteLine();
+            Console.WriteLine("Options:");
+
             if (direct)
             {
-                Console.WriteLine("Usage: PokeD.Server.NetCore [OPTIONS]");
-                Console.WriteLine();
-                Console.WriteLine("Options:");
-
                 options.WriteOptionDescriptions(Console.Out);
             }
             else
             {
-                Console.WriteLine("Usage: PokeD.Server.NetCore [OPTIONS]");
-                Console.WriteLine();
-                Console.WriteLine("Options:");
-
                 var opt = new System.IO.StringWriter();
                 options.WriteOptionDescriptions(opt);
                 foreach (var line in opt.GetStringBuilder().ToString().Split(new[] { Environment.NewLine }, StringSplitOptions.None))
                     Console.WriteLine(line);
             }
+
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey();
+            Environment.Exit((int) ExitCodes.Success);
         }
         /*
         private void ParseArgs(IEnumerable<string> args)

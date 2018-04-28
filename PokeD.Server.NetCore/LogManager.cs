@@ -12,11 +12,12 @@ namespace PokeD.Server.NetCore
         {
             lock (LogFile)
             {
-                using (Stream stream = LogFile.Open(PCLExt.FileStorage.FileAccess.ReadAndWrite))
-                using (var writer = new StreamWriter(stream) { AutoFlush = true })
+                using (var stream = LogFile.Open(PCLExt.FileStorage.FileAccess.ReadAndWrite))
+                using (var writer = new StreamWriter(stream))
                 {
                     writer.BaseStream.Seek(0, SeekOrigin.End);
                     writer.WriteLine(message);
+                    writer.Flush();
                 }
             }
         }

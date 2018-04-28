@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
@@ -20,6 +20,9 @@ namespace PokeD.Server.NetCore
             PacketExtensions.Init();
 
             ServicePointManager.UseNagleAlgorithm = false;
+
+            // -- If somehow the exception was not handled in Main block, report it and fix it.
+            AppDomain.CurrentDomain.UnhandledException += CatchException;
         }
 
         public static void Main(params string[] args)
@@ -50,11 +53,12 @@ namespace PokeD.Server.NetCore
             {
                 serverManager?.Dispose();
             }
+
+            Environment.Exit((int) ExitCodes.Success);
         }
 
 
         private static readonly string REPORTURL = "http://poked.github.io/report/";
-
 
         private static void CatchException(object sender, UnhandledExceptionEventArgs e)
         {
@@ -104,6 +108,8 @@ PokeD.Server.Desktop Crash Log v {Assembly.GetExecutingAssembly().GetName().Vers
 Software:
     OS: {System.Runtime.InteropServices.RuntimeInformation.OSDescription} {System.Runtime.InteropServices.RuntimeInformation.OSArchitecture} [{platformService.Application.RuntimeFramework.FullName}]
     Language: {CultureInfo.CurrentCulture.EnglishName}
+    Framework: 
+        Runtime {typeof(System.Runtime.InteropServices.RuntimeInformation).GetTypeInfo().Assembly.GetCustomAttributes().OfType<AssemblyInformationalVersionAttribute>().Single().InformationalVersion}
 
 {RecursiveException(ex)}
 
@@ -170,14 +176,12 @@ InnerException:
             return sb.ToString();
         }
 
-
         private static void ReportErrorLocal(string exception)
         {
             using (var stream = new CrashLogFile().Open(PCLExt.FileStorage.FileAccess.ReadAndWrite))
             using (var writer = new StreamWriter(stream))
                 writer.Write(exception);
         }
-
         private static void ReportErrorWeb(string exception)
         {
             //if (!Server.AutomaticErrorReporting)
