@@ -16,6 +16,7 @@ namespace PokeD.Server.NetCore
     public partial class ServerManager : IDisposable
     {
         private Server Server { get; set; }
+        private ManualResetEventSlim UpdateLock { get; } = new ManualResetEventSlim(false);
         private CancellationTokenSource UpdateToken { get; set; }
 
         public ServerManager()
@@ -89,29 +90,38 @@ namespace PokeD.Server.NetCore
         
         private void Update()
         {
+            UpdateLock.Reset();
+
             var watch = Stopwatch.StartNew();
-            
-            while (!UpdateToken.IsCancellationRequested)
+
+            try
             {
-                string input;
-                if (!string.IsNullOrEmpty((input = Console.ReadLine())))
+                while (!UpdateToken.IsCancellationRequested)
                 {
-                    if (input.StartsWith("/") && !ExecuteCommand(input))
-                        Logger.Log(LogType.Command, "Invalid command!");
+                    string input;
+                    if (!string.IsNullOrEmpty((input = Console.ReadLine())))
+                    {
+                        if (input.StartsWith("/") && !ExecuteCommand(input))
+                            Logger.Log(LogType.Command, "Invalid command!");
+                    }
+
+                    if (UpdateToken.IsCancellationRequested || Server == null)
+                        break;
+
+                    if (watch.ElapsedMilliseconds < 10)
+                    {
+                        var time = (int)(10 - watch.ElapsedMilliseconds);
+                        if (time < 0) time = 0;
+                        Thread.Sleep(time);
+                    }
+
+                    watch.Reset();
+                    watch.Start();
                 }
-
-                if(UpdateToken.IsCancellationRequested || Server == null)
-                    break;
-
-                if (watch.ElapsedMilliseconds < 10)
-                {
-                    var time = (int) (10 - watch.ElapsedMilliseconds);
-                    if (time < 0) time = 0;
-                    Thread.Sleep(time);
-                }
-
-                watch.Reset();
-                watch.Start();
+            }
+            finally
+            {
+                UpdateLock.Set();
             }
 
             Logger.Log(LogType.Warning, "Update loop stopped!");
@@ -123,8 +133,15 @@ namespace PokeD.Server.NetCore
             Logger.LogMessage -= Logger_LogMessage;
 
             Server?.Dispose();
-            
-            //UpdateToken.Dispose();
+
+            if (UpdateToken?.IsCancellationRequested == false)
+            {
+                UpdateToken.Cancel();
+                UpdateLock.Wait();
+            }
+
+            UpdateLock?.Dispose();
+            UpdateToken?.Dispose();
         }
     }
 }
