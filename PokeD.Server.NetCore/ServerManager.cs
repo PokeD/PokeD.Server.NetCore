@@ -3,8 +3,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
-using ConsoleManager;
-
 using Open.Nat;
 
 using PokeD.Core;
@@ -83,8 +81,6 @@ namespace PokeD.Server.NetCore
 
             if (NATForwardingEnabled)
                 NatDiscoverer.ReleaseAll();
-
-            ConsoleEx.Stop();
         }
 
         

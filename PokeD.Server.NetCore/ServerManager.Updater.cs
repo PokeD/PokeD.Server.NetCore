@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+
 using Octokit;
+
 using PokeD.Server.NetCore.Extensions;
 using PokeD.Server.NetCore.Updater;
 

@@ -3,12 +3,7 @@ using System.Collections.Generic;
 
 using CommandLine.Options;
 
-using ConsoleManager;
-
 using PCLExt.Config;
-
-using PokeD.Server.Modules;
-using PokeD.Server.Services;
 
 namespace PokeD.Server.NetCore
 {
@@ -26,8 +21,6 @@ namespace PokeD.Server.NetCore
             try
             {
                 options = new OptionSet()
-                    .Add("c|console", "enables the console.", StartFastConsole)
-                    .Add("fps=", "{FPS} of the console, integer.", fps => ConsoleEx.ScreenFPS = int.Parse(fps))
                     .Add("cf|config=", "used {CONFIG_WRAPPER} [json/yaml].", ParseConfig)
                     .Add("n|nat", "enables NAT port forwarding.", str => NATForwardingEnabled = true)
                     .Add("h|help", "show help.", str => ShowHelp(options))
@@ -37,8 +30,6 @@ namespace PokeD.Server.NetCore
             }
             catch (Exception ex) when (ex is OptionException || ex is FormatException)
             {
-                ConsoleEx.Stop();
-
                 Console.Write("PokeD.Server.Desktop: ");
                 Console.WriteLine(ex.Message);
                 Console.WriteLine("Try `PokeD.Server.NetCore --help' for more information.");
@@ -72,26 +63,6 @@ namespace PokeD.Server.NetCore
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
             Environment.Exit((int) ExitCodes.Success);
-        }
-        /*
-        private void ParseArgs(IEnumerable<string> args)
-        {
-            StartFastConsole(string.Empty);
-            NATForwardingEnabled = false;
-            ParseConfig("yaml");
-        }
-        */
-        private void StartFastConsole(string s)
-        {
-            ConsoleEx.TitleFormatted = "PokeD Server FPS: {0}";
-            ConsoleEx.ConstantAddLine(
-                "ModuleManagerUpdate thread execution time: {0} ms", () => new object[] { ModuleManagerService.UpdateThread });
-            ConsoleEx.ConstantAddLine(
-                "PlayerWatcher       thread execution time: {0} ms", () => new object[] { ModuleP3D.PlayerWatcherThreadTime });
-            ConsoleEx.ConstantAddLine(
-                "PlayerCorrection    thread execution time: {0} ms", () => new object[] { ModuleP3D.PlayerCorrectionThreadTime });
-
-            ConsoleEx.Start();
         }
         private void ParseConfig(string config)
         {

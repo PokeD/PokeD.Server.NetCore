@@ -1,7 +1,5 @@
 ﻿using System;
 
-using ConsoleManager;
-
 using Open.Nat;
 
 using PokeD.Server.Services;
@@ -24,12 +22,10 @@ namespace PokeD.Server.NetCore
                 Console.WriteLine();
                 Console.WriteLine("Stopped the server. Press any key to continue...");
                 Console.ReadKey();
-                ConsoleEx.Stop();
             }
 
             else if (command.StartsWith("clear"))
             {
-                ConsoleEx.ClearOutput();
                 Console.Clear();
             }
 
