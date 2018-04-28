@@ -34,7 +34,7 @@ namespace PokeD.Server.NetCore.Extensions
                     break;
             }
 
-            return release.Assets?.SingleOrDefault(asset => asset.Name == $"{runtimeIdentifier}.zip");
+            return release.Assets?.SingleOrDefault(asset => asset.Name == $"{runtimeIdentifier}-installer.exe");
         }
     }
 }

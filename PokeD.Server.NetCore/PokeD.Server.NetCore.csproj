@@ -28,6 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Scripts\Kolben\command_pong.klb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
