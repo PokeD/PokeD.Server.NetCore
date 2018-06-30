@@ -13,18 +13,13 @@ namespace PokeD.Server.NetCore
 {
     public partial class ServerManager
     {
-        private static readonly string WebsiteNotUp = "Could not connect to GitHub.com!";
-        private static readonly string UpToDate = "Server is up to date!";
-        private static readonly string UpdateAvailable = "A new Server version is available!\nWould you like to download it?";
-        private static readonly string UpdateNotFound = "No update was found!";
-
         private void CheckServerForUpdate()
         {
             if(DisableUpdate)
                 return;
 
             if (!GitHub.WebsiteIsUp)
-                Console.WriteLine(WebsiteNotUp);
+                Console.WriteLine(Catalog.GetString("Could not connect to GitHub.com!"));
 
             var launcherReleases = GitHub.GetAllReleases.ToList();
 
@@ -34,7 +29,7 @@ namespace PokeD.Server.NetCore
                 var latestReleaseAsset = default(ReleaseAsset);
                 if (Assembly.GetExecutingAssembly().GetName().Version > new Version(latestRelease.TagName) && ((latestReleaseAsset = latestRelease.GetReleaseAsset()) != null))
                 {
-                    Console.WriteLine(UpdateAvailable);
+                    Console.WriteLine(Catalog.GetString("A new Server version is available!\nWould you like to download it?"));
 
                     string response;
                     while (string.IsNullOrEmpty(response = Console.ReadLine().ToLower()))
@@ -48,10 +43,10 @@ namespace PokeD.Server.NetCore
                     }
                 }
                 else
-                    Console.WriteLine(UpToDate);
+                    Console.WriteLine(Catalog.GetString("Server is up to date!"));
             }
             else
-                Console.WriteLine(UpdateNotFound);
+                Console.WriteLine(Catalog.GetString("No update was found!"));
         }
     }
 }

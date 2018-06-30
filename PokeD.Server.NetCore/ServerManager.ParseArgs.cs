@@ -30,7 +30,7 @@ namespace PokeD.Server.NetCore
             }
             catch (Exception ex) when (ex is OptionException || ex is FormatException)
             {
-                Console.Write("PokeD.Server.Desktop: ");
+                Console.Write("PokeD.Server.NetCore: ");
                 Console.WriteLine(ex.Message);
                 Console.WriteLine("Try `PokeD.Server.NetCore --help' for more information.");
 
@@ -49,9 +49,7 @@ namespace PokeD.Server.NetCore
             Console.WriteLine("Options:");
 
             if (direct)
-            {
                 options.WriteOptionDescriptions(Console.Out);
-            }
             else
             {
                 var opt = new System.IO.StringWriter();

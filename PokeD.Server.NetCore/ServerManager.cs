@@ -3,10 +3,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
+using NGettext;
+
 using Open.Nat;
 
 using PokeD.Core;
 using PokeD.Server.NetCore.Extensions;
+using PokeD.Server.NetCore.Storage.Files;
 using PokeD.Server.Services;
 
 namespace PokeD.Server.NetCore
@@ -16,6 +19,8 @@ namespace PokeD.Server.NetCore
         private Server Server { get; set; }
         private ManualResetEventSlim UpdateLock { get; } = new ManualResetEventSlim(false);
         private CancellationTokenSource UpdateToken { get; set; }
+
+        private ICatalog Catalog { get; } = new TranslationFile("Console.mo");
 
         public ServerManager()
         {
