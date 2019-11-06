@@ -12,3 +12,6 @@
 [submodule "kolben"]
 	path = kolben
 	url = https://github.com/PokeD/kolben
+[submodule "Aragas.TupleEventSystem"]
+	path = Aragas.TupleEventSystem
+	url = https://github.com/Aragas/Aragas.TupleEventSystem
