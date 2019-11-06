@@ -23,7 +23,7 @@ namespace PokeD.Server.NetCore.Storage.Files
                 ? new TranslationFolder()
                     .CreateFolder(cultureInfo.Name, CreationCollisionOption.OpenIfExists)
                     .GetFile(fileName)
-                : new NonExistingFile();
+                : new NonExistingFile(System.IO.Path.Combine(cultureInfo.Name, fileName));
         }
         public TranslationFile(string fileName, CultureInfo cultureInfo = null) : base(GetFile(fileName, cultureInfo))
         {

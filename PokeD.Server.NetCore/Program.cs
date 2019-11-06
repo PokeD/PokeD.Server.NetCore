@@ -74,14 +74,14 @@ namespace PokeD.Server.NetCore
 
         private static string CatchError(Exception ex)
         {
-#if !NETCOREAPP2_0
+#if !NETCOREAPP3_0
             var osInfo = SystemInfoLibrary.OperatingSystem.OperatingSystemInfo.GetOperatingSystemInfo();
 #else
             var platformService = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default;
 #endif
 
             var errorLog =
-#if !NETCOREAPP2_0
+#if !NETCOREAPP3_0
                 $@"[CODE]
 PokeD.Server.Desktop Crash Log v {Assembly.GetExecutingAssembly().GetName().Version}
 
@@ -120,7 +120,7 @@ Go To: {REPORTURL} to report this crash there.
 
             return errorLog;
         }
-#if !NETCOREAPP2_0
+#if !NETCOREAPP3_0
         private static string RecursiveCPU(System.Collections.Generic.IList<SystemInfoLibrary.Hardware.CPU.CPUInfo> cpus, int index)
         {
             var sb = new StringBuilder();
