@@ -1,13 +1,19 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+using PokeD.Core.Extensions;
+using PokeD.Server.Storage.Files;
+
+using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
-
-using PokeD.Core.Extensions;
-using PokeD.Server.Storage.Files;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using PokeD.Core;
 
 namespace PokeD.Server.NetCore
 {
@@ -25,8 +31,31 @@ namespace PokeD.Server.NetCore
             AppDomain.CurrentDomain.UnhandledException += CatchException;
         }
 
-        public static void Main(params string[] args)
+        public static async Task Main(params string[] args)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            Console.OutputEncoding = Encoding.UTF8;
+
+            try
+            {
+                //Logger.Information("Starting Worker");
+                var host = CreateHostBuilder(args).Build();
+                await host.StartAsync();
+                var serverManager = host.Services.GetRequiredService<ServerManager>();
+                serverManager.Run(args);
+                await host.WaitForShutdownAsync();
+            }
+            catch (Exception ex)
+            {
+                //Logger.Log(ex, "Worker terminated unexpectedly");
+            }
+            finally
+            {
+                //Logger.CloseAndFlush();
+            }
+
+
+            /*
             ServerManager serverManager = null;
             Start:
             try
@@ -55,7 +84,15 @@ namespace PokeD.Server.NetCore
             }
 
             Environment.Exit((int) ExitCodes.Success);
+            */
         }
+        public static IHostBuilder CreateHostBuilder(string[]? args) => Host
+            .CreateDefaultBuilder()
+            .ConfigureWebHostDefaults(webhost => webhost.UseStartup<Startup>())
+            .ConfigureServices((context, services) =>
+            {
+                services.AddSingleton<ServerManager>();
+            });
 
 
         private static readonly string REPORTURL = "http://poked.github.io/report/";

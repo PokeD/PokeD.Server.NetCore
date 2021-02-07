@@ -2,7 +2,8 @@
   "profiles": {
     "PokeD.Server.NetCore": {
       "commandName": "Project",
-      "commandLineArgs": " -l"
+      "commandLineArgs": " -l",
+      "applicationUrl": "http://*:15749"
     }
   }
 }

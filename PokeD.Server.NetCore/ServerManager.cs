@@ -16,7 +16,7 @@ namespace PokeD.Server.NetCore
 {
     public partial class ServerManager : IDisposable
     {
-        private Server Server { get; set; }
+        internal Server Server { get; set; }
         private ManualResetEventSlim UpdateLock { get; } = new ManualResetEventSlim(false);
         private CancellationTokenSource UpdateToken { get; set; }
 
@@ -88,7 +88,7 @@ namespace PokeD.Server.NetCore
                 NatDiscoverer.ReleaseAll();
         }
 
-        
+
         private void Update()
         {
             UpdateLock.Reset();
