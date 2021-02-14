@@ -77,6 +77,7 @@ namespace PokeD.Server.NetCore
                 services.AddSingleton<ModuleManagerService>();
 
                 services.AddHostedService<SecurityService>(sp => sp.GetRequiredService<SecurityService>());
+                services.Configure<DatabaseServiceOptions>(context.Configuration.GetSection("Database"));
                 services.AddHostedService<DatabaseService>(sp => sp.GetRequiredService<DatabaseService>());
                 services.AddHostedService<WorldService>(sp => sp.GetRequiredService<WorldService>());
                 services.AddHostedService<ChatChannelManagerService>(sp => sp.GetRequiredService<ChatChannelManagerService>());

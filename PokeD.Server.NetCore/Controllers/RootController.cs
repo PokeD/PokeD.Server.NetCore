@@ -18,7 +18,7 @@ namespace PokeD.Server.NetCore.Controllers
     }
     public class Response
     {
-        public List<Player> Players { get; set; } = new List<Player>();
+        public List<Player> Players { get; set; } = new();
     }
 
     [ApiController]
