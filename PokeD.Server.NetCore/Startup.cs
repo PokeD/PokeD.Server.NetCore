@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using Serilog;
+
 using System.Text.Json;
 
 namespace PokeD.Server.NetCore
@@ -26,6 +28,8 @@ namespace PokeD.Server.NetCore
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSerilogRequestLogging();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

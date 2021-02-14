@@ -3,7 +3,7 @@
     "PokeD.Server.NetCore": {
       "commandName": "Project",
       "commandLineArgs": " -l",
-      "applicationUrl": "http://*:15749"
+      "applicationUrl": "http://localhost:15749"
     }
   }
 }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokeD.BattleEngine", "PokeD.BattleEngine\PokeD.BattleEngine.csproj", "{A90F84DF-CCFA-4722-9490-A3DF98DAEC95}"
 EndProject
@@ -10,8 +10,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokeD.Server", "PokeD.Server\PokeD.Server\PokeD.Server.csproj", "{8A831814-AD8B-4A3B-978E-F2927C42C3F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokeD.Server.NetCore", "PokeD.Server.NetCore\PokeD.Server.NetCore.csproj", "{805FDC92-37F5-4884-B487-D9437BE18E6B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kolben.Core", "kolben\Kolben\Kolben.Core.csproj", "{4B4BF039-3A18-44F1-9679-62716D8C6D05}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aragas.TupleEventSystem", "Aragas.TupleEventSystem\src\Aragas.TupleEventSystem\Aragas.TupleEventSystem.csproj", "{3BBE9449-C89E-4202-85E9-8C6DD65AA525}"
 EndProject
@@ -37,10 +35,6 @@ Global
 		{805FDC92-37F5-4884-B487-D9437BE18E6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{805FDC92-37F5-4884-B487-D9437BE18E6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{805FDC92-37F5-4884-B487-D9437BE18E6B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4B4BF039-3A18-44F1-9679-62716D8C6D05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B4BF039-3A18-44F1-9679-62716D8C6D05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4B4BF039-3A18-44F1-9679-62716D8C6D05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4B4BF039-3A18-44F1-9679-62716D8C6D05}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3BBE9449-C89E-4202-85E9-8C6DD65AA525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3BBE9449-C89E-4202-85E9-8C6DD65AA525}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BBE9449-C89E-4202-85E9-8C6DD65AA525}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -9,9 +9,6 @@
 [submodule "PokeD.BattleEngine"]
 	path = PokeD.BattleEngine
 	url = https://github.com/PokeD/PokeD.BattleEngine.git
-[submodule "kolben"]
-	path = kolben
-	url = https://github.com/PokeD/kolben
 [submodule "Aragas.TupleEventSystem"]
 	path = Aragas.TupleEventSystem
 	url = https://github.com/Aragas/Aragas.TupleEventSystem

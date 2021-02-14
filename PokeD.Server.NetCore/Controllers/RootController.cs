@@ -26,20 +26,19 @@ namespace PokeD.Server.NetCore.Controllers
     public class RootController : ControllerBase
     {
         private readonly ILogger<RootController> _logger;
-        private readonly ServerManager _serverManager;
+        private readonly ModuleManagerService _moduleManager;
 
-        public RootController(ILogger<RootController> logger, ServerManager serverManager)
+        public RootController(ILogger<RootController> logger, ModuleManagerService moduleManager)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _serverManager = serverManager ?? throw new ArgumentNullException(nameof(serverManager));
+            _moduleManager = moduleManager ?? throw new ArgumentNullException(nameof(moduleManager));
         }
 
         [HttpGet("status")]
         public async Task<ActionResult> StatusAsync(CancellationToken ct)
         {
-            var moduleManager = _serverManager.Server.Services.GetService<ModuleManagerService>();
             var response = new Response();
-            moduleManager.AllClientsForeach(func =>
+            _moduleManager.AllClientsForeach(func =>
             {
                 foreach (var client in func)
                 {
